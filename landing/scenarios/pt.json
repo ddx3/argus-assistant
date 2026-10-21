@@ -1,0 +1,102 @@
+{
+ "_doc": "Exemplo de conversa para a demonstração na página. Português (Brasil).",
+ "speech": [
+  "Me lembra, qual é a diferença entre processo e thread?",
+  "Olha só: um processo é um programa separado, com memória própria, e as threads vivem dentro dele e dividem essa memória.",
+  "Beleza. Dá uma olhada, por favor, por que meu teste está falhando?",
+  "Estou vendo: o loop interno compara o item com ele mesmo.",
+  "E por último: quanto vão render 10.000 a 8% ao ano em três anos?"
+ ],
+ "answers": [
+  "Um **processo** é um programa isolado, com memória própria. Uma **thread** é uma linha de execução dentro de um processo: as threads de um mesmo processo dividem a memória dele.\n\n- processos custam mais para criar e para alternar\n- threads trocam dados mais rápido, mas precisam de sincronização\n- uma thread que falha pode derrubar o processo inteiro",
+  "**Bug:** o loop interno começa em zero, então quando `i == j` um item é comparado com ele mesmo e a função sempre retorna `True`.\n\n```python\ndef has_duplicates(items):\n    return len(set(items)) != len(items)\n```\n\nOu dá para manter os loops e começar o interno em `i + 1`. A versão com conjunto roda em O(n).",
+  "Isso é juros compostos:\n\n$$S = 10.000 \\cdot (1 + 0{,}08)^3$$\n\n$$S \\approx 12.597$$\n\nResposta: cerca de **12.597**, ou seja, um ganho de **2.597**."
+ ],
+ "code": {
+  "title": "review — pull request #214",
+  "heading": "Filtro de duplicados",
+  "l1": "A função has_duplicates(items) deve",
+  "l2": "retornar True se a lista tiver",
+  "l3": "itens repetidos, e False se não tiver.",
+  "input": "entrada",
+  "expected": "esperado  False",
+  "tests": "CI · TESTES"
+ },
+ "math": {
+  "title": "sheets — Projeção da aplicação",
+  "slide": "SLIDE 7",
+  "heading": "Projeção da aplicação",
+  "rows": [
+   [
+    "Valor",
+    "10.000"
+   ],
+   [
+    "Taxa",
+    "8% ao ano"
+   ],
+   [
+    "Prazo",
+    "3 anos"
+   ],
+   [
+    "Resultado",
+    "?"
+   ]
+  ]
+ },
+ "idle": {
+  "title": "notes — Reunião da equipe",
+  "heading": "Reunião da equipe",
+  "items": [
+   "· arquitetura do serviço",
+   "· revisar pull request #214",
+   "· projeção da aplicação"
+  ]
+ },
+ "call": {
+  "names": [
+   "Ana K.",
+   "Rafael",
+   "Marina S.",
+   "Você"
+  ],
+  "initials": [
+   "AK",
+   "RP",
+   "MS",
+   "V"
+  ],
+  "sharing": "Você está compartilhando a tela"
+ },
+ "windows": [
+  {
+   "title": "Reunião semanal da equipe",
+   "label": "Reunião semanal da equipe",
+   "kind": "call",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Aula de estatística",
+   "label": "Aula de estatística",
+   "kind": "lecture",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Player de música",
+   "label": "Player de música",
+   "kind": "music",
+   "w": 1280,
+   "h": 720
+  },
+  {
+   "title": "Notas",
+   "label": "Notas",
+   "kind": "notes",
+   "w": 1100,
+   "h": 800
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+# The account server image (`deploy/server/Dockerfile`) is built from the repository root,
+# and without this file the whole tree goes to the daemon: `.env` with keys, builds of
+# hundreds of megabytes, session recordings, chats, models. A single `COPY . .` added in
+# the future would be enough to put the secrets into an image layer. So everything is
+# excluded except the three paths that the Dockerfile takes by itself.
+*
+!deploy/server/requirements.txt
+!src/argus/__init__.py
+!src/argus/server
+**/__pycache__
+**/*.pyc

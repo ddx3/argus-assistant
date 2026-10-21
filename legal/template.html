@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181a20'/%3E%3Cg transform='translate(5 4.5) scale(.0787)' fill='%23fff'%3E%3Cpath d='M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z'/%3E%3Ccircle cx='345.5' cy='525' r='60'/%3E%3C/g%3E%3C/svg%3E">
+<title>{{TITLE}} — Argus</title>
+<style>
+  :root{
+    --bg:#0a0b0d; --panel:#131519; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
+    --text:#f2f4f7; --dim:#9aa1ad; --faint:#5b6270;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    color-scheme:dark;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;margin:0;padding:24px 0 56px;}
+  /* Width and margins are as on the description page (`landing/template.html`, `.wrap`): the
+     document is read in the same column as the main page, not in a narrow strip in the middle. */
+  .page{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);}
+  .top{margin-bottom:28px;}
+  .brand{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:20px;color:var(--text);text-decoration:none;}
+  .brand svg{width:22px;height:22px;flex:none;}
+  .brand .wm{display:inline-flex;align-items:baseline;}
+  .brand .wm svg{width:auto;height:.7em;aspect-ratio:691/699;margin-right:.01em;}
+  a{color:var(--dim);text-underline-offset:2px;} a:hover{color:var(--text);}
+  h1{font-size:clamp(26px,5vw,32px);line-height:1.2;margin:0 0 6px;}
+  h2{font-size:18px;margin:34px 0 8px;line-height:1.3;}
+  h3{font-size:15px;margin:22px 0 6px;color:var(--text);}
+  p{margin:0 0 12px;} ul{margin:0 0 14px;padding-left:22px;} li{margin:0 0 6px;}
+  li::marker{color:var(--faint);}
+  .meta{color:var(--faint);font-size:14px;margin-bottom:18px;}
+  .lead{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--dim);}
+  b{font-weight:600;}
+  mark.todo{background:rgba(224,164,88,.18);color:#f0d19f;border-radius:4px;padding:0 4px;}
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:13px;display:flex;gap:6px 20px;flex-wrap:wrap;}
+  /* Inside the app the document lies in a window over the page: neither the header with
+     "Argus" nor the download link is needed there — they would lead from the app window to the
+     download page. */
+  html.embed .top, html.embed footer, html.embed .langbar{display:none;}
+  /* Language switcher: flat text without borders, the current language is lighter (requirement:
+     no outlines anywhere). */
+  .langbar{display:flex;flex-wrap:wrap;gap:4px 16px;margin:-8px 0 22px;}
+  .langbar button{background:none;border:0;padding:2px 0;font:inherit;font-size:14px;color:var(--faint);cursor:pointer;}
+  .langbar button:hover{color:var(--dim);}
+  .langbar button[aria-current="true"]{color:var(--text);}
+  article[hidden]{display:none;}
+  html.embed body{padding-top:clamp(28px,4vw,48px);}
+  @media print{
+    :root{--bg:#fff;--panel:#f3f4f6;--text:#111;--dim:#333;--faint:#555;--line:#ddd;--line2:#bbb;color-scheme:light;}
+    .top .brand > svg{display:none;}
+  }
+</style>
+<script>
+  // Inside the app the page is opened with `?embed=1`. The flag itself in the address is carried
+  // over to the neighboring document as well, otherwise a link from the terms to the policy
+  // inside the app window would bring up the site header.
+  if (/[?&]embed=1\b/.test(location.search)) document.documentElement.className = "embed";
+</script>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <a class="brand" href="./">
+      <span class="wm" role="img" aria-label="Argus"><svg viewBox="0 0 691 699" aria-hidden="true"><path d="M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z" fill="currentColor"/><circle cx="345.5" cy="525" r="60" fill="currentColor"/></svg><span aria-hidden="true">rgus</span></span>
+    </a>
+  </div>
+
+  <nav class="langbar" aria-label="Language">{{LANGBAR}}</nav>
+
+{{ARTICLES}}
+</div>
+
+<script>
+  // The document language. The page carries all the languages at once (one `<article>` per
+  // language, `legal/legal_render.py`), one is visible:
+  //   1. `?lang=xx` in the address;
+  //   2. inside the app (`/p/legal-…`) — the interface language (`window.ARGUS_LANG`, the app
+  //      puts it first in `<head>`);
+  //   3. on the site — the one chosen earlier (`argus.legal.lang`), then the browser language;
+  //   4. English (which is also visible without scripts).
+  (function () {
+    var LANGS = {{LANGS_JSON}};
+    var UI = {{UI_JSON}};
+    var DOC = "{{DOC}}";
+    var STORE = "argus.legal.lang";
+    var inApp = /^\/p\//.test(location.pathname);
+
+    function pick() {
+      var q = /[?&]lang=([a-z]{2})\b/.exec(location.search);
+      if (q && LANGS.indexOf(q[1]) >= 0) return q[1];
+      var app = typeof window !== "undefined" ? window.ARGUS_LANG : undefined;
+      if (inApp) return LANGS.indexOf(app) >= 0 ? app : "en";
+      try { var s = localStorage.getItem(STORE); if (s && LANGS.indexOf(s) >= 0) return s; } catch (e) { /* no storage — no big deal */ }
+      var n = String(typeof navigator !== "undefined" ? navigator.language || "en" : "en").slice(0, 2).toLowerCase();
+      return LANGS.indexOf(n) >= 0 ? n : "en";
+    }
+
+    function show(lang, remember) {
+      document.querySelectorAll("article[data-doc-lang]").forEach(function (a) {
+        a.hidden = a.getAttribute("data-doc-lang") !== lang;
+      });
+      document.querySelectorAll(".langbar button").forEach(function (b) {
+        if (b.getAttribute("data-lang") === lang) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+      });
+      document.documentElement.lang = lang;
+      document.title = UI[lang][DOC] + " — Argus";
+      if (remember && !inApp) { try { localStorage.setItem(STORE, lang); } catch (e) { /* no big deal */ } }
+    }
+
+    document.querySelectorAll(".langbar button").forEach(function (b) {
+      b.addEventListener("click", function () { show(b.getAttribute("data-lang"), true); });
+    });
+    show(pick(), false);
+  })();
+</script>
+
+<script>
+  // In the app the page lives under `/p/legal-<name>`: both in a window over the page
+  // (`?embed=1`) and in an ordinary tab (the link in the account is a real one: people open it
+  // with Ctrl or the middle button, or copy the address). The neighboring document there has a
+  // different name (`/p/legal-privacy`; `/p/privacy.html` is a 404), and `./` would lead to
+  // `/p/` — a 404 too. So the links are rewritten by address, not only in the window.
+  if (/^\/p\//.test(location.pathname)) {
+    var tail = document.documentElement.className === "embed" ? "?embed=1" : "";
+    document.querySelectorAll("a[href$='.html']").forEach(function (a) {
+      a.setAttribute("href", "legal-" + a.getAttribute("href").replace(/\.html.*$/, "") + tail);
+    });
+    document.querySelectorAll("a[href='./']").forEach(function (a) { a.setAttribute("href", "/"); });
+  }
+</script>
+</body>
+</html>

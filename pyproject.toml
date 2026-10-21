@@ -1,0 +1,73 @@
+[project]
+name = "argus"
+version = "1.0"
+description = "Perception core: screen + system audio + mic -> LLM"
+readme = "README.md"
+authors = [{ name = "Argus team" }]
+requires-python = ">=3.12,<3.13"
+
+dependencies = [
+    # --- core ---
+    "pydantic>=2.9",          # event schemas
+    "numpy>=2.1",             # audio and frames as arrays
+    # --- capture: Windows ---
+    "pyaudiowpatch>=0.2.12; sys_platform == 'win32'",  # WASAPI loopback (system audio) + microphone
+    "bettercam>=1.0; sys_platform == 'win32'",         # screen capture via DXGI
+    "comtypes>=1.4; sys_platform == 'win32'",          # COM (capture): imported directly, not only through bettercam
+    "windows-capture>=2.0; sys_platform == 'win32'",   # capture of a single window together with video
+    "pywin32>=306; sys_platform == 'win32'",           # windows: titles, list, snapshot (win32gui)
+    # --- capture: macOS (see docs/macos.md) ---
+    "sounddevice>=0.5; sys_platform == 'darwin'",      # microphone (PortAudio inside the wheel)
+    "pyobjc-framework-AVFoundation>=10; sys_platform == 'darwin'",  # microphone permission
+    # Everything else needed on macOS (Cocoa, Quartz, WebKit) comes along with pywebview.
+    "soxr>=0.5",              # audio resampling to 16 kHz
+    # --- speech recognition ---
+    "onnxruntime>=1.20",      # Silero VAD: 2 MB on the CPU, the only weights
+    # --- CLI / output ---
+    "typer>=0.15",            # commands argus doctor / capture / run
+    "rich>=13.9",             # readable terminal output
+    "opencv-python>=4.9",     # cv2: screen snapshot to JPEG and frames; imported directly and needed even without OCR
+    "rapidocr>=3.0",         # screen OCR; pulls in opencv-python, a separate headless build is not needed
+    "claude-agent-sdk>=0.1",   # the model through a subscription, as a live session
+    "anthropic>=0.40",        # direct API: the production path
+    "openai>=3.10",           # second provider by key: model comparison
+    # dashboard. Not older than the release with strict Content-Type checking: a JSON body is
+    # accepted only with application/json, and a foreign page cannot send a POST with a simple
+    # form or `text/plain` without a preflight request (test: test_update_service.py)
+    "fastapi>=0.141.1",
+    "uvicorn>=0.30",          # server for the dashboard
+    "websockets>=13",         # without it uvicorn returns 404 on /ws and the dashboard goes blind
+    "pywebview>=6.2.1",
+    "httpx>=0.28",            # ElevenLabs client (tts/client.py): two endpoints,
+                               # not worth pulling in a whole SDK for them
+    # --- exam channel: the materials the model answers from ---
+    "pypdf>=6.0",             # PDF text layer
+    "pypdfium2>=5.0",         # rendering of scans: PDFs without a text layer
+    "python-docx>=1.1",       # lecture notes and study guides
+    "python-pptx>=1.0",       # lecture presentations, together with notes
+    "pillow>=11.0",           # photos of pages: EXIF rotation and compression
+]
+
+[project.scripts]
+argus = "argus.cli:app"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8",
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "pyinstaller>=6.22.2",
+    # httpx moved into [project] dependencies: it became needed in production for
+    # tts/client.py, while the live page tests used it before and still do.
+]
+
+[build-system]
+requires = ["uv_build>=0.11.7,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

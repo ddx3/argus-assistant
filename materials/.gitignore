@@ -1,0 +1,4 @@
+# Lectures and notes. They do not go into the repository: other people's material,
+# sometimes hundreds of megabytes. `.pages` holds rendered scan pages, a cache.
+*
+!.gitignore

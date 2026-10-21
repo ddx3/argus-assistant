@@ -1,0 +1,101 @@
+{
+ "speech": [
+  "Recuérdame, ¿en qué se diferencia un proceso de un hilo?",
+  "Claro: un proceso es un programa independiente con su propia memoria, y los hilos viven dentro de él y la comparten.",
+  "Bien. ¿Puedes revisar por qué me falla el test?",
+  "Ya lo veo: el bucle interno compara un elemento consigo mismo.",
+  "Y la última: ¿cuánto crecerán 10 000 al 8 % anual en tres años?"
+ ],
+ "answers": [
+  "Un **proceso** es un programa aislado con su propia memoria. Un **hilo** es una línea de ejecución dentro de un proceso: los hilos de un mismo proceso comparten su memoria.\n\n- crear y cambiar de proceso cuesta más\n- los hilos intercambian datos más rápido, pero necesitan sincronización\n- un hilo que falla puede tumbar todo el proceso",
+  "**Error:** el bucle interno empieza en cero, así que cuando `i == j` se compara un elemento consigo mismo y la función siempre devuelve `True`.\n\n```python\ndef has_duplicates(items):\n    return len(set(items)) != len(items)\n```\n\nO bien, deja los bucles y empieza el interno en `i + 1`. La versión con conjunto se ejecuta en O(n).",
+  "Es interés compuesto:\n\n$$S = 10\\,000 \\cdot (1 + 0{,}08)^3$$\n\n$$S \\approx 12\\,597$$\n\nRespuesta: unos **12 597**, es decir, una ganancia de **2597**."
+ ],
+ "code": {
+  "title": "review — pull request #214",
+  "heading": "Filtro de duplicados",
+  "l1": "La función has_duplicates(items) debe",
+  "l2": "devolver True si la lista contiene",
+  "l3": "elementos repetidos, y False si no.",
+  "input": "entrada",
+  "expected": "esperado  False",
+  "tests": "CI · TESTS"
+ },
+ "math": {
+  "title": "sheets — Proyección del depósito",
+  "slide": "DIAPOSITIVA 7",
+  "heading": "Proyección del depósito",
+  "rows": [
+   [
+    "Monto",
+    "10 000"
+   ],
+   [
+    "Tasa",
+    "8 % anual"
+   ],
+   [
+    "Plazo",
+    "3 años"
+   ],
+   [
+    "Resultado",
+    "?"
+   ]
+  ]
+ },
+ "idle": {
+  "title": "notes — Reunión del equipo",
+  "heading": "Reunión del equipo",
+  "items": [
+   "· arquitectura del servicio",
+   "· revisión del pull request #214",
+   "· proyección del depósito"
+  ]
+ },
+ "call": {
+  "names": [
+   "Ana K.",
+   "Diego",
+   "María S.",
+   "Tú"
+  ],
+  "initials": [
+   "AK",
+   "DR",
+   "MS",
+   "Tú"
+  ],
+  "sharing": "Estás compartiendo tu pantalla"
+ },
+ "windows": [
+  {
+   "title": "Reunión semanal del equipo",
+   "label": "Reunión semanal del equipo",
+   "kind": "call",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Clase de estadística",
+   "label": "Clase de estadística",
+   "kind": "lecture",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Reproductor de música",
+   "label": "Reproductor de música",
+   "kind": "music",
+   "w": 1280,
+   "h": 720
+  },
+  {
+   "title": "Notas",
+   "label": "Notas",
+   "kind": "notes",
+   "w": 1100,
+   "h": 800
+  }
+ ]
+}

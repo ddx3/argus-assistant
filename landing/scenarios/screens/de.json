@@ -1,0 +1,171 @@
+{
+ "_doc": "Данные для кадров «Сессии» и «Запись» на лендинге (screens.py). Выдуманные. Время сессий — сегодня/вчера, часы по часам машины.",
+ "sessions": [
+  {
+   "id": "s-sync",
+   "name": "Wöchentliches Team-Meeting",
+   "day": 0,
+   "at": [
+    10,
+    30
+   ]
+  },
+  {
+   "id": "s-review",
+   "name": "Review von Pull Request #214",
+   "day": 0,
+   "at": [
+    9,
+    12
+   ]
+  },
+  {
+   "id": "s-standup",
+   "name": "Morgen-Standup",
+   "day": 0,
+   "at": [
+    8,
+    45
+   ]
+  },
+  {
+   "id": "s-sso",
+   "name": "Kundengespräch: Single Sign-on",
+   "day": 1,
+   "at": [
+    16,
+    40
+   ]
+  },
+  {
+   "id": "s-spanish",
+   "name": "Spanischkurs, Lektion 12",
+   "day": 1,
+   "at": [
+    14,
+    0
+   ]
+  },
+  {
+   "id": "s-stats",
+   "name": "Statistik-Vorlesung, Woche 4",
+   "day": 1,
+   "at": [
+    11,
+    5
+   ]
+  },
+  {
+   "id": "s-deposit",
+   "name": "Einlagenprognose",
+   "day": 1,
+   "at": [
+    9,
+    30
+   ]
+  },
+  {
+   "id": "s-budget",
+   "name": "Budgetbesprechung",
+   "day": 1,
+   "at": [
+    9,
+    0
+   ]
+  }
+ ],
+ "record": {
+  "id": "s-sync",
+  "name": "Wöchentliches Team-Meeting",
+  "lines": [
+   [
+    "10:30:31",
+    "them",
+    "Hallo zusammen, könnt ihr mich hören?"
+   ],
+   [
+    "10:30:34",
+    "me",
+    "Ja, laut und deutlich."
+   ],
+   [
+    "10:30:41",
+    "them",
+    "Super. Anna kommt gleich dazu."
+   ],
+   [
+    "10:30:47",
+    "me",
+    "Kein Problem, wir können auf sie warten."
+   ],
+   [
+    "10:30:52",
+    "them",
+    "Okay, jetzt ist sie da."
+   ],
+   [
+    "10:30:57",
+    "them",
+    "Hallo Anna. Wir fangen gerade an."
+   ],
+   [
+    "10:31:04",
+    "them",
+    "Fangen wir mit dem Release an. Liegen wir für Donnerstag im Plan?"
+   ],
+   [
+    "10:31:12",
+    "me",
+    "Größtenteils. Der Zahlungsablauf ist fertig. Der Export der Rechnungen braucht noch ein Review."
+   ],
+   [
+    "10:31:40",
+    "them",
+    "Wer kann ihn heute prüfen?"
+   ],
+   [
+    "10:31:47",
+    "me",
+    "Igor kann das. Ich frage ihn gleich nach diesem Gespräch."
+   ],
+   [
+    "10:32:20",
+    "them",
+    "Gut. Als Nächstes: Acme hat nach Single Sign-on gefragt. Können wir das noch in diesem Quartal anbieten?"
+   ],
+   [
+    "10:32:33",
+    "me",
+    "Vielleicht. Maria muss erst den Aufwand schätzen."
+   ],
+   [
+    "10:32:50",
+    "them",
+    "Maria, kannst du die Schätzung bis Montag schicken?"
+   ],
+   [
+    "10:32:58",
+    "them",
+    "Ja, ich schicke sie am Montag."
+   ],
+   [
+    "10:33:30",
+    "them",
+    "Zum Schluss: Der Support braucht die Release Notes vor Mittwoch."
+   ],
+   [
+    "10:33:41",
+    "me",
+    "Anna schickt sie am Dienstag."
+   ]
+  ],
+  "results": [
+   {
+    "id": "r1",
+    "request": "Zusammenfassung und Aufgaben",
+    "text": "## Zusammenfassung\nDas Release liegt für Donnerstag im Plan. Der Zahlungsablauf ist fertig, und der Export der Rechnungen wartet auf ein Review (10:31).\n\nAcme hat nach Single Sign-on gefragt. Wir können es in diesem Quartal anbieten, wenn die Schätzung es zulässt (10:32).\n\n## Aufgaben\n| Wer | Was | Wann |\n| --- | --- | --- |\n| Igor | Export der Rechnungen prüfen | Heute |\n| Maria | Schätzung für Single Sign-on schicken | Montag |\n| Anna | Release Notes an den Support schicken | Dienstag |",
+    "pdf": "Wöchentliches Team-Meeting — Zusammenfassung und Aufgaben.pdf"
+   }
+  ]
+ }
+}

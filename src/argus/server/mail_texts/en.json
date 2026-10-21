@@ -1,0 +1,103 @@
+{
+  "events": {
+    "reset": {
+      "subject": "Argus password reset",
+      "heading": "New password",
+      "paragraphs": [
+        "To set a new password, press the button. The link works for {minutes} minutes and only once."
+      ],
+      "button": "Set a new password",
+      "note": "Did not ask for this? Just ignore this email, your password stays the same."
+    },
+    "welcome": {
+      "subject": "Welcome to Argus",
+      "heading": "Account created",
+      "paragraphs": [
+        "You signed up for Argus with {email}.",
+        "{gift}",
+        "Open the app and start recognition. The balance is spent on recognition, answers and voice; you can top it up in the settings."
+      ],
+      "gift": "A welcome gift of {amount} has been added to your balance.",
+      "note": "Did not sign up? Write to us and we will delete the account."
+    },
+    "password_changed": {
+      "subject": "Argus password changed",
+      "heading": "Password changed",
+      "paragraphs": [
+        "The password for {email} was changed on {when}.",
+        "You were signed out of every app. Sign in again with the new password."
+      ],
+      "note": "Was this not you? Write to us and we will help you get access back."
+    },
+    "top_up": {
+      "subject": "Argus balance topped up",
+      "heading": "Thank you for your top-up",
+      "paragraphs": [
+        "The payment was received and the money is on your balance."
+      ],
+      "rows": [
+        "Amount",
+        "Date",
+        "Balance now"
+      ],
+      "note": "Did not make this payment? Write to us."
+    },
+    "low": {
+      "subject": "Your Argus balance is running low",
+      "heading": "Balance is running low",
+      "paragraphs": [
+        "{balance} is left on your balance.",
+        "To keep recognition going, top up your balance in the app settings."
+      ]
+    },
+    "empty": {
+      "subject": "Your Argus balance is empty",
+      "heading": "Balance is empty",
+      "paragraphs": [
+        "Recognition, answers and voice are paused while the balance is empty.",
+        "You can top it up in the app settings."
+      ]
+    },
+    "deleted": {
+      "subject": "Argus account deleted",
+      "heading": "Account deleted",
+      "paragraphs": [
+        "The account {email} has been deleted: the address, password and sign-ins are erased.",
+        "The remaining balance went with the account. Payment records are kept with no link to you."
+      ],
+      "note": "Did you not do this? Write to us."
+    }
+  },
+  "footer": "This message was sent automatically. Questions: {support}.",
+  "date": {
+    "months": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    "format": "{d} {m} {y}, {time} UTC"
+  },
+  "reset_page": {
+    "title": "New password — Argus",
+    "heading": "New password",
+    "placeholder": "New password",
+    "button": "Save",
+    "bad_link": "The link does not work — request a new one in the app.",
+    "saved": "Password saved. Go back to the app and sign in again.",
+    "failed": "Something went wrong",
+    "offline": "No connection",
+    "short": "The password must be at least {min} characters.",
+    "weak": "This password is too easy to guess. Choose another one.",
+    "busy": "The server is busy right now. Try again in a minute.",
+    "limit": "Too many attempts. Try again later."
+  }
+}

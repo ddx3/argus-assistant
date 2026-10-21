@@ -1,0 +1,216 @@
+<!doctype html>
+<!-- REMOVED 2026-10-13: there is no separate download page any more. The landing buttons lead to
+     /download, nginx itself serves the file for the visitor's system (deploy/landing/), and the
+     text about the first launch on Mac moved to the questions on the "Help" page
+     (faq.13). The file is kept because tests/test_mac_packaging.py looks at it; publish_mac.py no
+     longer publishes it. -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Argus — Скачать / Download</title>
+<script>
+  // Language and system are detected before the first paint so that the page does not flicker.
+  (function () {
+    var d = document.documentElement, n = navigator;
+    d.lang = /^(ru|uk|be)\b/i.test(n.language || "") ? "ru" : "en";
+    if (/Mac/i.test(n.platform || "") || /Macintosh/i.test(n.userAgent || "")) d.className += " is-mac";
+  })();
+</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181a20'/%3E%3Cg transform='translate(5 4.5) scale(.0787)' fill='%23fff'%3E%3Cpath d='M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z'/%3E%3Ccircle cx='345.5' cy='525' r='60'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0a0b0d; --panel:#131519; --sunk:#08090b;
+    --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
+    --text:#f2f4f7; --dim:#9aa1ad; --faint:#5b6270;
+    --accent:#4fb8d8; --accent-ink:#04141a; --warn:#e0a458;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Consolas,"Cascadia Mono",monospace;
+    color-scheme:dark;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html[lang="en"] [lang="ru"], html[lang="ru"] [lang="en"]{display:none !important;}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);font-size:17px;
+    margin:0;padding:16px;min-height:100vh;line-height:1.6;
+    display:flex;align-items:center;justify-content:center;
+  }
+  body::before{
+    content:"";position:fixed;z-index:-1;inset:0;pointer-events:none;
+    background:radial-gradient(120% 90% at 15% -10%, rgba(79,184,216,.10), transparent 70%);
+  }
+  a{color:var(--accent);}
+  .page{max-width:480px;width:100%;display:flex;flex-direction:column;gap:24px;padding:16px 0;}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;}
+  .brand svg{width:22px;height:22px;flex:none;}
+  .brand .wm{display:inline-flex;align-items:baseline;}
+  .brand .wm svg{width:auto;height:.7em;aspect-ratio:691/699;margin-right:.01em;}
+  h1{font-size:clamp(24px,5vw,30px);margin:0 0 8px;line-height:1.2;font-weight:700;}
+  h2{font-size:19px;margin:0;line-height:1.3;font-weight:700;display:flex;align-items:center;gap:10px;}
+  .lede{color:var(--dim);margin:0;font-size:15.5px;}
+  .cards{display:flex;flex-direction:column;gap:16px;}
+  #mac{order:1;} #win{order:2;}
+  html:not(.is-mac) #mac{order:3;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;display:flex;flex-direction:column;gap:16px;}
+  .badge{font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--warn);
+    border:1px solid rgba(224,164,88,.35);border-radius:999px;padding:1px 9px;}
+  .dl-btn{
+    display:flex;align-items:center;justify-content:center;gap:10px;padding:15px 22px;border-radius:10px;
+    background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:16px;text-decoration:none;
+  }
+  .dl-btn:hover{filter:brightness(1.08);}
+  .dl-btn svg{width:18px;height:18px;flex:none;}
+  .meta{display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--mono);font-size:12px;color:var(--faint);}
+  .meta b{color:var(--dim);font-weight:500;}
+  ol.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;color:var(--dim);line-height:1.55;}
+  ol.steps b{color:var(--text);font-weight:600;}
+  details{font-size:13.5px;color:var(--dim);line-height:1.55;}
+  summary{cursor:pointer;color:var(--dim);}
+  code{font-family:var(--mono);font-size:12.5px;background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--text);word-break:break-all;}
+  .soon{color:var(--dim);font-size:15px;}
+  .fast{margin:0;font-size:13.5px;color:var(--dim);line-height:1.5;}
+  .linklike{background:none;border:0;padding:0;margin:0;color:var(--accent);text-decoration:underline;cursor:pointer;font:inherit;}
+  .linklike:disabled{opacity:.6;cursor:default;}
+  .warn{
+    background:rgba(224,164,88,.08);border:1px solid rgba(224,164,88,.28);border-radius:10px;
+    padding:14px 16px;font-size:13.5px;color:#e4b676;line-height:1.55;
+  }
+  .warn b{color:#f0d19f;}
+  .legal{margin:0;font-size:12.5px;line-height:1.55;color:var(--faint);}
+  .legal a{color:var(--dim);}
+  footer{text-align:center;font-size:12.5px;color:var(--faint);}
+  footer a{color:var(--faint);}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="brand">
+    <span class="wm" role="img" aria-label="Argus"><svg viewBox="0 0 691 699" aria-hidden="true"><path d="M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z" fill="currentColor"/><circle cx="345.5" cy="525" r="60" fill="currentColor"/></svg><span aria-hidden="true">rgus</span></span>
+  </div>
+
+  <div>
+    <h1><span lang="ru">Скачать Argus</span><span lang="en">Download Argus</span></h1>
+    <p class="lede"><span lang="ru">Выбери свою систему. Аккаунт заводится прямо в приложении.</span><span lang="en">Pick your system. You create the account inside the app.</span></p>
+  </div>
+
+  <div class="cards">
+    <div class="card" id="mac">
+      <h2>macOS <span class="badge"><span lang="ru">бета</span><span lang="en">beta</span></span></h2>
+      <a class="dl-btn" href="Argus-mac.dmg" download="Argus-mac.dmg">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span lang="ru">Скачать Argus для Mac</span><span lang="en">Download Argus for Mac</span>
+      </a>
+      <p class="fast">
+        <button type="button" id="fast-dl" class="linklike"><span lang="ru">Качается медленно? Загрузить в несколько потоков</span><span lang="en">Slow download? Download in several streams</span></button>
+        <span id="fast-state" aria-live="polite"></span>
+      </p>
+      <div class="meta">
+        <span><span lang="ru">Apple Silicon (M1 и новее)</span><span lang="en">Apple Silicon (M1 or newer)</span></span>
+        <span>macOS <b>14+</b></span>
+        <span><span lang="ru">версия</span><span lang="en">version</span> <b>{{MAC_VERSION}}</b></span>
+        <span><span lang="ru">обновлено</span><span lang="en">updated</span> <b>{{MAC_DATE}}</b></span>
+        <span><span lang="ru">размер</span><span lang="en">size</span> <b>~{{MAC_SIZE}} <span lang="ru">МБ</span><span lang="en">MB</span></b></span>
+      </div>
+      <ol class="steps">
+        <li lang="ru">Открой скачанный файл и перетащи <b>Argus</b> в папку «Программы».</li>
+        <li lang="en">Open the downloaded file and drag <b>Argus</b> into Applications.</li>
+        <li lang="ru"><b>Первый запуск.</b> Сборка пока без подписи Apple, поэтому macOS скажет, что не может проверить разработчика. Так и должно быть: нажми «Готово», открой <b>Системные настройки → Конфиденциальность и безопасность</b>, прокрути вниз и нажми <b>«Всё равно открыть»</b> рядом с Argus.</li>
+        <li lang="en"><b>First launch.</b> The build is not signed by Apple yet, so macOS says it cannot verify the developer. That is expected: click Done, open <b>System Settings → Privacy &amp; Security</b>, scroll down and click <b>Open Anyway</b> next to Argus.</li>
+        <li lang="ru">Разреши <b>микрофон</b> и <b>запись экрана и системного звука</b> — по ним Argus слышит разговор и видит экран. После разрешения записи экрана перезапусти Argus.</li>
+        <li lang="en">Allow the <b>microphone</b> and <b>screen &amp; system audio recording</b> — that is how Argus hears the call and sees the screen. Restart Argus after you allow screen recording.</li>
+      </ol>
+      <details>
+        <summary><span lang="ru">Не открывается?</span><span lang="en">Won't open?</span></summary>
+        <p><span lang="ru">Открой Терминал и выполни команду, потом запусти Argus снова:</span><span lang="en">Open Terminal, run this command, then start Argus again:</span><br>
+        <code>xattr -dr com.apple.quarantine /Applications/Argus.app</code></p>
+      </details>
+    </div>
+
+    <div class="card soon" id="win">
+      <h2>Windows</h2>
+      <p style="margin:0"><span lang="ru">Сборка для Windows обновляется — скоро она снова будет здесь.</span><span lang="en">The Windows build is being updated — it will be back here soon.</span></p>
+    </div>
+  </div>
+
+  <!--legal--><p class="legal"><span lang="ru">Скачивая и запуская Argus, ты принимаешь
+      <a href="terms.html">Условия использования</a> и
+      <a href="privacy.html">Политику конфиденциальности</a>.</span><span lang="en">By downloading and running Argus you accept the
+      <a href="terms.html">Terms of Use</a> and the
+      <a href="privacy.html">Privacy Policy</a>.</span></p><!--/legal-->
+
+  <footer>
+    <span lang="ru">Argus · соло-проект, активная разработка</span><span lang="en">Argus · a solo project in active development</span> ·
+    <!--legal--><a href="terms.html"><span lang="ru">условия</span><span lang="en">terms</span></a> ·
+    <a href="privacy.html"><span lang="ru">конфиденциальность</span><span lang="en">privacy</span></a> ·<!--/legal-->
+    <a href="https://claude.ai/artifact/VwifoHFG783BwvwL3rkb4Q" target="_blank" rel="noopener noreferrer"><span lang="ru">что умеет →</span><span lang="en">what it does →</span></a>
+  </footer>
+</div>
+<script>
+  // "Download in several streams": the server gives each
+  // connection about 90 KB/s (measured from the developer's machine), and the connections add
+  // up. We download the file in pieces by ranges and assemble it in the browser; the regular
+  // button above is not affected.
+  (function () {
+    var button = document.getElementById("fast-dl"), state = document.getElementById("fast-state");
+    if (!button) return;
+    if (!window.fetch || !window.Blob || !window.URL) { button.parentNode.style.display = "none"; return; }
+    // The browser keeps at most six connections to one server, so six "workers" take 4 MB pieces
+    // from a shared queue: fast ones do not wait for slow ones, and a piece that fails is
+    // downloaded again.
+    var WORKERS = 6, PIECE = 4 * 1024 * 1024, FILE = "Argus-mac.dmg", busy = false;
+    var ru = function () { return document.documentElement.lang === "ru"; };
+    var say = function (ruText, enText) { state.textContent = " " + (ru() ? ruText : enText); };
+    button.addEventListener("click", async function () {
+      if (busy) return;
+      busy = true; button.disabled = true;
+      try {
+        var head = await fetch(FILE, { method: "HEAD", cache: "no-store" });
+        var size = parseInt(head.headers.get("Content-Length"), 10);
+        if (!size) throw new Error("no size");
+        var count = Math.ceil(size / PIECE), blobs = new Array(count), next = 0, got = 0;
+        var fetchPiece = async function (i) {
+          var from = i * PIECE, to = Math.min(size - 1, from + PIECE - 1), taken = 0;
+          for (var attempt = 0; ; attempt++) {
+            try {
+              var response = await fetch(FILE, { headers: { Range: "bytes=" + from + "-" + to }, cache: "no-store" });
+              if (response.status !== 206) throw new Error("no ranges");
+              var reader = response.body.getReader(), chunks = [];
+              for (;;) {
+                var step = await reader.read();
+                if (step.done) break;
+                chunks.push(step.value); taken += step.value.length; got += step.value.length;
+                var pct = Math.min(99, Math.floor(got * 100 / size));
+                say("Загружено " + pct + "%", pct + "% downloaded");
+              }
+              return new Blob(chunks);
+            } catch (e) {
+              got -= taken; taken = 0;
+              if (attempt >= 2) throw e;
+            }
+          }
+        };
+        var worker = async function () {
+          for (;;) {
+            var i = next++;
+            if (i >= count) return;
+            blobs[i] = await fetchPiece(i);
+          }
+        };
+        await Promise.all(Array.from({ length: Math.min(WORKERS, count) }, worker));
+        var file = new Blob(blobs, { type: "application/octet-stream" });
+        if (file.size !== size) throw new Error("wrong size");
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(file);
+        link.download = FILE;
+        document.body.appendChild(link); link.click(); link.remove();
+        say("Готово — файл сохранён.", "Done — the file is saved.");
+        setTimeout(function () { URL.revokeObjectURL(link.href); }, 120000);
+      } catch (e) {
+        say("Не вышло — скачай обычной кнопкой выше.", "That did not work — use the regular button above.");
+      }
+      busy = false; button.disabled = false;
+    });
+  })();
+</script>
+</body>
+</html>

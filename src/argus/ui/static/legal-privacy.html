@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181a20'/%3E%3Cg transform='translate(5 4.5) scale(.0787)' fill='%23fff'%3E%3Cpath d='M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z'/%3E%3Ccircle cx='345.5' cy='525' r='60'/%3E%3C/g%3E%3C/svg%3E">
+<title>Privacy Policy — Argus</title>
+<style>
+  :root{
+    --bg:#0a0b0d; --panel:#131519; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
+    --text:#f2f4f7; --dim:#9aa1ad; --faint:#5b6270;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    color-scheme:dark;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;margin:0;padding:24px 0 56px;}
+  /* Width and margins are as on the description page (`landing/template.html`, `.wrap`): the
+     document is read in the same column as the main page, not in a narrow strip in the middle. */
+  .page{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);}
+  .top{margin-bottom:28px;}
+  .brand{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:20px;color:var(--text);text-decoration:none;}
+  .brand svg{width:22px;height:22px;flex:none;}
+  .brand .wm{display:inline-flex;align-items:baseline;}
+  .brand .wm svg{width:auto;height:.7em;aspect-ratio:691/699;margin-right:.01em;}
+  a{color:var(--dim);text-underline-offset:2px;} a:hover{color:var(--text);}
+  h1{font-size:clamp(26px,5vw,32px);line-height:1.2;margin:0 0 6px;}
+  h2{font-size:18px;margin:34px 0 8px;line-height:1.3;}
+  h3{font-size:15px;margin:22px 0 6px;color:var(--text);}
+  p{margin:0 0 12px;} ul{margin:0 0 14px;padding-left:22px;} li{margin:0 0 6px;}
+  li::marker{color:var(--faint);}
+  .meta{color:var(--faint);font-size:14px;margin-bottom:18px;}
+  .lead{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--dim);}
+  b{font-weight:600;}
+  mark.todo{background:rgba(224,164,88,.18);color:#f0d19f;border-radius:4px;padding:0 4px;}
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:13px;display:flex;gap:6px 20px;flex-wrap:wrap;}
+  /* Inside the app the document lies in a window over the page: neither the header with
+     "Argus" nor the download link is needed there — they would lead from the app window to the
+     download page. */
+  html.embed .top, html.embed footer, html.embed .langbar{display:none;}
+  /* Language switcher: flat text without borders, the current language is lighter (requirement:
+     no outlines anywhere). */
+  .langbar{display:flex;flex-wrap:wrap;gap:4px 16px;margin:-8px 0 22px;}
+  .langbar button{background:none;border:0;padding:2px 0;font:inherit;font-size:14px;color:var(--faint);cursor:pointer;}
+  .langbar button:hover{color:var(--dim);}
+  .langbar button[aria-current="true"]{color:var(--text);}
+  article[hidden]{display:none;}
+  html.embed body{padding-top:clamp(28px,4vw,48px);}
+  @media print{
+    :root{--bg:#fff;--panel:#f3f4f6;--text:#111;--dim:#333;--faint:#555;--line:#ddd;--line2:#bbb;color-scheme:light;}
+    .top .brand > svg{display:none;}
+  }
+</style>
+<script>
+  // Inside the app the page is opened with `?embed=1`. The flag itself in the address is carried
+  // over to the neighboring document as well, otherwise a link from the terms to the policy
+  // inside the app window would bring up the site header.
+  if (/[?&]embed=1\b/.test(location.search)) document.documentElement.className = "embed";
+</script>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <a class="brand" href="./">
+      <span class="wm" role="img" aria-label="Argus"><svg viewBox="0 0 691 699" aria-hidden="true"><path d="M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z" fill="currentColor"/><circle cx="345.5" cy="525" r="60" fill="currentColor"/></svg><span aria-hidden="true">rgus</span></span>
+    </a>
+  </div>
+
+  <nav class="langbar" aria-label="Language"><button type="button" data-lang="ru">Русский</button><button type="button" data-lang="uk">Українська</button><button type="button" data-lang="en">English</button><button type="button" data-lang="es">Español</button><button type="button" data-lang="pt">Português</button><button type="button" data-lang="de">Deutsch</button><button type="button" data-lang="fr">Français</button><button type="button" data-lang="tr">Türkçe</button><button type="button" data-lang="pl">Polski</button></nav>
+
+<article lang="ru" data-doc-lang="ru" hidden>
+<h1>Политика конфиденциальности</h1>
+<p class="meta">Версия от 14 октября 2026 г. Argus предоставляет команда Argus («мы»). Это перевод для удобства; если он отличается от английского оригинала, приоритет имеет английская версия.</p>
+
+<p class="lead">Argus слушает разговор и смотрит на ваш экран, поэтому на этой странице прямо сказано, куда что попадает. Наш сервер хранит ваш аккаунт, ваш баланс и ваше использование в виде чисел. Мы не храним текст ваших вопросов, ваш звук и кадры вашего экрана, но они проходят через сторонние сервисы — см. раздел 2.</p>
+
+<h2>1. Кто мы и как с нами связаться</h2>
+<p>Ответственный за обработку данных (контролёр данных) — команда Argus. По любому вопросу о ваших данных пишите на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+
+<h2>2. Какие данные мы обрабатываем и куда они попадают</h2>
+
+<h3>2.1. Ваш аккаунт (хранится на нашем сервере)</h3>
+<ul>
+  <li>ваш адрес электронной почты;</li>
+  <li>ваш пароль — только в необратимом виде; самого пароля мы не знаем;</li>
+  <li>время вашей регистрации и версия условий, которые вы приняли;</li>
+  <li>ваш баланс, пополнения и платежи;</li>
+  <li>использование: чем вы пользовались (распознаванием, ответами, озвучкой ответов), в каком объёме и когда — в виде чисел, без содержания;</li>
+  <li>данные, которые поддерживают ваш вход в аккаунт, — тоже только в необратимом виде.</li>
+</ul>
+
+<h3>2.2. Разговор: звук, экран, вопросы</h3>
+<p>Звук микрофона и системы, кадры экрана, распознанный текст, ваши вопросы и ваши материалы обрабатываются на вашем компьютере. Чтобы всё работало, часть из них уходит наружу, и обрабатывают её сторонние сервисы, а не мы:</p>
+<ul>
+  <li><b>звук</b> идёт на наш сервер и оттуда — в сервис распознавания речи, который превращает его в текст;</li>
+  <li><b>вопрос</b> вместе с нужными частями разговора, кадрами экрана и вашими материалами идёт на наш сервер и оттуда — к провайдеру сервиса ИИ, который готовит ответ;</li>
+  <li><b>текст ответа</b> уходит к провайдеру озвучки ответов, только если вы включили озвучку ответов; если вы используете клонирование голоса, образцы вашего голоса уходят к тому же провайдеру.</li>
+</ul>
+<p>Наш сервер не сохраняет вопросы, ответы, кадры и звук: он передаёт их дальше и записывает только объём вашего использования, чтобы рассчитать баланс. Как провайдеры обращаются с данными после этого, определяют их собственные правила; мы выбираем провайдеров, но не управляем их системами.</p>
+
+<h3>2.3. Что остаётся на вашем компьютере</h3>
+<p>Записи сессий, история ответов, кадры, приложенные к ответам, и ваши материалы хранятся в папках на вашем компьютере: в Windows — рядом с программой, а в macOS — в <code>~/Library/Application Support/Argus</code> (журнал — в <code>~/Library/Logs/Argus</code>). У нас нет к ним доступа. Чтобы их удалить, удалите эти папки: в Windows достаточно удалить всю папку программы; в macOS перенос приложения в Корзину их не удаляет.</p>
+
+<h3>2.4. Платежи</h3>
+<p>Пополнения проходят через платёжного провайдера. Мы никогда не видим и не храним номера карт: провайдер присылает нам сумму, статус и идентификатор платежа.</p>
+
+<h3>2.5. Технические данные</h3>
+<p>Как и любой сервер, наши записывают IP-адрес, время и запрошенный адрес в технические журналы. Мы используем их для безопасности и для исправления ошибок. Приложение спрашивает у сервера загрузки, есть ли новая версия, при запуске, а затем каждые 30 минут, пока работает. Сервер видит ваш IP-адрес, как при любом запросе; в запросе нет ни номера версии, ни данных аккаунта.</p>
+
+<h3>2.6. Сайт</h3>
+<p>На сайте нет рекламы, аналитики и скриптов слежения. Страница с описанием запоминает в вашем браузере только выбранный вами язык.</p>
+
+<h2>3. Зачем мы это используем</h2>
+<ul>
+  <li>чтобы предоставлять сервис и рассчитывать ваш баланс — это нужно для исполнения нашего договора с вами;</li>
+  <li>чтобы защищать сервис от злоупотреблений и исправлять ошибки — наш законный интерес;</li>
+  <li>чтобы вести учёт платежей — этого требует закон;</li>
+  <li>чтобы писать вам по поводу аккаунта: восстановление пароля и важные изменения условий. Рекламных писем мы не рассылаем.</li>
+</ul>
+<p>Мы не продаём данные, не показываем рекламу и не составляем профили на основе ваших данных.</p>
+
+<h2>4. Кому мы передаём данные</h2>
+<p>Только тем, без кого сервис не работает: провайдеру сервиса ИИ, провайдеру распознавания речи, провайдеру озвучки ответов (если вы включаете озвучку ответов), платёжному провайдеру и хостинг-провайдеру, на чьих серверах работают наши. Каждый получает только то, что нужно для его задачи. Государственным органам мы раскрываем данные только так, как этого требует закон.</p>
+
+<h2>5. Как долго мы храним данные</h2>
+<ul>
+  <li>данные аккаунта — пока существует аккаунт; после удаления они сразу исчезают из рабочей базы данных;</li>
+  <li>записи о платежах и использовании — столько, сколько требует закон о бухгалтерском учёте, но без вашей почты и без связи с вами;</li>
+  <li>технические журналы — ограниченное время, затем они стираются при ротации журналов;</li>
+  <li>если мы делаем резервные копии базы данных, удалённые данные исчезают из них не позднее чем через 30 дней.</li>
+</ul>
+
+<h2>6. Ваши права</h2>
+<p>Вы можете:</p>
+<ul>
+  <li>получить копию своих данных — напишите нам (адрес ниже);</li>
+  <li>удалить свой аккаунт — напишите нам (адрес ниже); остаток на балансе при этом пропадает;</li>
+  <li>попросить нас исправить ваши данные, ограничить их обработку или возразить против неё;</li>
+  <li>получить свои данные в переносимом формате;</li>
+  <li>отозвать согласие там, где обработка основана на нём;</li>
+  <li>пожаловаться в орган по защите данных в вашей стране.</li>
+</ul>
+<p>Пишите на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> — мы ответим в течение 30 дней.</p>
+
+<h2>7. Безопасность</h2>
+<p>Мы принимаем разумные меры для защиты ваших данных: пароли и данные для входа хранятся только в необратимом виде. Никакая защита не бывает абсолютной, и мы не можем обещать абсолютной защиты.</p>
+
+<h2>8. Возраст</h2>
+<p>Argus предназначен для людей от 18 лет. Мы сознательно не собираем данные несовершеннолетних; если мы узнаем о таком аккаунте, мы его удалим.</p>
+
+<h2>9. Другие страны</h2>
+<p>Провайдеры, которыми мы пользуемся, могут находиться в других странах и обрабатывать данные там, в том числе там, где защита данных отличается от вашей. Мы передаём им только то, что нужно для работы сервиса.</p>
+
+<h2>10. Изменения</h2>
+<p>Мы можем менять эту политику. Версия и дата указаны вверху страницы, а действующий текст всегда доступен на нашем сайте по тому же адресу. О существенных изменениях мы сообщим вам по электронной почте; если после этого вы продолжите пользоваться Argus, мы будем считать изменения принятыми.</p>
+
+<h2>11. Контакты</h2>
+<p>Команда Argus. Электронная почта: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Условия использования</a>
+    <a href="./">Скачать Argus</a>
+  </footer>
+</article>
+<article lang="uk" data-doc-lang="uk" hidden>
+<h1>Політика конфіденційності</h1>
+<p class="meta">Версія від 14 жовтня 2026 р. Argus надає команда Argus («ми»). Це переклад, наданий для зручності; якщо він відрізняється від англійського оригіналу, перевагу має англійська версія.</p>
+
+<p class="lead">Argus слухає розмову й дивиться на ваш екран, тому на цій сторінці прямо сказано, куди потрапляють дані. Наш сервер зберігає ваш акаунт, баланс і використання у вигляді чисел. Ми не зберігаємо текст ваших запитань, ваше аудіо чи кадри вашого екрана, але вони проходять через сторонні сервіси — див. розділ 2.</p>
+
+<h2>1. Хто ми і як з нами зв'язатися</h2>
+<p>Контролером даних є команда Argus. З будь-яких питань щодо ваших даних пишіть на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+
+<h2>2. Які дані ми обробляємо і куди вони потрапляють</h2>
+
+<h3>2.1. Ваш акаунт (зберігається на нашому сервері)</h3>
+<ul>
+  <li>ваша адреса електронної пошти;</li>
+  <li>ваш пароль — лише у вигляді, який неможливо відновити; самого пароля ми не знаємо;</li>
+  <li>час вашої реєстрації та версія умов, яку ви прийняли;</li>
+  <li>ваш баланс, поповнення й платежі;</li>
+  <li>використання: що ви використовували (розпізнавання, відповіді, озвучення відповідей), скільки й коли — у вигляді чисел, без вмісту;</li>
+  <li>дані, які підтримують ваш вхід в акаунт, — теж лише у вигляді, який неможливо відновити.</li>
+</ul>
+
+<h3>2.2. Розмова: аудіо, екран, запитання</h3>
+<p>Звук із мікрофона та системи, кадри екрана, розпізнаний текст, ваші запитання та матеріали обробляються на вашому комп'ютері. Щоб програма працювала, частина цих даних передається далі, і обробляють її сторонні сервіси, а не ми:</p>
+<ul>
+  <li><b>аудіо</b> йде на наш сервер, а звідти — до сервісу розпізнавання мовлення, який перетворює його на текст;</li>
+  <li><b>запитання</b> разом з відповідними частинами розмови, кадрами екрана та вашими матеріалами йде на наш сервер, а звідти — до постачальника сервісу штучного інтелекту, який готує відповідь;</li>
+  <li><b>текст відповіді</b> йде до постачальника озвучення відповідей, лише якщо ви ввімкнули озвучення; якщо ви користуєтеся клонуванням голосу, зразки вашого голосу потрапляють до того самого постачальника.</li>
+</ul>
+<p>Наш сервер не зберігає запитання, відповіді, кадри чи аудіо: він передає їх далі й записує лише обсяг вашого використання — для розрахунку балансу. Як постачальники поводяться з даними після цього, визначають їхні власні правила; постачальників обираємо ми, але їхніх систем ми не контролюємо.</p>
+
+<h3>2.3. Що залишається на вашому комп'ютері</h3>
+<p>Записи сесій, історія відповідей, кадри, додані до відповідей, і ваші матеріали зберігаються в теках на вашому комп'ютері: у Windows — поруч із програмою, у macOS — у <code>~/Library/Application Support/Argus</code> (журнал — у <code>~/Library/Logs/Argus</code>). Ми не маємо до них доступу. Щоб їх видалити, видаліть ці теки: у Windows достатньо видалити всю теку програми; у macOS перенесення застосунку до Смітника їх не видаляє.</p>
+
+<h3>2.4. Платежі</h3>
+<p>Поповнення проходять через платіжного провайдера. Ми ніколи не бачимо й не зберігаємо номери карток: провайдер надсилає нам суму, статус і ідентифікатор платежу.</p>
+
+<h3>2.5. Технічні дані</h3>
+<p>Як і будь-який сервер, наші записують IP-адресу, час і запитану адресу в технічні журнали. Ми використовуємо їх для безпеки та виправлення помилок. Під час запуску застосунок запитує в сервера завантаження, чи є нова версія, а потім робить це кожні 30 хвилин, поки працює. Сервер бачить вашу IP-адресу, як і за будь-якого запиту; запит не містить ні номера версії, ні даних акаунта.</p>
+
+<h3>2.6. Вебсайт</h3>
+<p>На вебсайті немає реклами, аналітики й скриптів відстеження. Сторінка з описом запам'ятовує у вашому браузері лише обрану вами мову.</p>
+
+<h2>3. Навіщо ми це використовуємо</h2>
+<ul>
+  <li>щоб надавати сервіс і розраховувати ваш баланс — це потрібно для виконання нашого договору з вами;</li>
+  <li>щоб захищати сервіс від зловживань і виправляти помилки — наш законний інтерес;</li>
+  <li>щоб вести облік платежів — цього вимагає закон;</li>
+  <li>щоб писати вам щодо акаунта: відновлення пароля та важливі зміни умов. Маркетингових листів ми не надсилаємо.</li>
+</ul>
+<p>Ми не продаємо дані, не показуємо рекламу й не складаємо профілів на основі ваших даних.</p>
+
+<h2>4. Кому ми передаємо дані</h2>
+<p>Лише тим, без кого сервіс не працює: постачальнику сервісу штучного інтелекту, постачальнику розпізнавання мовлення, постачальнику озвучення відповідей (якщо ви ввімкнете озвучення), платіжному провайдеру та хостинг-провайдеру, на чиїх серверах працює наш сервер. Кожен отримує лише те, що потрібно для його завдання. Державним органам ми розкриваємо дані лише тоді, коли цього вимагає закон.</p>
+
+<h2>5. Як довго ми зберігаємо дані</h2>
+<ul>
+  <li>дані акаунта — доки існує акаунт; після видалення вони одразу зникають із робочої бази даних;</li>
+  <li>записи про платежі та використання — стільки, скільки вимагає бухгалтерське законодавство, але без вашої електронної адреси й без прив'язки до вас;</li>
+  <li>технічні журнали — обмежений час, потім їх стирають під час ротації журналів;</li>
+  <li>якщо ми робимо резервні копії бази даних, видалені дані зникають із них щонайбільше за 30 днів.</li>
+</ul>
+
+<h2>6. Ваші права</h2>
+<p>Ви можете:</p>
+<ul>
+  <li>отримати копію своїх даних — напишіть нам (адреса нижче);</li>
+  <li>видалити свій акаунт — напишіть нам (адреса нижче); залишок на балансі буде втрачено;</li>
+  <li>попросити нас виправити ваші дані, обмежити їх обробку або заперечити проти неї;</li>
+  <li>отримати свої дані у форматі, придатному для перенесення;</li>
+  <li>відкликати згоду там, де обробка ґрунтується на ній;</li>
+  <li>поскаржитися до органу із захисту даних у своїй країні.</li>
+</ul>
+<p>Напишіть на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> — ми відповімо протягом 30 днів.</p>
+
+<h2>7. Безпека</h2>
+<p>Ми вживаємо розумних заходів для захисту ваших даних: паролі та дані для входу зберігаються лише у вигляді, який неможливо відновити. Жоден захист не є абсолютним, і обіцяти такого ми не можемо.</p>
+
+<h2>8. Вік</h2>
+<p>Argus призначений для людей віком від 18 років. Ми свідомо не збираємо дані неповнолітніх; якщо дізнаємося про такий акаунт, видалимо його.</p>
+
+<h2>9. Інші країни</h2>
+<p>Постачальники, якими ми користуємося, можуть перебувати в інших країнах і обробляти там дані, зокрема й у тих, де захист даних відрізняється від захисту у вашій країні. Ми передаємо їм лише те, що потрібно для роботи сервісу.</p>
+
+<h2>10. Зміни</h2>
+<p>Ми можемо змінювати цю політику. Версію та дату вказано вгорі сторінки, а чинний текст завжди розміщено на нашому сайті за тією самою адресою. Про істотні зміни ми повідомимо вас листом на електронну пошту; якщо після цього ви продовжите користуватися Argus, ми вважатимемо зміни прийнятими.</p>
+
+<h2>11. Контакти</h2>
+<p>Команда Argus. Електронна пошта: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Умови використання</a>
+    <a href="./">Завантажити Argus</a>
+  </footer>
+</article>
+<article lang="en" data-doc-lang="en">
+<h1>Privacy Policy</h1>
+<p class="meta">Version of October 14, 2026. Argus is operated by the Argus team (“we”).</p>
+
+<p class="lead">Argus listens to a conversation and looks at your screen, so this page says plainly where things go. Our server stores your account, your balance, and your usage as numbers. We don't store the text of your questions, your audio, or your screen frames, but they do pass through third-party services — see section 2.</p>
+
+<h2>1. Who we are and how to reach us</h2>
+<p>The data controller is the Argus team. For any question about your data, write to <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+
+<h2>2. What data we handle and where it goes</h2>
+
+<h3>2.1. Your account (stored on our server)</h3>
+<ul>
+  <li>your email address;</li>
+  <li>your password — only in a form that can't be reversed; we don't know the password itself;</li>
+  <li>the time you registered and the version of the terms you accepted;</li>
+  <li>your balance, top-ups, and payments;</li>
+  <li>usage: what you used (recognition, answers, voice replies), how much, and when — as numbers, without content;</li>
+  <li>the details that keep you signed in — also only in a form that can't be reversed.</li>
+</ul>
+
+<h3>2.2. The conversation: audio, screen, questions</h3>
+<p>The microphone and system audio, screen frames, recognized text, your questions, and your materials are processed on your computer. To work, part of them goes out, and third-party services handle it, not us:</p>
+<ul>
+  <li><b>audio</b> goes to our server and from there to a speech-recognition service, which turns it into text;</li>
+  <li><b>a question</b>, together with the relevant parts of the conversation, screen frames, and your materials, goes to our server and from there to an AI service provider, which prepares the answer;</li>
+  <li><b>the text of an answer</b> goes to a voice-reply provider only if you turned voice replies on; if you use voice cloning, samples of your voice go to the same provider.</li>
+</ul>
+<p>Our server does not save questions, answers, frames, or audio: it passes them on and records only how much you used, to calculate your balance. How the providers handle data after that is governed by their own rules; we choose the providers but don't control their systems.</p>
+
+<h3>2.3. What stays on your computer</h3>
+<p>Session recordings, answer history, frames attached to answers, and your materials are kept in folders on your computer: next to the program on Windows, and in <code>~/Library/Application Support/Argus</code> on macOS (the log is in <code>~/Library/Logs/Argus</code>). We don't access them. To delete them, delete those folders: on Windows, deleting the whole program folder is enough; on macOS, moving the app to the Trash does not remove them.</p>
+
+<h3>2.4. Payments</h3>
+<p>Top-ups go through a payment provider. We never see or store card numbers: the provider sends us the amount, the status, and a payment ID.</p>
+
+<h3>2.5. Technical data</h3>
+<p>Like any server, ours write the IP address, time, and requested address to technical logs. We use them for security and to fix errors. The app asks the download server whether a new version exists when it starts and then every 30 minutes while it runs. The server sees your IP address, like any request; the request carries no version number and no account details.</p>
+
+<h3>2.6. The website</h3>
+<p>The website has no ads, no analytics, and no tracking scripts. The description page remembers only your chosen language in your browser.</p>
+
+<h2>3. Why we use it</h2>
+<ul>
+  <li>to provide the service and calculate your balance — this is needed to perform our contract with you;</li>
+  <li>to protect the service from abuse and to fix errors — our legitimate interest;</li>
+  <li>to keep payment records — required by law;</li>
+  <li>to write to you about your account: password recovery and important changes to the terms. We send no marketing emails.</li>
+</ul>
+<p>We don't sell data, show ads, or build profiles from your data.</p>
+
+<h2>4. Who we share data with</h2>
+<p>Only those without whom the service doesn't work: an AI service provider, a speech-recognition provider, a voice-reply provider (if you turn voice replies on), a payment provider, and the hosting provider whose servers run ours. Each receives only what its task needs. We disclose data to public authorities only as the law requires.</p>
+
+<h2>5. How long we keep data</h2>
+<ul>
+  <li>account data — as long as the account exists; after deletion it disappears from the working database right away;</li>
+  <li>payment and usage records — as long as accounting law requires, but without your email and without a link to you;</li>
+  <li>technical logs — for a limited time, then they are erased when logs rotate;</li>
+  <li>if we make backups of the database, deleted data disappears from them within 30 days at most.</li>
+</ul>
+
+<h2>6. Your rights</h2>
+<p>You can:</p>
+<ul>
+  <li>get a copy of your data — write to us (address below);</li>
+  <li>delete your account — write to us (address below); any remaining balance is lost;</li>
+  <li>ask us to correct your data, restrict its processing, or object to it;</li>
+  <li>take your data in a portable format;</li>
+  <li>withdraw consent where processing relies on it;</li>
+  <li>complain to the data protection authority in your country.</li>
+</ul>
+<p>Write to <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> — we will reply within 30 days.</p>
+
+<h2>7. Security</h2>
+<p>We take reasonable measures to protect your data: passwords and sign-in details are stored only in a form that can't be reversed. No protection is absolute, and we can't promise one.</p>
+
+<h2>8. Age</h2>
+<p>Argus is for people aged 18 and over. We don't knowingly collect data from minors; if we learn of such an account, we will delete it.</p>
+
+<h2>9. Other countries</h2>
+<p>The providers we use may be located in, and process data in, other countries, including ones where data protection differs from yours. We pass them only what the service needs to work.</p>
+
+<h2>10. Changes</h2>
+<p>We may change this policy. The version and date are at the top of the page, and the current text is always on our website at the same address. We will email you about material changes; if you keep using Argus after that, we treat the changes as accepted.</p>
+
+<h2>11. Contact</h2>
+<p>the Argus team. Email: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Terms of Use</a>
+    <a href="./">Download Argus</a>
+  </footer>
+</article>
+<article lang="es" data-doc-lang="es" hidden>
+<h1>Política de privacidad</h1>
+<p class="meta">Versión del 14 de octubre de 2026. Argus lo opera el equipo de Argus («nosotros»). Esta es una traducción facilitada por comodidad; si difiere del original en inglés, prevalece la versión en inglés.</p>
+
+<p class="lead">Argus escucha una conversación y mira su pantalla, así que esta página explica con claridad adónde va cada cosa. Nuestro servidor guarda su cuenta, su saldo y su uso en forma de números. No guardamos el texto de sus preguntas, su audio ni las capturas de su pantalla, pero sí pasan por servicios de terceros: consulte la sección 2.</p>
+
+<h2>1. Quiénes somos y cómo contactarnos</h2>
+<p>El responsable del tratamiento de los datos es el equipo de Argus. Para cualquier duda sobre sus datos, escriba a <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+
+<h2>2. Qué datos tratamos y adónde van</h2>
+
+<h3>2.1. Su cuenta (se guarda en nuestro servidor)</h3>
+<ul>
+  <li>su correo electrónico;</li>
+  <li>su contraseña, solo de una forma que no se puede revertir; no conocemos la contraseña en sí;</li>
+  <li>el momento en que se registró y la versión de los términos que aceptó;</li>
+  <li>su saldo, sus recargas y sus pagos;</li>
+  <li>el uso: qué usó (reconocimiento, respuestas, respuestas por voz), cuánto y cuándo, en forma de números, sin contenido;</li>
+  <li>los datos que mantienen su sesión iniciada, también solo de una forma que no se puede revertir.</li>
+</ul>
+
+<h3>2.2. La conversación: audio, pantalla, preguntas</h3>
+<p>El audio del micrófono y del sistema, las capturas de pantalla, el texto reconocido, sus preguntas y sus materiales se procesan en su equipo. Para funcionar, una parte sale de él, y la tratan servicios de terceros, no nosotros:</p>
+<ul>
+  <li><b>el audio</b> va a nuestro servidor y de ahí a un servicio de reconocimiento de voz, que lo convierte en texto;</li>
+  <li><b>una pregunta</b>, junto con las partes pertinentes de la conversación, las capturas de pantalla y sus materiales, va a nuestro servidor y de ahí a un proveedor de servicios de IA, que prepara la respuesta;</li>
+  <li><b>el texto de una respuesta</b> va a un proveedor de respuestas por voz solo si activó las respuestas por voz; si usa la clonación de voz, las muestras de su voz van al mismo proveedor.</li>
+</ul>
+<p>Nuestro servidor no guarda preguntas, respuestas, capturas ni audio: los transmite y registra solo cuánto usó, para calcular su saldo. Cómo tratan los proveedores los datos a partir de ese momento lo rigen sus propias normas; nosotros elegimos a los proveedores, pero no controlamos sus sistemas.</p>
+
+<h3>2.3. Lo que se queda en su equipo</h3>
+<p>Las grabaciones de las sesiones, el historial de respuestas, las capturas adjuntas a las respuestas y sus materiales se guardan en carpetas de su equipo: junto al programa en Windows, y en <code>~/Library/Application Support/Argus</code> en macOS (el registro está en <code>~/Library/Logs/Argus</code>). No accedemos a ellos. Para eliminarlos, elimine esas carpetas: en Windows basta con eliminar toda la carpeta del programa; en macOS, mover la aplicación a la Papelera no los elimina.</p>
+
+<h3>2.4. Pagos</h3>
+<p>Las recargas se hacen a través de un proveedor de pagos. Nunca vemos ni guardamos números de tarjeta: el proveedor nos envía el importe, el estado y un identificador de pago.</p>
+
+<h3>2.5. Datos técnicos</h3>
+<p>Como cualquier servidor, los nuestros escriben la dirección IP, la hora y la dirección solicitada en registros técnicos. Los usamos por seguridad y para corregir errores. La aplicación pregunta al servidor de descargas si existe una versión nueva al iniciarse y después cada 30 minutos mientras está en ejecución. El servidor ve su dirección IP, como en cualquier solicitud; la solicitud no incluye ni el número de versión ni datos de la cuenta.</p>
+
+<h3>2.6. El sitio web</h3>
+<p>El sitio web no tiene anuncios, ni analítica, ni scripts de seguimiento. La página de descripción solo recuerda en su navegador el idioma que eligió.</p>
+
+<h2>3. Para qué los usamos</h2>
+<ul>
+  <li>para prestar el servicio y calcular su saldo: es necesario para cumplir nuestro contrato con usted;</li>
+  <li>para proteger el servicio contra abusos y corregir errores: nuestro interés legítimo;</li>
+  <li>para conservar los registros de pagos: lo exige la ley;</li>
+  <li>para escribirle sobre su cuenta: recuperación de la contraseña y cambios importantes en los términos. No enviamos correos de marketing.</li>
+</ul>
+<p>No vendemos datos, no mostramos anuncios ni elaboramos perfiles a partir de sus datos.</p>
+
+<h2>4. Con quién compartimos los datos</h2>
+<p>Solo con aquellos sin los cuales el servicio no funciona: un proveedor de servicios de IA, un proveedor de reconocimiento de voz, un proveedor de respuestas por voz (si activa las respuestas por voz), un proveedor de pagos y el proveedor de alojamiento en cuyos servidores se ejecutan los nuestros. Cada uno recibe solo lo que necesita para su tarea. Comunicamos datos a las autoridades públicas únicamente cuando la ley lo exige.</p>
+
+<h2>5. Cuánto tiempo conservamos los datos</h2>
+<ul>
+  <li>los datos de la cuenta, mientras la cuenta exista; tras eliminarla, desaparecen de inmediato de la base de datos en uso;</li>
+  <li>los registros de pagos y de uso, durante el tiempo que exija la legislación contable, pero sin su correo electrónico y sin vínculo con usted;</li>
+  <li>los registros técnicos, durante un tiempo limitado; después se borran al rotar los registros;</li>
+  <li>si hacemos copias de seguridad de la base de datos, los datos eliminados desaparecen de ellas en un máximo de 30 días.</li>
+</ul>
+
+<h2>6. Sus derechos</h2>
+<p>Puede:</p>
+<ul>
+  <li>obtener una copia de sus datos: escríbanos (la dirección está más abajo);</li>
+  <li>eliminar su cuenta: escríbanos (la dirección está más abajo); el saldo restante se pierde;</li>
+  <li>pedirnos que corrijamos sus datos o que limitemos su tratamiento, u oponerse a él;</li>
+  <li>recibir sus datos en un formato portable;</li>
+  <li>retirar su consentimiento cuando el tratamiento se base en él;</li>
+  <li>presentar una reclamación ante la autoridad de protección de datos de su país.</li>
+</ul>
+<p>Escriba a <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>: le responderemos en un plazo de 30 días.</p>
+
+<h2>7. Seguridad</h2>
+<p>Tomamos medidas razonables para proteger sus datos: las contraseñas y los datos de inicio de sesión se guardan solo de una forma que no se puede revertir. Ninguna protección es absoluta, y no podemos prometerla.</p>
+
+<h2>8. Edad</h2>
+<p>Argus es para personas de 18 años o más. No recopilamos a sabiendas datos de menores; si descubrimos una cuenta así, la eliminaremos.</p>
+
+<h2>9. Otros países</h2>
+<p>Los proveedores que usamos pueden estar ubicados en otros países y tratar datos en ellos, incluidos países donde la protección de datos difiere de la de su país. Solo les transmitimos lo que el servicio necesita para funcionar.</p>
+
+<h2>10. Cambios</h2>
+<p>Podemos cambiar esta política. La versión y la fecha figuran en la parte superior de la página, y el texto vigente siempre está en nuestro sitio web, en la misma dirección. Le avisaremos por correo electrónico de los cambios importantes; si sigue usando Argus después, consideraremos que los acepta.</p>
+
+<h2>11. Contacto</h2>
+<p>El equipo de Argus. Correo electrónico: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Términos de uso</a>
+    <a href="./">Descargar Argus</a>
+  </footer>
+</article>
+<article lang="pt" data-doc-lang="pt" hidden>
+<h1>Política de privacidade</h1>
+<p class="meta">Versão de 14 de outubro de 2026. O Argus é operado pela equipe do Argus (“nós”). Esta é uma tradução fornecida para sua conveniência; se houver diferença em relação ao original em inglês, prevalece a versão em inglês.</p>
+
+<p class="lead">O Argus escuta uma conversa e olha a sua tela, por isso esta página diz com clareza para onde as coisas vão. O nosso servidor guarda a sua conta, o seu saldo e o seu uso como números. Não guardamos o texto das suas perguntas, o seu áudio nem as capturas da sua tela, mas esses dados passam por serviços de terceiros — veja a seção 2.</p>
+
+<h2>1. Quem somos e como falar conosco</h2>
+<p>O controlador dos dados é a equipe do Argus. Para qualquer dúvida sobre os seus dados, escreva para <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+
+<h2>2. Quais dados tratamos e para onde eles vão</h2>
+
+<h3>2.1. Sua conta (armazenada no nosso servidor)</h3>
+<ul>
+  <li>o seu endereço de e-mail;</li>
+  <li>a sua senha — somente de uma forma que não pode ser revertida; nós não sabemos a senha em si;</li>
+  <li>o momento em que você se cadastrou e a versão dos termos que você aceitou;</li>
+  <li>o seu saldo, as recargas e os pagamentos;</li>
+  <li>o uso: o que você usou (reconhecimento, respostas, respostas por voz), quanto e quando — em números, sem conteúdo;</li>
+  <li>os dados que mantêm você conectado — também somente de uma forma que não pode ser revertida.</li>
+</ul>
+
+<h3>2.2. A conversa: áudio, tela, perguntas</h3>
+<p>O microfone e o áudio do sistema, as capturas de tela, o texto reconhecido, as suas perguntas e os seus materiais são processados no seu computador. Para o serviço funcionar, parte deles sai do computador, e quem os trata são serviços de terceiros, não nós:</p>
+<ul>
+  <li><b>o áudio</b> vai para o nosso servidor e, de lá, para um serviço de reconhecimento de fala, que o transforma em texto;</li>
+  <li><b>uma pergunta</b>, junto com as partes relevantes da conversa, as capturas de tela e os seus materiais, vai para o nosso servidor e, de lá, para um provedor de serviço de IA, que prepara a resposta;</li>
+  <li><b>o texto de uma resposta</b> vai para um provedor de respostas por voz somente se você ativou as respostas por voz; se você usar a clonagem de voz, amostras da sua voz vão para o mesmo provedor.</li>
+</ul>
+<p>O nosso servidor não salva perguntas, respostas, capturas nem áudio: ele apenas os repassa e registra somente quanto você usou, para calcular o seu saldo. A forma como os provedores tratam os dados depois disso é regida pelas regras deles; nós escolhemos os provedores, mas não controlamos os sistemas deles.</p>
+
+<h3>2.3. O que fica no seu computador</h3>
+<p>As gravações das sessões, o histórico de respostas, as capturas anexadas às respostas e os seus materiais ficam em pastas no seu computador: ao lado do programa, no Windows, e em <code>~/Library/Application Support/Argus</code>, no macOS (o log fica em <code>~/Library/Logs/Argus</code>). Nós não os acessamos. Para excluí-los, exclua essas pastas: no Windows, basta excluir a pasta inteira do programa; no macOS, mover o aplicativo para a Lixeira não os remove.</p>
+
+<h3>2.4. Pagamentos</h3>
+<p>As recargas passam por um provedor de pagamento. Nunca vemos nem guardamos números de cartão: o provedor nos envia o valor, o status e um identificador do pagamento.</p>
+
+<h3>2.5. Dados técnicos</h3>
+<p>Como qualquer servidor, os nossos registram o endereço IP, o horário e o endereço solicitado em logs técnicos. Usamos esses logs para segurança e para corrigir erros. O aplicativo pergunta ao servidor de download se existe uma nova versão quando é iniciado e, depois, a cada 30 minutos enquanto está em execução. O servidor vê o seu endereço IP, como em qualquer requisição; a requisição não leva número de versão nem dados da conta.</p>
+
+<h3>2.6. O site</h3>
+<p>O site não tem anúncios, análises nem scripts de rastreamento. A página de descrição apenas lembra, no seu navegador, o idioma que você escolheu.</p>
+
+<h2>3. Por que usamos os dados</h2>
+<ul>
+  <li>para prestar o serviço e calcular o seu saldo — isso é necessário para cumprir o nosso contrato com você;</li>
+  <li>para proteger o serviço contra abusos e corrigir erros — o nosso interesse legítimo;</li>
+  <li>para manter os registros de pagamentos — exigido por lei;</li>
+  <li>para escrever a você sobre a sua conta: recuperação de senha e mudanças importantes nos termos. Não enviamos e-mails de marketing.</li>
+</ul>
+<p>Não vendemos dados, não exibimos anúncios nem criamos perfis a partir dos seus dados.</p>
+
+<h2>4. Com quem compartilhamos os dados</h2>
+<p>Somente com aqueles sem os quais o serviço não funciona: um provedor de serviço de IA, um provedor de reconhecimento de fala, um provedor de respostas por voz (se você ativar as respostas por voz), um provedor de pagamento e o provedor de hospedagem em cujos servidores o nosso funciona. Cada um recebe apenas o que a sua tarefa exige. Só divulgamos dados a autoridades públicas na medida em que a lei exigir.</p>
+
+<h2>5. Por quanto tempo guardamos os dados</h2>
+<ul>
+  <li>dados da conta — enquanto a conta existir; após a exclusão, eles somem imediatamente do banco de dados em uso;</li>
+  <li>registros de pagamentos e de uso — pelo tempo que a legislação contábil exigir, mas sem o seu e-mail e sem vínculo com você;</li>
+  <li>logs técnicos — por um tempo limitado; depois, são apagados na rotação dos logs;</li>
+  <li>se fizermos backups do banco de dados, os dados excluídos somem deles em no máximo 30 dias.</li>
+</ul>
+
+<h2>6. Seus direitos</h2>
+<p>Você pode:</p>
+<ul>
+  <li>obter uma cópia dos seus dados — escreva para nós (endereço abaixo);</li>
+  <li>excluir a sua conta — escreva para nós (endereço abaixo); qualquer saldo restante é perdido;</li>
+  <li>pedir a correção dos seus dados ou a limitação do tratamento deles, ou se opor a esse tratamento;</li>
+  <li>receber os seus dados em um formato portável;</li>
+  <li>retirar o consentimento quando o tratamento se basear nele;</li>
+  <li>apresentar uma reclamação à autoridade de proteção de dados do seu país.</li>
+</ul>
+<p>Escreva para <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> — responderemos em até 30 dias.</p>
+
+<h2>7. Segurança</h2>
+<p>Tomamos medidas razoáveis para proteger os seus dados: senhas e dados de login são guardados somente de uma forma que não pode ser revertida. Nenhuma proteção é absoluta, e não podemos prometer uma que seja.</p>
+
+<h2>8. Idade</h2>
+<p>O Argus é para pessoas com 18 anos ou mais. Não coletamos conscientemente dados de menores; se soubermos de uma conta assim, vamos excluí-la.</p>
+
+<h2>9. Outros países</h2>
+<p>Os provedores que usamos podem estar localizados em outros países e tratar dados neles, inclusive em países onde a proteção de dados é diferente da do seu. Passamos a eles apenas o que o serviço precisa para funcionar.</p>
+
+<h2>10. Alterações</h2>
+<p>Podemos alterar esta política. A versão e a data ficam no topo da página, e o texto atual está sempre no nosso site, no mesmo endereço. Avisaremos por e-mail sobre as mudanças relevantes; se você continuar usando o Argus depois disso, consideraremos as mudanças como aceitas.</p>
+
+<h2>11. Contato</h2>
+<p>A equipe do Argus. E-mail: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Termos de uso</a>
+    <a href="./">Baixar o Argus</a>
+  </footer>
+</article>
+<article lang="de" data-doc-lang="de" hidden>
+<h1>Datenschutzerklärung</h1>
+<p class="meta">Stand: 14. Oktober 2026. Argus wird vom Argus-Team betrieben („wir“). Diese Übersetzung dient nur dem besseren Verständnis; weicht sie vom englischen Original ab, gilt die englische Fassung.</p>
+
+<p class="lead">Argus hört ein Gespräch mit und sieht sich Ihren Bildschirm an; deshalb sagt diese Seite offen, wohin welche Daten gehen. Unser Server speichert Ihr Konto, Ihr Guthaben und Ihre Nutzung als Zahlen. Den Text Ihrer Fragen, Ihr Audio und Ihre Bildschirmbilder speichern wir nicht, sie laufen aber über Dienste Dritter – siehe Abschnitt 2.</p>
+
+<h2>1. Wer wir sind und wie Sie uns erreichen</h2>
+<p>Verantwortlich für die Datenverarbeitung ist das Argus-Team. Bei allen Fragen zu Ihren Daten schreiben Sie an <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+
+<h2>2. Welche Daten wir verarbeiten und wohin sie gehen</h2>
+
+<h3>2.1. Ihr Konto (auf unserem Server gespeichert)</h3>
+<ul>
+  <li>Ihre E-Mail-Adresse;</li>
+  <li>Ihr Passwort – nur in einer Form, die sich nicht zurückrechnen lässt; das Passwort selbst kennen wir nicht;</li>
+  <li>der Zeitpunkt Ihrer Registrierung und die Version der Bedingungen, die Sie akzeptiert haben;</li>
+  <li>Ihr Guthaben, Ihre Aufladungen und Zahlungen;</li>
+  <li>die Nutzung: was Sie genutzt haben (Spracherkennung, Antworten, Sprachausgabe), wie viel und wann – als Zahlen, ohne Inhalte;</li>
+  <li>die Angaben, mit denen Sie angemeldet bleiben – ebenfalls nur in einer Form, die sich nicht zurückrechnen lässt.</li>
+</ul>
+
+<h3>2.2. Das Gespräch: Audio, Bildschirm, Fragen</h3>
+<p>Mikrofon- und Systemton, Bildschirmbilder, erkannter Text, Ihre Fragen und Ihre Materialien werden auf Ihrem Computer verarbeitet. Damit der Dienst funktioniert, verlässt ein Teil davon Ihren Computer, und Dienste Dritter verarbeiten ihn, nicht wir:</p>
+<ul>
+  <li><b>Audio</b> geht an unseren Server und von dort an einen Spracherkennungsdienst, der es in Text umwandelt;</li>
+  <li><b>eine Frage</b> geht zusammen mit den relevanten Teilen des Gesprächs, Bildschirmbildern und Ihren Materialien an unseren Server und von dort an einen Anbieter von KI-Diensten, der die Antwort erstellt;</li>
+  <li><b>der Text einer Antwort</b> geht nur dann an einen Anbieter für Sprachausgabe, wenn Sie die Sprachausgabe eingeschaltet haben; wenn Sie das Klonen Ihrer Stimme nutzen, gehen Proben Ihrer Stimme an denselben Anbieter.</li>
+</ul>
+<p>Unser Server speichert weder Fragen noch Antworten, Bildschirmbilder oder Audio: Er leitet sie nur weiter und erfasst allein, wie viel Sie genutzt haben, um Ihr Guthaben zu berechnen. Wie die Anbieter die Daten danach behandeln, richtet sich nach ihren eigenen Regeln; wir wählen die Anbieter aus, haben aber keine Kontrolle über deren Systeme.</p>
+
+<h3>2.3. Was auf Ihrem Computer bleibt</h3>
+<p>Aufnahmen von Sitzungen, der Antwortverlauf, an Antworten angehängte Bildschirmbilder und Ihre Materialien liegen in Ordnern auf Ihrem Computer: unter Windows neben dem Programm und unter macOS in <code>~/Library/Application Support/Argus</code> (das Protokoll liegt in <code>~/Library/Logs/Argus</code>). Wir greifen nicht darauf zu. Um sie zu löschen, löschen Sie diese Ordner: Unter Windows genügt es, den gesamten Programmordner zu löschen; unter macOS entfernt das Verschieben der App in den Papierkorb sie nicht.</p>
+
+<h3>2.4. Zahlungen</h3>
+<p>Aufladungen laufen über einen Zahlungsdienstleister. Kartennummern sehen oder speichern wir nie: Der Anbieter übermittelt uns den Betrag, den Status und eine Zahlungs-ID.</p>
+
+<h3>2.5. Technische Daten</h3>
+<p>Wie bei jedem Server werden auch bei unseren die IP-Adresse, die Uhrzeit und die angeforderte Adresse in technische Protokolle geschrieben. Wir nutzen sie für die Sicherheit und zur Fehlerbehebung. Die App fragt beim Start und danach alle 30 Minuten, solange sie läuft, den Download-Server, ob es eine neue Version gibt. Der Server sieht dabei Ihre IP-Adresse, wie bei jeder Anfrage; die Anfrage enthält weder eine Versionsnummer noch Kontodaten.</p>
+
+<h3>2.6. Die Website</h3>
+<p>Die Website hat keine Werbung, keine Analysen und keine Tracking-Skripte. Die Beschreibungsseite merkt sich in Ihrem Browser nur die Sprache, die Sie gewählt haben.</p>
+
+<h2>3. Wozu wir sie verwenden</h2>
+<ul>
+  <li>um den Dienst bereitzustellen und Ihr Guthaben zu berechnen – das ist zur Erfüllung unseres Vertrags mit Ihnen erforderlich;</li>
+  <li>um den Dienst vor Missbrauch zu schützen und Fehler zu beheben – unser berechtigtes Interesse;</li>
+  <li>um Zahlungsunterlagen aufzubewahren – gesetzlich vorgeschrieben;</li>
+  <li>um Ihnen zu Ihrem Konto zu schreiben: Passwortwiederherstellung und wichtige Änderungen der Bedingungen. Wir senden keine Werbe-E-Mails.</li>
+</ul>
+<p>Wir verkaufen keine Daten, zeigen keine Werbung und erstellen aus Ihren Daten keine Profile.</p>
+
+<h2>4. An wen wir Daten weitergeben</h2>
+<p>Nur an diejenigen, ohne die der Dienst nicht funktioniert: einen Anbieter von KI-Diensten, einen Anbieter für Spracherkennung, einen Anbieter für Sprachausgabe (wenn Sie die Sprachausgabe einschalten), einen Zahlungsdienstleister und den Hosting-Anbieter, auf dessen Servern unsere laufen. Jeder erhält nur das, was seine Aufgabe erfordert. Daten legen wir gegenüber Behörden nur offen, soweit das Gesetz es verlangt.</p>
+
+<h2>5. Wie lange wir Daten speichern</h2>
+<ul>
+  <li>Kontodaten – solange das Konto besteht; nach der Löschung verschwinden sie sofort aus der aktiven Datenbank;</li>
+  <li>Zahlungs- und Nutzungsunterlagen – so lange, wie das Buchführungsrecht es verlangt, aber ohne Ihre E-Mail-Adresse und ohne Verbindung zu Ihnen;</li>
+  <li>technische Protokolle – für begrenzte Zeit, danach werden sie bei der Rotation der Protokolle gelöscht;</li>
+  <li>wenn wir Sicherungskopien der Datenbank anlegen, verschwinden gelöschte Daten dort spätestens innerhalb von 30 Tagen.</li>
+</ul>
+
+<h2>6. Ihre Rechte</h2>
+<p>Sie können:</p>
+<ul>
+  <li>eine Kopie Ihrer Daten erhalten – schreiben Sie uns (Adresse unten);</li>
+  <li>Ihr Konto löschen – schreiben Sie uns (Adresse unten); ein noch vorhandenes Guthaben geht verloren;</li>
+  <li>uns bitten, Ihre Daten zu berichtigen, ihre Verarbeitung einzuschränken oder ihr zu widersprechen;</li>
+  <li>Ihre Daten in einem übertragbaren Format erhalten;</li>
+  <li>eine Einwilligung widerrufen, wo die Verarbeitung auf ihr beruht;</li>
+  <li>sich bei der Datenschutzbehörde Ihres Landes beschweren.</li>
+</ul>
+<p>Schreiben Sie an <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> – wir antworten innerhalb von 30 Tagen.</p>
+
+<h2>7. Sicherheit</h2>
+<p>Wir treffen angemessene Maßnahmen zum Schutz Ihrer Daten: Passwörter und Anmeldedaten werden nur in einer Form gespeichert, die sich nicht zurückrechnen lässt. Kein Schutz ist absolut, und einen absoluten Schutz können wir nicht versprechen.</p>
+
+<h2>8. Alter</h2>
+<p>Argus ist für Personen ab 18 Jahren. Wir erheben wissentlich keine Daten von Minderjährigen; erfahren wir von einem solchen Konto, löschen wir es.</p>
+
+<h2>9. Andere Länder</h2>
+<p>Die Anbieter, die wir nutzen, können in anderen Ländern ansässig sein und dort Daten verarbeiten, auch in Ländern, in denen der Datenschutz anders geregelt ist als bei Ihnen. Wir geben ihnen nur das weiter, was der Dienst zum Funktionieren braucht.</p>
+
+<h2>10. Änderungen</h2>
+<p>Wir dürfen diese Erklärung ändern. Version und Datum stehen oben auf der Seite, und der aktuelle Text ist immer unter derselben Adresse auf unserer Website zu finden. Über wesentliche Änderungen informieren wir Sie per E-Mail; wenn Sie Argus danach weiter nutzen, gelten die Änderungen als akzeptiert.</p>
+
+<h2>11. Kontakt</h2>
+<p>Argus-Team. E-Mail: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Nutzungsbedingungen</a>
+    <a href="./">Argus herunterladen</a>
+  </footer>
+</article>
+<article lang="fr" data-doc-lang="fr" hidden>
+<h1>Politique de confidentialité</h1>
+<p class="meta">Version du 14 octobre 2026. Argus est exploité par l’équipe Argus («&nbsp;nous&nbsp;»). Cette traduction est fournie à titre indicatif&nbsp;; en cas de différence avec l’original anglais, la version anglaise prévaut.</p>
+
+<p class="lead">Argus écoute une conversation et regarde votre écran&nbsp;: cette page dit donc clairement où vont les données. Notre serveur conserve votre compte, votre solde et votre utilisation sous forme de chiffres. Nous ne conservons ni le texte de vos questions, ni votre audio, ni vos captures d’écran, mais ils transitent par des services tiers — voir la section 2.</p>
+
+<h2>1. Qui nous sommes et comment nous joindre</h2>
+<p>Le responsable du traitement des données est l’équipe Argus. Pour toute question sur vos données, écrivez à <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+
+<h2>2. Quelles données nous traitons et où elles vont</h2>
+
+<h3>2.1. Votre compte (conservé sur notre serveur)</h3>
+<ul>
+  <li>votre adresse e-mail&nbsp;;</li>
+  <li>votre mot de passe — uniquement sous une forme irréversible&nbsp;; nous ne connaissons pas le mot de passe lui-même&nbsp;;</li>
+  <li>le moment de votre inscription et la version des conditions que vous avez acceptée&nbsp;;</li>
+  <li>votre solde, vos recharges et vos paiements&nbsp;;</li>
+  <li>l’utilisation&nbsp;: ce que vous avez utilisé (reconnaissance, réponses, réponses vocales), en quelle quantité et quand — sous forme de chiffres, sans contenu&nbsp;;</li>
+  <li>les informations qui vous maintiennent connecté — également uniquement sous une forme irréversible.</li>
+</ul>
+
+<h3>2.2. La conversation&nbsp;: audio, écran, questions</h3>
+<p>Le micro et le son du système, les captures d’écran, le texte reconnu, vos questions et vos documents sont traités sur votre ordinateur. Pour que le service fonctionne, une partie de ces données en sort, et ce sont des services tiers qui la traitent, pas nous&nbsp;:</p>
+<ul>
+  <li><b>l’audio</b> est envoyé à notre serveur, puis de là à un service de reconnaissance vocale, qui le transforme en texte&nbsp;;</li>
+  <li><b>une question</b>, avec les parties pertinentes de la conversation, les captures d’écran et vos documents, est envoyée à notre serveur, puis de là à un fournisseur de services d’intelligence artificielle, qui prépare la réponse&nbsp;;</li>
+  <li><b>le texte d’une réponse</b> n’est envoyé à un fournisseur de réponses vocales que si vous avez activé les réponses vocales&nbsp;; si vous utilisez le clonage de voix, des échantillons de votre voix sont envoyés au même fournisseur.</li>
+</ul>
+<p>Notre serveur ne conserve ni les questions, ni les réponses, ni les captures d’écran, ni l’audio&nbsp;: il les transmet et note seulement la quantité que vous avez utilisée, pour calculer votre solde. La manière dont les prestataires traitent ensuite les données relève de leurs propres règles&nbsp;; nous choisissons les prestataires, mais nous ne contrôlons pas leurs systèmes.</p>
+
+<h3>2.3. Ce qui reste sur votre ordinateur</h3>
+<p>Les enregistrements de sessions, l’historique des réponses, les captures d’écran jointes aux réponses et vos documents sont conservés dans des dossiers sur votre ordinateur&nbsp;: à côté du programme sous Windows, et dans <code>~/Library/Application Support/Argus</code> sous macOS (le journal se trouve dans <code>~/Library/Logs/Argus</code>). Nous n’y avons pas accès. Pour les supprimer, supprimez ces dossiers&nbsp;: sous Windows, il suffit de supprimer le dossier entier du programme&nbsp;; sous macOS, mettre l’application à la corbeille ne les supprime pas.</p>
+
+<h3>2.4. Paiements</h3>
+<p>Les recharges passent par un prestataire de paiement. Nous ne voyons ni ne conservons jamais les numéros de carte&nbsp;: le prestataire nous transmet le montant, le statut et un identifiant de paiement.</p>
+
+<h3>2.5. Données techniques</h3>
+<p>Comme tout serveur, les nôtres inscrivent l’adresse IP, l’heure et l’adresse demandée dans des journaux techniques. Nous les utilisons pour la sécurité et pour corriger les erreurs. Au démarrage, puis toutes les 30 minutes tant qu’elle fonctionne, l’application demande au serveur de téléchargement s’il existe une nouvelle version. Le serveur voit votre adresse IP, comme pour toute requête&nbsp;; la requête ne contient ni numéro de version ni informations sur votre compte.</p>
+
+<h3>2.6. Le site web</h3>
+<p>Le site web n’a ni publicité, ni outil d’analyse, ni script de suivi. La page de présentation ne mémorise que la langue que vous avez choisie, dans votre navigateur.</p>
+
+<h2>3. Pourquoi nous les utilisons</h2>
+<ul>
+  <li>pour fournir le service et calculer votre solde — c’est nécessaire à l’exécution de notre contrat avec vous&nbsp;;</li>
+  <li>pour protéger le service contre les abus et corriger les erreurs — notre intérêt légitime&nbsp;;</li>
+  <li>pour conserver les justificatifs de paiement — exigé par la loi&nbsp;;</li>
+  <li>pour vous écrire au sujet de votre compte&nbsp;: récupération du mot de passe et changements importants des conditions. Nous n’envoyons pas d’e-mails publicitaires.</li>
+</ul>
+<p>Nous ne vendons pas de données, n’affichons pas de publicités et ne créons pas de profils à partir de vos données.</p>
+
+<h2>4. Avec qui nous partageons les données</h2>
+<p>Uniquement avec ceux sans qui le service ne fonctionne pas&nbsp;: un fournisseur de services d’intelligence artificielle, un prestataire de reconnaissance vocale, un fournisseur de réponses vocales (si vous activez les réponses vocales), un prestataire de paiement et l’hébergeur sur les serveurs duquel fonctionnent les nôtres. Chacun ne reçoit que ce dont sa tâche a besoin. Nous ne communiquons des données aux autorités publiques que si la loi l’exige.</p>
+
+<h2>5. Combien de temps nous conservons les données</h2>
+<ul>
+  <li>les données du compte — tant que le compte existe&nbsp;; après la suppression, elles disparaissent aussitôt de la base de données active&nbsp;;</li>
+  <li>les justificatifs de paiement et d’utilisation — aussi longtemps que la loi comptable l’exige, mais sans votre e-mail et sans lien avec vous&nbsp;;</li>
+  <li>les journaux techniques — pendant une durée limitée, puis ils sont effacés lors de la rotation des journaux&nbsp;;</li>
+  <li>si nous faisons des sauvegardes de la base de données, les données supprimées en disparaissent dans un délai maximal de 30 jours.</li>
+</ul>
+
+<h2>6. Vos droits</h2>
+<p>Vous pouvez&nbsp;:</p>
+<ul>
+  <li>obtenir une copie de vos données — écrivez-nous (adresse ci-dessous)&nbsp;;</li>
+  <li>supprimer votre compte — écrivez-nous (adresse ci-dessous)&nbsp;; le solde restant est perdu&nbsp;;</li>
+  <li>nous demander de corriger vos données ou d’en limiter le traitement, ou vous opposer à ce traitement&nbsp;;</li>
+  <li>récupérer vos données dans un format portable&nbsp;;</li>
+  <li>retirer votre consentement lorsque le traitement repose sur celui-ci&nbsp;;</li>
+  <li>déposer une réclamation auprès de l’autorité de protection des données de votre pays.</li>
+</ul>
+<p>Écrivez à <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> — nous vous répondrons dans un délai de 30 jours.</p>
+
+<h2>7. Sécurité</h2>
+<p>Nous prenons des mesures raisonnables pour protéger vos données&nbsp;: les mots de passe et les informations de connexion ne sont conservés que sous une forme irréversible. Aucune protection n’est absolue, et nous ne pouvons pas en promettre une.</p>
+
+<h2>8. Âge</h2>
+<p>Argus est destiné aux personnes de 18 ans et plus. Nous ne collectons pas sciemment de données de mineurs&nbsp;; si nous découvrons un tel compte, nous le supprimerons.</p>
+
+<h2>9. Autres pays</h2>
+<p>Les prestataires que nous utilisons peuvent être situés dans d’autres pays et y traiter des données, y compris dans des pays où la protection des données diffère de celle dont vous bénéficiez. Nous ne leur transmettons que ce dont le service a besoin pour fonctionner.</p>
+
+<h2>10. Modifications</h2>
+<p>Nous pouvons modifier cette politique. La version et la date figurent en haut de la page, et le texte en vigueur se trouve toujours sur notre site web, à la même adresse. Nous vous écrirons par e-mail en cas de changements importants&nbsp;; si vous continuez à utiliser Argus ensuite, nous considérons que vous avez accepté les changements.</p>
+
+<h2>11. Contact</h2>
+<p>L’équipe Argus. E-mail&nbsp;: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Conditions d'utilisation</a>
+    <a href="./">Télécharger Argus</a>
+  </footer>
+</article>
+<article lang="tr" data-doc-lang="tr" hidden>
+<h1>Gizlilik Politikası</h1>
+<p class="meta">Sürüm tarihi: 14 Ekim 2026. Argus, Argus ekibi (“biz”) tarafından işletilir. Bu, kolaylık sağlamak amacıyla sunulan bir çeviridir; İngilizce asıl metinle arasında fark olursa İngilizce sürüm geçerlidir.</p>
+
+<p class="lead">Argus bir konuşmayı dinler ve ekranınıza bakar; bu yüzden bu sayfa, verilerin nereye gittiğini açıkça anlatır. Sunucumuz hesabınızı, bakiyenizi ve kullanımınızı sayılar olarak saklar. Sorularınızın metnini, sesinizi ya da ekran görüntülerinizi saklamayız, ancak bunlar üçüncü taraf hizmetlerden geçer — bkz. 2. bölüm.</p>
+
+<h2>1. Biz kimiz ve bize nasıl ulaşırsınız</h2>
+<p>Veri sorumlusu Argus ekibidir. Verilerinizle ilgili her soru için <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> adresine yazın.</p>
+
+<h2>2. Hangi verileri işleriz ve nereye giderler</h2>
+
+<h3>2.1. Hesabınız (sunucumuzda saklanır)</h3>
+<ul>
+  <li>e-posta adresiniz;</li>
+  <li>şifreniz — yalnızca geri döndürülemeyen bir biçimde; şifrenizin kendisini bilmeyiz;</li>
+  <li>kayıt olduğunuz zaman ve kabul ettiğiniz koşulların sürümü;</li>
+  <li>bakiyeniz, bakiye yüklemeleriniz ve ödemeleriniz;</li>
+  <li>kullanım: neyi kullandığınız (tanıma, yanıtlar, sesli yanıtlar), ne kadar kullandığınız ve ne zaman — içerik olmadan, sayılar olarak;</li>
+  <li>oturumunuzun açık kalmasını sağlayan bilgiler — bunlar da yalnızca geri döndürülemeyen bir biçimde.</li>
+</ul>
+
+<h3>2.2. Konuşma: ses, ekran, sorular</h3>
+<p>Mikrofon ve sistem sesi, ekran görüntüleri, tanınan metin, sorularınız ve materyalleriniz bilgisayarınızda işlenir. Çalışabilmesi için bir kısmı dışarı gider ve bunu biz değil, üçüncü taraf hizmetler işler:</p>
+<ul>
+  <li><b>ses</b> sunucumuza, oradan da sesi metne çeviren bir konuşma tanıma hizmetine gider;</li>
+  <li><b>bir soru</b>, konuşmanın ilgili bölümleri, ekran görüntüleri ve materyallerinizle birlikte sunucumuza, oradan da yanıtı hazırlayan bir yapay zekâ hizmeti sağlayıcısına gider;</li>
+  <li><b>bir yanıtın metni</b> yalnızca sesli yanıtları açtıysanız bir sesli yanıt sağlayıcısına gider; ses klonlama kullanıyorsanız sesinizden alınan örnekler de aynı sağlayıcıya gider.</li>
+</ul>
+<p>Sunucumuz soruları, yanıtları, ekran görüntülerini ya da sesi kaydetmez: bunları iletir ve yalnızca bakiyenizi hesaplamak için ne kadar kullandığınızı kaydeder. Sağlayıcıların verileri bundan sonra nasıl işlediği kendi kurallarına tabidir; sağlayıcıları biz seçeriz ama sistemlerini biz kontrol etmeyiz.</p>
+
+<h3>2.3. Bilgisayarınızda kalanlar</h3>
+<p>Oturum kayıtları, yanıt geçmişi, yanıtlara eklenen ekran görüntüleri ve materyalleriniz bilgisayarınızdaki klasörlerde tutulur: Windows’ta programın yanında, macOS’ta ise <code>~/Library/Application Support/Argus</code> içinde (günlük dosyası <code>~/Library/Logs/Argus</code> içindedir). Bunlara erişmeyiz. Silmek için bu klasörleri silin: Windows’ta program klasörünün tamamını silmek yeterlidir; macOS’ta uygulamayı Çöp Sepeti’ne taşımak bunları silmez.</p>
+
+<h3>2.4. Ödemeler</h3>
+<p>Bakiye yüklemeleri bir ödeme hizmeti sağlayıcısı üzerinden yapılır. Kart numaralarını hiçbir zaman görmeyiz ve saklamayız: sağlayıcı bize tutarı, durumu ve bir ödeme kimliğini gönderir.</p>
+
+<h3>2.5. Teknik veriler</h3>
+<p>Her sunucu gibi bizimkiler de IP adresini, zamanı ve istenen adresi teknik günlüklere yazar. Bunları güvenlik için ve hataları gidermek için kullanırız. Uygulama, başladığında ve çalıştığı sürece her 30 dakikada bir indirme sunucusuna yeni bir sürüm olup olmadığını sorar. Sunucu, her istekte olduğu gibi IP adresinizi görür; istek ne sürüm numarası ne de hesap bilgisi taşır.</p>
+
+<h3>2.6. Web sitesi</h3>
+<p>Web sitesinde reklam, analiz ya da izleme betiği yoktur. Tanıtım sayfası tarayıcınızda yalnızca seçtiğiniz dili hatırlar.</p>
+
+<h2>3. Bunları neden kullanırız</h2>
+<ul>
+  <li>hizmeti sunmak ve bakiyenizi hesaplamak — bu, sizinle aramızdaki sözleşmenin ifası için gereklidir;</li>
+  <li>hizmeti kötüye kullanıma karşı korumak ve hataları gidermek — meşru menfaatimiz;</li>
+  <li>ödeme kayıtlarını tutmak — kanunen zorunludur;</li>
+  <li>hesabınızla ilgili size yazmak: şifre kurtarma ve koşullardaki önemli değişiklikler. Pazarlama e-postası göndermeyiz.</li>
+</ul>
+<p>Veri satmayız, reklam göstermeyiz ve verilerinizden profil oluşturmayız.</p>
+
+<h2>4. Verileri kimlerle paylaşırız</h2>
+<p>Yalnızca onlar olmadan hizmetin çalışmadığı taraflarla: bir yapay zekâ hizmeti sağlayıcısı, bir konuşma tanıma sağlayıcısı, bir sesli yanıt sağlayıcısı (sesli yanıtları açarsanız), bir ödeme hizmeti sağlayıcısı ve sunucularımızın üzerinde çalıştığı barındırma sağlayıcısı. Her biri yalnızca görevi için gerekeni alır. Verileri kamu makamlarına yalnızca hukukun gerektirdiği ölçüde ifşa ederiz.</p>
+
+<h2>5. Verileri ne kadar süre saklarız</h2>
+<ul>
+  <li>hesap verileri — hesap var olduğu sürece; silindikten sonra çalışan veritabanından hemen kaybolur;</li>
+  <li>ödeme ve kullanım kayıtları — muhasebe mevzuatının gerektirdiği süre boyunca, ancak e-posta adresiniz olmadan ve sizinle bağlantısı olmadan;</li>
+  <li>teknik günlükler — sınırlı bir süre boyunca; ardından günlükler döndürülürken silinir;</li>
+  <li>veritabanının yedeklerini alırsak, silinen veriler yedeklerden en geç 30 gün içinde kaybolur.</li>
+</ul>
+
+<h2>6. Haklarınız</h2>
+<p>Şunları yapabilirsiniz:</p>
+<ul>
+  <li>verilerinizin bir kopyasını almak — bize yaz (adres aşağıda);</li>
+  <li>hesabınızı silmek — bize yaz (adres aşağıda); kalan bakiye kaybolur;</li>
+  <li>verilerinizin düzeltilmesini, işlenmesinin kısıtlanmasını istemek ya da işlenmesine itiraz etmek;</li>
+  <li>verilerinizi taşınabilir bir biçimde almak;</li>
+  <li>işlemenin rızaya dayandığı durumlarda rızanızı geri çekmek;</li>
+  <li>ülkenizdeki veri koruma otoritesine şikâyette bulunmak.</li>
+</ul>
+<p><a href="mailto:support@arguspilot.com">support@arguspilot.com</a> adresine yazın — 30 gün içinde yanıtlarız.</p>
+
+<h2>7. Güvenlik</h2>
+<p>Verilerinizi korumak için makul önlemler alırız: şifreler ve oturum açma bilgileri yalnızca geri döndürülemeyen bir biçimde saklanır. Hiçbir koruma mutlak değildir ve böyle bir koruma sözü veremeyiz.</p>
+
+<h2>8. Yaş</h2>
+<p>Argus, 18 yaş ve üzerindeki kişiler içindir. Bu yaşın altındaki kişilerden bilerek veri toplamayız; böyle bir hesaptan haberdar olursak onu sileriz.</p>
+
+<h2>9. Diğer ülkeler</h2>
+<p>Kullandığımız sağlayıcılar başka ülkelerde bulunabilir ve verileri başka ülkelerde işleyebilir; bunların arasında veri korumasının sizinkinden farklı olduğu ülkeler de olabilir. Onlara yalnızca hizmetin çalışması için gerekeni aktarırız.</p>
+
+<h2>10. Değişiklikler</h2>
+<p>Bu politikayı değiştirebiliriz. Sürüm ve tarih sayfanın en üstünde yer alır, güncel metin ise her zaman web sitemizde aynı adrestedir. Önemli değişiklikleri size e-postayla bildiririz; bundan sonra Argus’u kullanmaya devam ederseniz değişiklikleri kabul etmiş sayarız.</p>
+
+<h2>11. İletişim</h2>
+<p>Argus ekibi. E-posta: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Kullanım Koşulları</a>
+    <a href="./">Argus'u indir</a>
+  </footer>
+</article>
+<article lang="pl" data-doc-lang="pl" hidden>
+<h1>Polityka prywatności</h1>
+<p class="meta">Wersja z dnia 14 października 2026 r. Argus jest prowadzony przez zespół Argus („my”). To tłumaczenie zostało udostępnione dla wygody; jeśli różni się od angielskiego oryginału, rozstrzygająca jest wersja angielska.</p>
+
+<p class="lead">Argus słucha rozmowy i patrzy na ekran osoby korzystającej z programu (dalej: Użytkownik), dlatego ta strona mówi wprost, dokąd trafiają dane. Nasz serwer przechowuje konto Użytkownika, saldo i zużycie w postaci liczb. Nie przechowujemy treści pytań, dźwięku ani zrzutów ekranu, ale przechodzą one przez usługi zewnętrzne — zob. sekcja 2.</p>
+
+<h2>1. Kim jesteśmy i jak się z nami skontaktować</h2>
+<p>Administratorem danych jest zespół Argus. W każdej sprawie dotyczącej danych Użytkownika można napisać na <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+
+<h2>2. Jakie dane przetwarzamy i dokąd trafiają</h2>
+
+<h3>2.1. Konto Użytkownika (przechowywane na naszym serwerze)</h3>
+<ul>
+  <li>adres e-mail Użytkownika;</li>
+  <li>hasło Użytkownika — wyłącznie w postaci, której nie da się odwrócić; samego hasła nie znamy;</li>
+  <li>czas rejestracji Użytkownika i wersja zaakceptowanych przez niego warunków;</li>
+  <li>saldo, doładowania i płatności Użytkownika;</li>
+  <li>zużycie: co zostało użyte (rozpoznawanie, odpowiedzi, odpowiedzi głosowe), w jakim zakresie i kiedy — w postaci liczb, bez treści;</li>
+  <li>dane, dzięki którym Użytkownik nie musi logować się ponownie — również wyłącznie w postaci, której nie da się odwrócić.</li>
+</ul>
+
+<h3>2.2. Rozmowa: dźwięk, ekran, pytania</h3>
+<p>Dźwięk z mikrofonu i systemu, zrzuty ekranu, rozpoznany tekst, pytania i materiały Użytkownika są przetwarzane na jego komputerze. Aby całość działała, część z nich wychodzi na zewnątrz, a obsługują ją usługi zewnętrzne, nie my:</p>
+<ul>
+  <li><b>dźwięk</b> trafia na nasz serwer, a stamtąd do usługi rozpoznawania mowy, która zamienia go na tekst;</li>
+  <li><b>pytanie</b> wraz z odpowiednimi fragmentami rozmowy, zrzutami ekranu i materiałami Użytkownika trafia na nasz serwer, a stamtąd do dostawcy usługi AI, który przygotowuje odpowiedź;</li>
+  <li><b>tekst odpowiedzi</b> trafia do dostawcy odpowiedzi głosowych tylko wtedy, gdy Użytkownik włączy odpowiedzi głosowe; jeśli korzysta z klonowania głosu, próbki jego głosu trafiają do tego samego dostawcy.</li>
+</ul>
+<p>Nasz serwer nie zapisuje pytań, odpowiedzi, zrzutów ekranu ani dźwięku: przekazuje je dalej i zapisuje tylko wielkość zużycia, aby obliczyć saldo Użytkownika. To, jak dostawcy postępują z danymi dalej, wynika z ich własnych zasad; dostawców wybieramy my, ale nie kontrolujemy ich systemów.</p>
+
+<h3>2.3. Co zostaje na komputerze Użytkownika</h3>
+<p>Nagrania sesji, historia odpowiedzi, zrzuty ekranu dołączone do odpowiedzi i materiały Użytkownika są przechowywane w folderach na jego komputerze: obok programu w Windows oraz w <code>~/Library/Application Support/Argus</code> w macOS (dziennik jest w <code>~/Library/Logs/Argus</code>). Nie mamy do nich dostępu. Aby je usunąć, należy usunąć te foldery: w Windows wystarczy usunąć cały folder programu; w macOS przeniesienie aplikacji do Kosza ich nie usuwa.</p>
+
+<h3>2.4. Płatności</h3>
+<p>Doładowania przechodzą przez operatora płatności. Nigdy nie widzimy ani nie przechowujemy numerów kart: operator przesyła nam kwotę, status i identyfikator płatności.</p>
+
+<h3>2.5. Dane techniczne</h3>
+<p>Jak każdy serwer, nasz zapisuje w dziennikach technicznych adres IP, czas i żądany adres. Używamy ich ze względów bezpieczeństwa i do naprawiania błędów. Aplikacja przy uruchomieniu pyta serwer pobierania, czy jest nowa wersja, a potem robi to co 30 minut, dopóki działa. Serwer widzi adres IP Użytkownika, jak przy każdym żądaniu; żądanie nie zawiera numeru wersji ani danych konta.</p>
+
+<h3>2.6. Strona internetowa</h3>
+<p>Strona internetowa nie zawiera reklam, analityki ani skryptów śledzących. Strona z opisem zapamiętuje w przeglądarce tylko wybrany przez Użytkownika język.</p>
+
+<h2>3. W jakim celu wykorzystujemy dane</h2>
+<ul>
+  <li>aby świadczyć usługę i naliczać saldo — jest to niezbędne do wykonania umowy z Użytkownikiem;</li>
+  <li>aby chronić usługę przed nadużyciami i naprawiać błędy — to nasz prawnie uzasadniony interes;</li>
+  <li>aby prowadzić dokumentację płatności — wymaga tego prawo;</li>
+  <li>aby pisać do Użytkownika w sprawie konta: odzyskiwanie hasła i ważne zmiany warunków. Nie wysyłamy e-maili marketingowych.</li>
+</ul>
+<p>Nie sprzedajemy danych, nie wyświetlamy reklam ani nie tworzymy profili na podstawie danych Użytkownika.</p>
+
+<h2>4. Komu przekazujemy dane</h2>
+<p>Tylko tym, bez których usługa nie działa: dostawcy usługi AI, dostawcy rozpoznawania mowy, dostawcy odpowiedzi głosowych (jeśli Użytkownik włączy odpowiedzi głosowe), operatorowi płatności oraz dostawcy hostingu, na którego serwerach działają nasze. Każdy z nich otrzymuje tylko to, czego potrzebuje do swojego zadania. Ujawniamy dane organom publicznym tylko wtedy, gdy wymaga tego prawo.</p>
+
+<h2>5. Jak długo przechowujemy dane</h2>
+<ul>
+  <li>dane konta — dopóki istnieje konto; po jego usunięciu znikają z roboczej bazy danych od razu;</li>
+  <li>zapisy płatności i zużycia — tak długo, jak wymaga tego prawo rachunkowe, ale bez adresu e-mail Użytkownika i bez powiązania z nim;</li>
+  <li>dzienniki techniczne — przez ograniczony czas, potem są usuwane przy rotacji dzienników;</li>
+  <li>jeśli tworzymy kopie zapasowe bazy danych, usunięte dane znikają z nich najpóźniej w ciągu 30 dni.</li>
+</ul>
+
+<h2>6. Prawa Użytkownika</h2>
+<p>Użytkownik może:</p>
+<ul>
+  <li>otrzymać kopię swoich danych — wystarczy napisać do nas (adres poniżej);</li>
+  <li>usunąć swoje konto — wystarczy napisać do nas (adres poniżej); pozostałe saldo przepada;</li>
+  <li>poprosić nas o sprostowanie danych lub ograniczenie ich przetwarzania albo sprzeciwić się ich przetwarzaniu;</li>
+  <li>zabrać swoje dane w formacie przenośnym;</li>
+  <li>wycofać zgodę, jeśli przetwarzanie opiera się na zgodzie;</li>
+  <li>złożyć skargę do organu ochrony danych w swoim kraju.</li>
+</ul>
+<p>Wiadomość można wysłać na <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> — odpowiemy w ciągu 30 dni.</p>
+
+<h2>7. Bezpieczeństwo</h2>
+<p>Stosujemy rozsądne środki ochrony danych Użytkownika: hasła i dane logowania są przechowywane wyłącznie w postaci, której nie da się odwrócić. Żadna ochrona nie jest absolutna i nie możemy takiej obiecać.</p>
+
+<h2>8. Wiek</h2>
+<p>Argus jest przeznaczony dla osób w wieku 18 lat i starszych. Nie zbieramy świadomie danych od osób niepełnoletnich; jeśli dowiemy się o takim koncie, usuniemy je.</p>
+
+<h2>9. Inne kraje</h2>
+<p>Dostawcy, z których korzystamy, mogą mieć siedzibę w innych krajach i tam przetwarzać dane, także w takich, w których ochrona danych różni się od tej w kraju Użytkownika. Przekazujemy im tylko to, czego usługa potrzebuje do działania.</p>
+
+<h2>10. Zmiany</h2>
+<p>Możemy zmieniać tę politykę. Wersja i data są na górze strony, a aktualny tekst jest zawsze na naszej stronie internetowej pod tym samym adresem. O istotnych zmianach powiadomimy Użytkownika e-mailem; jeśli po tym nadal korzysta on z Argus, uznajemy zmiany za przyjęte.</p>
+
+<h2>11. Kontakt</h2>
+<p>Zespół Argus. E-mail: <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="terms.html">Warunki korzystania</a>
+    <a href="./">Pobierz Argus</a>
+  </footer>
+</article>
+</div>
+
+<script>
+  // The document language. The page carries all the languages at once (one `<article>` per
+  // language, `legal/legal_render.py`), one is visible:
+  //   1. `?lang=xx` in the address;
+  //   2. inside the app (`/p/legal-…`) — the interface language (`window.ARGUS_LANG`, the app
+  //      puts it first in `<head>`);
+  //   3. on the site — the one chosen earlier (`argus.legal.lang`), then the browser language;
+  //   4. English (which is also visible without scripts).
+  (function () {
+    var LANGS = ["ru", "uk", "en", "es", "pt", "de", "fr", "tr", "pl"];
+    var UI = {"en": {"name": "English", "terms": "Terms of Use", "privacy": "Privacy Policy", "download": "Download Argus"}, "ru": {"name": "Русский", "terms": "Условия использования", "privacy": "Политика конфиденциальности", "download": "Скачать Argus"}, "uk": {"name": "Українська", "terms": "Умови використання", "privacy": "Політика конфіденційності", "download": "Завантажити Argus"}, "es": {"name": "Español", "terms": "Términos de uso", "privacy": "Política de privacidad", "download": "Descargar Argus"}, "pt": {"name": "Português", "terms": "Termos de uso", "privacy": "Política de privacidade", "download": "Baixar o Argus"}, "de": {"name": "Deutsch", "terms": "Nutzungsbedingungen", "privacy": "Datenschutzerklärung", "download": "Argus herunterladen"}, "fr": {"name": "Français", "terms": "Conditions d'utilisation", "privacy": "Politique de confidentialité", "download": "Télécharger Argus"}, "tr": {"name": "Türkçe", "terms": "Kullanım Koşulları", "privacy": "Gizlilik Politikası", "download": "Argus'u indir"}, "pl": {"name": "Polski", "terms": "Warunki korzystania", "privacy": "Polityka prywatności", "download": "Pobierz Argus"} };
+    var DOC = "privacy";
+    var STORE = "argus.legal.lang";
+    var inApp = /^\/p\//.test(location.pathname);
+
+    function pick() {
+      var q = /[?&]lang=([a-z]{2})\b/.exec(location.search);
+      if (q && LANGS.indexOf(q[1]) >= 0) return q[1];
+      var app = typeof window !== "undefined" ? window.ARGUS_LANG : undefined;
+      if (inApp) return LANGS.indexOf(app) >= 0 ? app : "en";
+      try { var s = localStorage.getItem(STORE); if (s && LANGS.indexOf(s) >= 0) return s; } catch (e) { /* no storage — no big deal */ }
+      var n = String(typeof navigator !== "undefined" ? navigator.language || "en" : "en").slice(0, 2).toLowerCase();
+      return LANGS.indexOf(n) >= 0 ? n : "en";
+    }
+
+    function show(lang, remember) {
+      document.querySelectorAll("article[data-doc-lang]").forEach(function (a) {
+        a.hidden = a.getAttribute("data-doc-lang") !== lang;
+      });
+      document.querySelectorAll(".langbar button").forEach(function (b) {
+        if (b.getAttribute("data-lang") === lang) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+      });
+      document.documentElement.lang = lang;
+      document.title = UI[lang][DOC] + " — Argus";
+      if (remember && !inApp) { try { localStorage.setItem(STORE, lang); } catch (e) { /* no big deal */ } }
+    }
+
+    document.querySelectorAll(".langbar button").forEach(function (b) {
+      b.addEventListener("click", function () { show(b.getAttribute("data-lang"), true); });
+    });
+    show(pick(), false);
+  })();
+</script>
+
+<script>
+  // In the app the page lives under `/p/legal-<name>`: both in a window over the page
+  // (`?embed=1`) and in an ordinary tab (the link in the account is a real one: people open it
+  // with Ctrl or the middle button, or copy the address). The neighboring document there has a
+  // different name (`/p/legal-privacy`; `/p/privacy.html` is a 404), and `./` would lead to
+  // `/p/` — a 404 too. So the links are rewritten by address, not only in the window.
+  if (/^\/p\//.test(location.pathname)) {
+    var tail = document.documentElement.className === "embed" ? "?embed=1" : "";
+    document.querySelectorAll("a[href$='.html']").forEach(function (a) {
+      a.setAttribute("href", "legal-" + a.getAttribute("href").replace(/\.html.*$/, "") + tail);
+    });
+    document.querySelectorAll("a[href='./']").forEach(function (a) { a.setAttribute("href", "/"); });
+  }
+</script>
+</body>
+</html>

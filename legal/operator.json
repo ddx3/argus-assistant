@@ -1,0 +1,6 @@
+{
+  "_": "Who operates the service. These fields are substituted into the terms and the privacy policy. An empty field is shown in the document as a yellow marker, and `python legal/build.py --release` fails on an empty field, so documents with gaps cannot be published. The documents are English only, so fill the fields in English. The operator is identified only by the service name and a generic governing-law phrase; no personal name or location is written.",
+  "name": "the Argus team",
+  "email": "support@arguspilot.com",
+  "law": "applicable law"
+}

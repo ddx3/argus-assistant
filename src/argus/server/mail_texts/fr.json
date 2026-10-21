@@ -1,0 +1,103 @@
+{
+  "events": {
+    "reset": {
+      "subject": "Réinitialisation du mot de passe Argus",
+      "heading": "Nouveau mot de passe",
+      "paragraphs": [
+        "Pour définir un nouveau mot de passe, appuyez sur le bouton. Le lien est valable {minutes} minutes et ne fonctionne qu’une seule fois."
+      ],
+      "button": "Définir un nouveau mot de passe",
+      "note": "Vous n’avez pas fait cette demande ? Ignorez simplement cet e-mail, votre mot de passe reste inchangé."
+    },
+    "welcome": {
+      "subject": "Bienvenue sur Argus",
+      "heading": "Compte créé",
+      "paragraphs": [
+        "Vous avez créé un compte Argus avec l’adresse {email}.",
+        "{gift}",
+        "Ouvrez l’application et activez la reconnaissance. Le solde est utilisé pour la reconnaissance, les réponses et les réponses vocales ; vous pouvez le recharger dans les paramètres."
+      ],
+      "gift": "Un cadeau de bienvenue de {amount} a été ajouté à votre solde.",
+      "note": "Vous n’avez pas créé ce compte ? Écrivez-nous et nous le supprimerons."
+    },
+    "password_changed": {
+      "subject": "Mot de passe Argus modifié",
+      "heading": "Mot de passe modifié",
+      "paragraphs": [
+        "Le mot de passe du compte {email} a été modifié le {when}.",
+        "La session a été fermée dans toutes les applications. Connectez-vous de nouveau avec le nouveau mot de passe."
+      ],
+      "note": "Ce n’était pas vous ? Écrivez-nous et nous vous aiderons à retrouver l’accès."
+    },
+    "top_up": {
+      "subject": "Solde Argus rechargé",
+      "heading": "Merci pour votre recharge",
+      "paragraphs": [
+        "Le paiement a été reçu et le montant a été ajouté à votre solde."
+      ],
+      "rows": [
+        "Montant",
+        "Date",
+        "Solde actuel"
+      ],
+      "note": "Ce paiement n’est pas de vous ? Écrivez-nous."
+    },
+    "low": {
+      "subject": "Votre solde Argus est presque épuisé",
+      "heading": "Le solde est presque épuisé",
+      "paragraphs": [
+        "Il reste {balance} sur votre solde.",
+        "Pour que la reconnaissance continue, rechargez votre solde dans les paramètres de l’application."
+      ]
+    },
+    "empty": {
+      "subject": "Votre solde Argus est épuisé",
+      "heading": "Solde épuisé",
+      "paragraphs": [
+        "La reconnaissance, les réponses et les réponses vocales sont suspendues tant que le solde est épuisé.",
+        "Vous pouvez le recharger dans les paramètres de l’application."
+      ]
+    },
+    "deleted": {
+      "subject": "Compte Argus supprimé",
+      "heading": "Compte supprimé",
+      "paragraphs": [
+        "Le compte {email} a été supprimé : l’adresse, le mot de passe et les connexions sont effacés.",
+        "Le solde restant a disparu avec le compte. Les enregistrements de paiement sont conservés sans lien avec vous."
+      ],
+      "note": "Ce n’était pas vous ? Écrivez-nous."
+    }
+  },
+  "footer": "Ce message a été envoyé automatiquement. Questions : {support}.",
+  "date": {
+    "months": [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ],
+    "format": "{d} {m} {y}, {time} UTC"
+  },
+  "reset_page": {
+    "title": "Nouveau mot de passe — Argus",
+    "heading": "Nouveau mot de passe",
+    "placeholder": "Nouveau mot de passe",
+    "button": "Enregistrer",
+    "bad_link": "Le lien ne fonctionne pas — demandez-en un nouveau dans l’application.",
+    "saved": "Mot de passe enregistré. Retournez dans l’application et connectez-vous de nouveau.",
+    "failed": "Échec",
+    "offline": "Pas de connexion",
+    "short": "Le mot de passe doit comporter au moins {min} caractères.",
+    "weak": "Ce mot de passe est trop facile à deviner. Veuillez en choisir un autre.",
+    "busy": "Le serveur est occupé pour le moment. Veuillez réessayer dans une minute.",
+    "limit": "Trop de tentatives. Veuillez réessayer plus tard."
+  }
+}

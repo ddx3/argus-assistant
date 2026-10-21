@@ -1,0 +1,171 @@
+{
+ "_doc": "Данные для кадров «Сессии» и «Запись» на лендинге (screens.py). Выдуманные. Время сессий — сегодня/вчера, часы по часам машины.",
+ "sessions": [
+  {
+   "id": "s-sync",
+   "name": "Weekly team sync",
+   "day": 0,
+   "at": [
+    10,
+    30
+   ]
+  },
+  {
+   "id": "s-review",
+   "name": "Pull request #214 review",
+   "day": 0,
+   "at": [
+    9,
+    12
+   ]
+  },
+  {
+   "id": "s-standup",
+   "name": "Morning standup",
+   "day": 0,
+   "at": [
+    8,
+    45
+   ]
+  },
+  {
+   "id": "s-sso",
+   "name": "Customer call: single sign-on",
+   "day": 1,
+   "at": [
+    16,
+    40
+   ]
+  },
+  {
+   "id": "s-spanish",
+   "name": "Spanish class, lesson 12",
+   "day": 1,
+   "at": [
+    14,
+    0
+   ]
+  },
+  {
+   "id": "s-stats",
+   "name": "Statistics lecture, week 4",
+   "day": 1,
+   "at": [
+    11,
+    5
+   ]
+  },
+  {
+   "id": "s-deposit",
+   "name": "Deposit forecast",
+   "day": 1,
+   "at": [
+    9,
+    30
+   ]
+  },
+  {
+   "id": "s-budget",
+   "name": "Budget review",
+   "day": 1,
+   "at": [
+    9,
+    0
+   ]
+  }
+ ],
+ "record": {
+  "id": "s-sync",
+  "name": "Weekly team sync",
+  "lines": [
+   [
+    "10:30:31",
+    "them",
+    "Hi everyone, can you hear me?"
+   ],
+   [
+    "10:30:34",
+    "me",
+    "Yes, loud and clear."
+   ],
+   [
+    "10:30:41",
+    "them",
+    "Great. Anna is joining in a minute."
+   ],
+   [
+    "10:30:47",
+    "me",
+    "No problem, we can wait for her."
+   ],
+   [
+    "10:30:52",
+    "them",
+    "Okay, she's here now."
+   ],
+   [
+    "10:30:57",
+    "them",
+    "Hi Anna. We're just starting."
+   ],
+   [
+    "10:31:04",
+    "them",
+    "Let's start with the release. Are we on track for Thursday?"
+   ],
+   [
+    "10:31:12",
+    "me",
+    "Mostly. The payment flow is done. The invoices export still needs a review."
+   ],
+   [
+    "10:31:40",
+    "them",
+    "Who can review it today?"
+   ],
+   [
+    "10:31:47",
+    "me",
+    "Igor can. I'll ask him right after this call."
+   ],
+   [
+    "10:32:20",
+    "them",
+    "Good. Next, Acme asked for single sign-on. Can we offer it this quarter?"
+   ],
+   [
+    "10:32:33",
+    "me",
+    "Maybe. Maria needs to estimate it first."
+   ],
+   [
+    "10:32:50",
+    "them",
+    "Maria, can you send the estimate by Monday?"
+   ],
+   [
+    "10:32:58",
+    "them",
+    "Yes, I'll send it on Monday."
+   ],
+   [
+    "10:33:30",
+    "them",
+    "Last thing: support needs the release notes before Wednesday."
+   ],
+   [
+    "10:33:41",
+    "me",
+    "Anna will send them on Tuesday."
+   ]
+  ],
+  "results": [
+   {
+    "id": "r1",
+    "request": "Summary and action items",
+    "text": "## Summary\nThe release is on track for Thursday. The payment flow is done, and the invoices export waits for a review (10:31).\n\nAcme asked for single sign-on. We can offer it this quarter if the estimate allows (10:32).\n\n## Action items\n| Who | What | When |\n| --- | --- | --- |\n| Igor | Review the invoices export | Today |\n| Maria | Send the single sign-on estimate | Monday |\n| Anna | Send the release notes to support | Tuesday |",
+    "pdf": "Weekly team sync — Summary and action items.pdf"
+   }
+  ]
+ }
+}

@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en" data-density="instrument">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Argus — design system showcase</title>
+<link rel="stylesheet" href="/design/argus.css">
+</head>
+<body data-phase="live">
+
+<main class="deck">
+
+  <section class="band band--wide">
+    <span class="tag tag--in">showcase</span>
+    <p class="target__scene">Every component in every state. A new widget
+      appears here <b>before</b> it does on a channel page: a convention without
+      a showcase holds nothing.</p>
+    <div class="keys">
+      <button class="key key--minor" data-act="theme">Switch theme</button>
+      <button class="key key--minor" data-act="phase">Next phase</button>
+      <span class="dim">phase: <b id="phase-now">live</b></span>
+    </div>
+  </section>
+
+  <!-- 1. verdict - one for each state -->
+  <section class="band band--wide" data-state="live">
+    <p class="verdict">
+      <span class="verdict__dot" aria-hidden="true"></span>
+      <span class="verdict__word">LISTENING</span>
+      <span class="verdict__why">hearing both</span>
+    </p>
+    <p class="verdict__fix">this line is not visible in live: CSS hides it</p>
+  </section>
+
+  <section class="band band--wide" data-state="work">
+    <p class="verdict">
+      <span class="verdict__dot" aria-hidden="true"></span>
+      <span class="verdict__word">THINKING</span>
+      <span class="verdict__why">wait a couple of seconds</span>
+    </p>
+  </section>
+
+  <section class="band band--wide" data-state="hold">
+    <p class="verdict">
+      <span class="verdict__dot" aria-hidden="true"></span>
+      <span class="verdict__word">SILENT</span>
+      <span class="verdict__why">doesn't look like a question</span>
+      <span class="verdict__count num">5 s</span>
+    </p>
+    <p class="verdict__fix">press "Answer now" · F8</p>
+  </section>
+
+  <section class="band band--wide" data-state="dead">
+    <p class="verdict">
+      <span class="verdict__dot" aria-hidden="true"></span>
+      <span class="verdict__word">DEAF</span>
+      <span class="verdict__why">the audio stopped</span>
+    </p>
+    <p class="verdict__fix">check the input device and restart capture</p>
+  </section>
+
+  <section class="band band--wide" data-state="idle">
+    <p class="verdict">
+      <span class="verdict__dot" aria-hidden="true"></span>
+      <span class="verdict__word">OFF</span>
+    </p>
+    <p class="verdict__fix">this line is hidden: idle is not a fault</p>
+  </section>
+
+  <!-- 2. utterance - three levels of freshness -->
+  <article class="band band--wide utterance" data-stale="fresh">
+    <header class="utterance__cause">
+      <span class="tag tag--them">cause</span>
+      <span class="utterance__cause-text">Why did you leave your last job?</span>
+    </header>
+    <p class="utterance__text">They shut down the division and disbanded the team<mark class="speaking">, I was looking for a place where</mark></p>
+    <footer class="utterance__meta">
+      <time class="num utterance__age">12 s</time>
+      <span class="dim">ago</span>
+      <button class="key key--minor" data-act="cut">Cut off</button>
+    </footer>
+  </article>
+
+  <article class="band band--wide utterance" data-stale="trap">
+    <p class="utterance__text">An answer that is a minute old. Reading it aloud
+      now means answering the question before last.</p>
+    <footer class="utterance__meta">
+      <time class="num utterance__age">1 min</time>
+      <span class="dim">ago</span>
+    </footer>
+  </article>
+
+  <!-- 3. lamps -->
+  <section class="band">
+    <span class="tag">signal path</span>
+    <ul class="lamps">
+      <li class="lamp" data-ch="me" data-state="live">
+        <span class="lamp__eye" aria-hidden="true"></span>
+        <span class="lamp__name">I hear you</span>
+      </li>
+      <li class="lamp" data-ch="them" data-state="hold">
+        <span class="lamp__eye" aria-hidden="true"></span>
+        <span class="lamp__name">I hear them</span>
+        <span class="lamp__silence num">4 min, not a word</span>
+      </li>
+      <li class="lamp" data-ch="out" data-state="dead">
+        <span class="lamp__eye" aria-hidden="true"></span>
+        <span class="lamp__name">I speak into "Headphones"</span>
+        <button class="key key--minor" data-act="listen">Listen for 15 s</button>
+        <span class="lamp__warn">the other person's speech is audible in the microphone: put on headphones</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 4. checks -->
+  <section class="band checks">
+    <p class="checks__verdict" data-state="dead">Can't start: the audio is going to the speakers</p>
+    <ol class="checks__list">
+      <li class="check" data-state="dead">
+        <span class="check__mark" aria-hidden="true"></span>
+        <span class="check__name">I speak into headphones</span>
+        <button class="key key--minor" data-act="devices">Choose a device</button>
+      </li>
+      <li class="check" data-state="live">
+        <span class="check__mark" aria-hidden="true"></span>
+        <span class="check__name">I hear you</span>
+        <span class="check__note">Yeti · speech 6 s ago</span>
+      </li>
+      <li class="check" data-state="hold">
+        <span class="check__mark" aria-hidden="true"></span>
+        <span class="check__name">space for recording: ~5 h left</span>
+      </li>
+      <li class="check" data-state="idle">
+        <span class="check__mark" aria-hidden="true"></span>
+        <span class="check__name">no test question asked</span>
+        <button class="key key--minor" data-act="nudge">Ask</button>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 5. budget - three levels -->
+  <section class="band">
+    <span class="tag">remaining</span>
+    <div class="budget" data-level="ample" data-state="live">
+      <span class="budget__left num">~120</span>
+      <span class="budget__unit">questions in reserve</span>
+      <div class="budget__bar" role="presentation"><i style="--fill:88%"></i></div>
+    </div>
+    <div class="budget" data-level="low" data-state="hold">
+      <span class="budget__left num">~12</span>
+      <span class="budget__unit">questions in reserve</span>
+      <div class="budget__bar" role="presentation"><i style="--fill:38%"></i></div>
+    </div>
+    <div class="budget" data-level="out" data-state="dead">
+      <span class="budget__left num">0</span>
+      <span class="budget__unit">reserve used up</span>
+      <div class="budget__bar" role="presentation"><i style="--fill:0%"></i></div>
+    </div>
+  </section>
+
+  <!-- 6. keys -->
+  <section class="band band--wide">
+    <span class="tag">actions</span>
+    <div class="keys">
+      <button class="key key--major key--stop" data-act="mute" data-armed="200">
+        <span class="key__name">Quiet</span>
+        <kbd class="key__hot">F9</kbd>
+        <span class="key__count num">3:20</span>
+      </button>
+      <button class="key key--major key--go" data-act="nudge">
+        <span class="key__name">Answer now</span>
+        <kbd class="key__hot">F8</kbd>
+      </button>
+      <button class="key key--minor" data-act="shot">Refresh frame</button>
+      <button class="key key--minor" disabled>Disabled</button>
+    </div>
+  </section>
+
+  <!-- 7. dial -->
+  <section class="band">
+    <div class="dial">
+      <span class="dial__name">Quiet ↔ Chatty</span>
+      <div class="dial__seg" role="radiogroup" aria-label="Talkativeness">
+        <button type="button" role="radio" aria-checked="false" data-act="talk" data-v="rare">rarely</button>
+        <button type="button" role="radio" aria-checked="true" data-act="talk" data-v="mid">normal</button>
+        <button type="button" role="radio" aria-checked="false" data-act="talk" data-v="lots">chatters</button>
+      </div>
+      <p class="dial__fact">right now <b class="num">7</b> replies in <b class="num">12</b> min</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="dial" data-alarm="1">
+      <span class="dial__name">Faster ↔ Smarter</span>
+      <div class="dial__seg" role="radiogroup" aria-label="Speed versus quality">
+        <button type="button" role="radio" aria-checked="true" data-act="mode" data-v="fast">faster</button>
+        <button type="button" role="radio" aria-checked="false" data-act="mode" data-v="smart">smarter</button>
+      </div>
+      <p class="dial__fact">answers in <b class="num">3.4</b> s</p>
+    </div>
+  </section>
+
+  <!-- 8. target -->
+  <section class="band target" data-state="live">
+    <p class="target__line">
+      <span class="tag tag--screen">reading</span>
+      <b class="target__win">CoderPad — Chrome</b>
+      <button class="key key--minor" data-act="pin">Re-pin</button>
+    </p>
+    <p class="target__scene">I see: a task statement and an empty editor</p>
+    <button class="target__still" data-act="shot" aria-label="refresh the still frame">
+      <img src="/screen.jpg" alt="still frame of the reading area" loading="lazy">
+      <span class="target__stamp num">14:02:31</span>
+    </button>
+  </section>
+
+  <section class="band target" data-state="dead">
+    <p class="target__line">
+      <span class="tag tag--screen">reading</span>
+      <b class="target__win">Zoom Meeting</b>
+      <button class="key key--minor" data-act="pin">Re-pin</button>
+    </p>
+    <p class="target__scene">the window is gone</p>
+  </section>
+
+  <!-- 9. log -->
+  <details class="band band--wide log" open>
+    <summary class="log__head">What it said <span class="num">9 in 40 min</span></summary>
+    <ol class="log__list">
+      <li class="log__row" data-mark="bad" data-late="1">
+        <button class="log__at num" data-act="replay" data-t="1421">23:41</button>
+        <span class="log__cause">Tell me about the GIL</span>
+        <span class="log__text">One thread per interpreter, released on I/O…</span>
+        <span class="log__late">arrived after you had already started speaking</span>
+        <span class="log__flags">
+          <button data-act="good" aria-label="good">✓</button>
+          <button data-act="bad" aria-label="embarrassing">✗</button>
+        </span>
+      </li>
+      <li class="log__row" data-mark="good">
+        <button class="log__at num" data-act="replay" data-t="1502">25:02</button>
+        <span class="log__cause">What is the difference between a process and a thread?</span>
+        <span class="log__text">Separate memory versus shared; the cost of switching…</span>
+        <span class="log__flags">
+          <button data-act="good" aria-label="good">✓</button>
+          <button data-act="bad" aria-label="embarrassing">✗</button>
+        </span>
+      </li>
+      <li class="log__row" data-silent="1">
+        <button class="log__at num" data-act="replay" data-t="1580">26:20</button>
+        <span class="log__cause">And how did you test it?</span>
+        <span class="log__text log__text--silent">stayed silent: doesn't look like a question</span>
+      </li>
+    </ol>
+  </details>
+
+  <!-- 10. brief - three states -->
+  <form class="band brief" data-state="empty">
+    <label class="brief__name" for="spec-cv">Who I am in this interview</label>
+    <p class="brief__state">profile not loaded: answers about your experience will be generic</p>
+    <textarea class="brief__field" id="spec-cv" rows="4"
+              placeholder="resume, stack, job posting, off-limits topics"></textarea>
+    <footer class="brief__foot">
+      <button class="key key--minor" type="button" data-act="save">Save</button>
+    </footer>
+  </form>
+
+  <form class="band brief" data-state="saved">
+    <label class="brief__name" for="spec-terms">Job posting terms</label>
+    <p class="brief__state">empty</p>
+    <textarea class="brief__field" id="spec-terms" rows="4">GIL, asyncio, Kubernetes, sharding</textarea>
+    <footer class="brief__foot">
+      <button class="key key--minor" type="button" data-act="save">Save</button>
+      <span class="brief__stamp num">saved 13:02</span>
+    </footer>
+  </form>
+
+  <!-- "GLANCE" DENSITY: the same components, the same DOM, one attribute -->
+  <section class="band band--wide" data-density="glance" data-state="hold">
+    <p class="verdict">
+      <span class="verdict__dot" aria-hidden="true"></span>
+      <span class="verdict__word">SILENT</span>
+      <span class="verdict__why">doesn't look like a question</span>
+    </p>
+    <p class="verdict__fix">this is the same block as above, with data-density="glance"</p>
+  </section>
+
+  <article class="band band--wide utterance" data-density="glance" data-stale="aging">
+    <header class="utterance__cause">
+      <span class="tag tag--them">cause</span>
+      <span class="utterance__cause-text">How do you debug race conditions?</span>
+    </header>
+    <p class="utterance__text">Logs with monotonic timestamps, then replay under load</p>
+    <footer class="utterance__meta">
+      <time class="num utterance__age">28 s</time>
+      <span class="dim">ago</span>
+    </footer>
+  </article>
+
+  <section class="band" data-density="glance">
+    <div class="keys">
+      <button class="key key--major key--stop" data-act="mute">
+        <span class="key__name">Pause</span>
+        <kbd class="key__hot">F9</kbd>
+        <span class="key__count num"></span>
+      </button>
+      <button class="key key--major key--go" data-act="nudge">
+        <span class="key__name">Answer now</span>
+        <kbd class="key__hot">F8</kbd>
+      </button>
+    </div>
+  </section>
+
+  <!-- phases: this block is visible only in before -->
+  <section class="band" data-phase-only="before">
+    <span class="tag">phase before only</span>
+    <p class="target__scene">The block is removed from the flow entirely instead of
+      being hidden visually: what cannot be decided now must not take up a single pixel.</p>
+  </section>
+
+  <section class="band" data-phase-only="after">
+    <span class="tag">phase after only</span>
+    <p class="target__scene">Review after the call.</p>
+  </section>
+
+</main>
+
+<!-- 11. overlay / sheet -->
+<div class="overlay" id="picker" hidden>
+  <div class="sheet">
+    <div class="sheet-head">
+      <b>What to read from the screen</b>
+      <span class="dim">sample cards</span>
+      <button class="key key--minor" id="pick-close">Close</button>
+    </div>
+    <div class="cards">
+      <div class="card-win active">
+        <div class="shot empty">◻</div>
+        <div class="cap">CoderPad — Chrome<br><small>1280x800</small></div>
+      </div>
+      <div class="card-win">
+        <div class="shot empty">◻</div>
+        <div class="cap">Zoom Meeting<br><small>960x540</small></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/design/panel.js"></script>
+<script>
+  const phases = ["before", "live", "after"];
+  Argus.act("theme", () => Argus.theme());
+  Argus.act("phase", () => {
+    const now = document.body.dataset.phase;
+    const next = phases[(phases.indexOf(now) + 1) % phases.length];
+    document.body.dataset.phase = next;
+    Argus.setText(document.getElementById("phase-now"), next);
+  });
+  Argus.act("pin", () => { document.getElementById("picker").hidden = false; });
+  document.getElementById("pick-close").onclick = () => {
+    document.getElementById("picker").hidden = true;
+  };
+</script>
+</body>
+</html>

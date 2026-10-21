@@ -1,0 +1,171 @@
+{
+ "_doc": "Данные для кадров «Сессии» и «Запись» на лендинге (screens.py). Выдуманные. Время сессий — сегодня/вчера, часы по часам машины.",
+ "sessions": [
+  {
+   "id": "s-sync",
+   "name": "Point hebdo de l’équipe",
+   "day": 0,
+   "at": [
+    10,
+    30
+   ]
+  },
+  {
+   "id": "s-review",
+   "name": "Revue de la pull request #214",
+   "day": 0,
+   "at": [
+    9,
+    12
+   ]
+  },
+  {
+   "id": "s-standup",
+   "name": "Stand-up du matin",
+   "day": 0,
+   "at": [
+    8,
+    45
+   ]
+  },
+  {
+   "id": "s-sso",
+   "name": "Appel client : authentification unique",
+   "day": 1,
+   "at": [
+    16,
+    40
+   ]
+  },
+  {
+   "id": "s-spanish",
+   "name": "Cours d’espagnol, leçon 12",
+   "day": 1,
+   "at": [
+    14,
+    0
+   ]
+  },
+  {
+   "id": "s-stats",
+   "name": "Cours de statistiques, semaine 4",
+   "day": 1,
+   "at": [
+    11,
+    5
+   ]
+  },
+  {
+   "id": "s-deposit",
+   "name": "Prévision des dépôts",
+   "day": 1,
+   "at": [
+    9,
+    30
+   ]
+  },
+  {
+   "id": "s-budget",
+   "name": "Revue du budget",
+   "day": 1,
+   "at": [
+    9,
+    0
+   ]
+  }
+ ],
+ "record": {
+  "id": "s-sync",
+  "name": "Point hebdo de l’équipe",
+  "lines": [
+   [
+    "10:30:31",
+    "them",
+    "Bonjour à tous, vous m’entendez ?"
+   ],
+   [
+    "10:30:34",
+    "me",
+    "Oui, cinq sur cinq."
+   ],
+   [
+    "10:30:41",
+    "them",
+    "Parfait. Anna nous rejoint dans une minute."
+   ],
+   [
+    "10:30:47",
+    "me",
+    "Pas de souci, on peut l’attendre."
+   ],
+   [
+    "10:30:52",
+    "them",
+    "Ça y est, elle est là."
+   ],
+   [
+    "10:30:57",
+    "them",
+    "Salut Anna. On commence tout juste."
+   ],
+   [
+    "10:31:04",
+    "them",
+    "Commençons par la version. On est dans les temps pour jeudi ?"
+   ],
+   [
+    "10:31:12",
+    "me",
+    "Plutôt oui. Le parcours de paiement est terminé. L’export des factures doit encore être relu."
+   ],
+   [
+    "10:31:40",
+    "them",
+    "Qui peut le relire aujourd’hui ?"
+   ],
+   [
+    "10:31:47",
+    "me",
+    "Igor peut le faire. Je lui demande juste après cet appel."
+   ],
+   [
+    "10:32:20",
+    "them",
+    "Bien. Ensuite, Acme a demandé l’authentification unique. Peut-on la proposer ce trimestre ?"
+   ],
+   [
+    "10:32:33",
+    "me",
+    "Peut-être. Maria doit d’abord faire une estimation."
+   ],
+   [
+    "10:32:50",
+    "them",
+    "Maria, tu peux envoyer l’estimation d’ici lundi ?"
+   ],
+   [
+    "10:32:58",
+    "them",
+    "Oui, je l’envoie lundi."
+   ],
+   [
+    "10:33:30",
+    "them",
+    "Dernier point : le support a besoin des notes de version avant mercredi."
+   ],
+   [
+    "10:33:41",
+    "me",
+    "Anna les enverra mardi."
+   ]
+  ],
+  "results": [
+   {
+    "id": "r1",
+    "request": "Résumé et tâches",
+    "text": "## Résumé\nLa version est dans les temps pour jeudi. Le parcours de paiement est terminé, et l’export des factures attend d’être relu (10:31).\n\nAcme a demandé l’authentification unique. On peut la proposer ce trimestre si l’estimation le permet (10:32).\n\n## Tâches\n| Qui | Quoi | Quand |\n| --- | --- | --- |\n| Igor | Relire l’export des factures | Aujourd’hui |\n| Maria | Envoyer l’estimation de l’authentification unique | Lundi |\n| Anna | Envoyer les notes de version au support | Mardi |",
+    "pdf": "Point hebdo de l’équipe — Résumé et tâches.pdf"
+   }
+  ]
+ }
+}

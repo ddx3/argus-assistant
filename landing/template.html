@@ -1,0 +1,750 @@
+<title>Argus</title>
+<script>try{if(!location.hash)document.documentElement.scrollIntoView({behavior:"instant"})}catch(e){}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181a20'/%3E%3Cg transform='translate(5 4.5) scale(.0787)' fill='%23fff'%3E%3Cpath d='M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z'/%3E%3Ccircle cx='345.5' cy='525' r='60'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+  /* Layout: a header and a 1240px column; on top the live app interface, below it frames taken
+     from the same interface. The colors, edges, buttons and fonts come from the app itself
+     (ui/static/chrome.css, design/argus.css), we do not introduce our own. */
+  :root{
+    color-scheme:dark;
+    --bg:#0a0c10; --panel:#171b21; --sunk:#08090b; --win:#101318;
+    --slab:rgba(255,255,255,.03); --slab-edge:rgba(255,255,255,.09);
+    --btn:rgba(255,255,255,.03); --btn-hover:rgba(255,255,255,.09); --edge-hi:rgba(255,255,255,.20);
+    --field:rgba(0,0,0,.30);
+    --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.14);
+    --text:#f2f4f7; --dim:#9aa1ad; --faint:#5b6270;
+    --me:#4fb8d8; --them:#c77fd8; --screen:#d8b54f; --in:#7c8bf0;
+    --ok:#5fd68a; --warn:#e0b23e; --bad:#f0716b;
+    --ok-bg:rgba(95,214,138,.12); --ok-edge:rgba(95,214,138,.34);
+    --me-bg:rgba(79,184,216,.12); --me-edge:rgba(79,184,216,.34);
+    --lift:0 20px 40px -26px rgba(0,0,0,.65);
+    --face:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+    --mono:Consolas,"Cascadia Mono",ui-monospace,monospace;
+    --r1:7px; --r2:9px; --r3:12px;
+    --maxw:1240px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;scroll-padding-top:80px;}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 var(--face);-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,p,figure{margin:0;}
+  h1,h2,h3{font-weight:600;line-height:1.16;text-wrap:balance;}
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+  :where(button,a,summary):focus-visible{outline:2px solid rgba(242,244,247,.7);outline-offset:2px;}
+  .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(16px,4vw,40px);}
+  .dim{color:var(--dim);}
+  .mono{font-family:var(--mono);}
+
+  /* the backing and the buttons are as in the app: fill and edge, hover makes them lighter, the
+     buttons have no color */
+  .slab{background:var(--slab);border:1px solid var(--slab-edge);border-radius:var(--r2);box-shadow:var(--lift);}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:6px 14px;border:1px solid var(--slab-edge);border-radius:6px;
+    background:var(--btn);color:var(--text);font:inherit;font-size:13px;font-weight:600;letter-spacing:.04em;cursor:pointer;
+    transition:background .12s,border-color .12s;white-space:nowrap;}
+  .btn:hover{background:var(--btn-hover);border-color:var(--edge-hi);}
+  .btn .dot{width:11px;height:11px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);flex:none;}
+  .btn.lg{padding:10px 20px;font-size:14px;}
+  .btn.sm{padding:4px 11px;font-size:12px;font-weight:500;letter-spacing:0;color:var(--dim);}
+  .btn.sm:hover{color:var(--text);}
+
+  /* header */
+  header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(10,12,16,.82);
+    -webkit-backdrop-filter:blur(24px) saturate(1.6);backdrop-filter:blur(24px) saturate(1.6);
+    border-bottom:1px solid var(--slab-edge);box-shadow:0 8px 20px -18px #000;}
+  .top-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:9px;}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:26px;line-height:1;}
+  .brand svg{width:22px;height:22px;color:var(--me);flex:none;}
+  /* header buttons without an outline, the globe and the central buttons alike: the tabs are
+     just words, the current section in the window is lighter; the language is a single globe */
+  .tabs{display:flex;gap:6px;}
+  .tabs a{position:relative;display:block;padding:8px 13px;border-radius:8px;font-size:13px;color:var(--dim);transition:color .15s,background .15s;}
+  .tabs a::first-letter{text-transform:uppercase;}   /* tab names are capitalized in every language */
+  .tabs a:hover{color:var(--text);background:var(--btn-hover);}
+  .tabs a.on{color:var(--text);}
+  @media (max-width:700px){.tabs{display:none;}}
+  .top-end{display:flex;align-items:center;gap:8px;}
+  /* language picker: a single globe without an outline, the list is like the app's dropdown
+     lists (`.combo-menu`) */
+  .langpick{position:relative;}
+  .lang-btn{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:8px;background:none;color:var(--dim);cursor:pointer;
+    transition:color .15s,background .15s;}
+  .lang-btn:hover,.lang-btn[aria-expanded="true"]{color:var(--text);background:var(--btn-hover);}
+  .lang-btn:focus-visible{outline:2px solid var(--focus);outline-offset:1px;}
+  .lang-btn .ic{width:20px;height:20px;}
+  .lang-btn .chev,.lang-name,.lang-code{display:none;}
+  .lang-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:60;width:max-content;max-height:min(360px,70vh);overflow:auto;
+    background:var(--win);border:1px solid var(--slab-edge);border-radius:var(--r2);box-shadow:0 14px 30px -12px #000;
+    padding:5px;display:flex;flex-direction:column;gap:2px;}
+  .lang-menu[hidden]{display:none;}
+  .lang-menu .opt{display:block;width:100%;padding:7px 11px;border:1px solid transparent;border-radius:6px;background:none;
+    color:var(--text);font:inherit;font-size:13px;text-align:left;cursor:pointer;white-space:nowrap;
+    transition:background .12s,border-color .12s;}
+  .lang-menu .opt:hover,.lang-menu .opt:focus-visible{background:var(--bg);border-color:var(--slab-edge);outline:none;}
+  .lang-menu .opt[aria-selected="true"]{background:rgba(255,255,255,.06);border-color:var(--slab-edge);font-weight:600;}
+  .lang-menu .opt[aria-selected="true"]:hover{background:var(--bg);}
+
+  /* first screen */
+  .hero{padding-block:clamp(2.2rem,5vw,3.6rem) clamp(1.6rem,3vw,2.4rem);}
+  .hero-copy{display:flex;flex-direction:column;align-items:flex-start;gap:1.1rem;max-width:980px;}
+  .hero-copy h1{font-size:clamp(2rem,4.3vw,3.1rem);letter-spacing:-.012em;font-weight:700;}
+  .hero-copy h1 em{font-style:normal;color:var(--me);}
+  .lede{color:var(--dim);max-width:62ch;font-size:16px;line-height:1.6;}
+  .hero-copy{max-width:none;}
+  /* size as for the section captions (`.st-lede`; requirement: adjust the size of this text) */
+  /* hero paragraph on one line: the size is fitted to the column width, --lw is the width of the
+     phrase in "em" in each language (measured);
+     on narrow screens (up to 1100px) the line would be too small, so it wraps normally */
+  .hero-copy{container-type:inline-size;}
+  .hero-copy .lede{--lw:58;max-width:none;font-size:min(1.45rem,calc(97cqi / var(--lw)));white-space:nowrap;line-height:1.5;letter-spacing:-.006em;}
+  html:lang(uk) .hero-copy .lede{--lw:58.8;}html:lang(en) .hero-copy .lede{--lw:52.4;}html:lang(es) .hero-copy .lede{--lw:58.2;}html:lang(pt) .hero-copy .lede{--lw:55.6;}
+  html:lang(de) .hero-copy .lede{--lw:63.1;}html:lang(fr) .hero-copy .lede{--lw:64.3;}html:lang(tr) .hero-copy .lede{--lw:48.6;}html:lang(pl) .hero-copy .lede{--lw:58.2;}
+  @media (max-width:1100px){.hero-copy .lede{white-space:normal;font-size:clamp(1.05rem,1.85vw,1.45rem);text-wrap:balance;}}
+  .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem 1.2rem;}
+
+  /* live interface */
+  .stage{margin-top:clamp(1.6rem,3vw,2.4rem);display:flex;flex-direction:column;gap:12px;}
+  .stage-view{position:relative;width:100%;aspect-ratio:1200/700;overflow:hidden;border-radius:var(--r3);
+    border:1px solid var(--slab-edge);background:var(--bg);box-shadow:0 30px 70px -34px #000;}
+  .stage-view .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;}
+  .stage-view .poster.narrow{display:none;}
+  .stage-view iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;pointer-events:none;opacity:0;transition:opacity .35s;background:var(--bg);
+    /* The window is squeezed to the column width, the scale is fractional. It gets its own layer
+       with pinned rasterization: when the width of the browser window changes, the frame is not
+       redrawn in parts, and no stripe of the previous card is left at the edge (it was seen as a
+       blue stripe that then disappeared). */
+    will-change:transform;}
+  .stage-view iframe.on{opacity:1;}
+  @media (max-width:719px){
+    .stage-view{aspect-ratio:400/440;}
+    .stage-view .poster.wide{display:none;}
+    .stage-view .poster.narrow{display:block;}
+  }
+
+  /* sections */
+  .sect{padding-block:clamp(2.6rem,6vw,4.2rem);border-top:1px solid var(--line);}
+  .sect-head{max-width:62ch;margin-bottom:1.8rem;display:flex;flex-direction:column;gap:.55rem;}
+  .sect-head h2{font-size:clamp(1.45rem,2.6vw,1.9rem);}
+  .sect-head p{color:var(--dim);}
+
+  /* how it works: three actions, each with a frame from the real window */
+  .how{display:flex;flex-direction:column;}
+
+  /* five "how it works" tiles (tiles D from the variants page, but without the arrow and without
+     the green lines under the three sources, and the answer format is text, code, formulas,
+     tables and everything else). A tile is a single surface, with no second frame inside; instead
+     of frames there are small live icons that show "what you picked". The earlier cards with
+     frames are in `archive/cards-v100/` */
+  .tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;}
+  .tile{display:flex;flex-direction:column;gap:18px;min-width:0;padding:clamp(16px,1.8vw,22px);border-radius:16px;background:#121417;box-shadow:0 0 0 1px var(--slab-edge);}
+  .tile .g{flex:none;height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+  .tile h3{display:flex;align-items:flex-start;gap:10px;font-size:18px;font-weight:650;line-height:1.25;}
+  .tile h3>i{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none;margin-top:.5em;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 14%,transparent);}
+  .tile p{margin-top:6px;font-size:14px;line-height:1.45;color:var(--dim);}
+  .tile p b{color:var(--text);font-weight:600;}
+  /* system sound: four mini-windows, the selected ones are marked */
+  .gw{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:min(100%,112px);}
+  .gw i{position:relative;aspect-ratio:4/3;border-radius:6px;background:#1b2029;opacity:.45;}
+  .gw i::before{content:"";position:absolute;left:10%;top:14%;width:34%;height:5px;border-radius:3px;background:#3a414d;}
+  .gw i::after{content:"";position:absolute;left:10%;right:10%;bottom:16%;height:5px;border-radius:3px;background:#2b313b;}
+  .gw i.sel{opacity:1;box-shadow:0 0 0 2px var(--them);animation:tglow 2.4s ease-in-out infinite;}
+  .gw i.sel:nth-child(4){animation-delay:-1.2s;}
+  .gw i.sel b{position:absolute;right:-5px;top:-5px;width:14px;height:14px;border-radius:50%;background:var(--them);display:grid;place-items:center;}
+  .gw i.sel b::before{content:"";width:6px;height:3px;border-left:2px solid #0a0c10;border-bottom:2px solid #0a0c10;transform:translateY(-1px) rotate(-45deg);}
+  @keyframes tglow{0%,100%{box-shadow:0 0 0 2px var(--them);}50%{box-shadow:0 0 0 2px var(--them),0 0 14px 2px color-mix(in srgb,var(--them) 60%,transparent);}}
+  /* microphone: an icon and "breathing" bars */
+  .gm{display:flex;align-items:center;gap:10px;}
+  .gm svg{width:26px;height:36px;color:var(--me);flex:none;}
+  .gm svg *{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;}
+  .geq{display:flex;align-items:center;gap:3px;height:44px;}
+  .geq i{display:block;width:4px;border-radius:2px;background:var(--me);height:16%;animation:teq 1s ease-in-out infinite;}
+  .geq i:nth-child(2n){animation-duration:.8s;animation-delay:-.3s;}.geq i:nth-child(3n){animation-duration:1.2s;animation-delay:-.6s;}.geq i:nth-child(5n){animation-duration:.7s;}
+  @keyframes teq{0%,100%{height:14%;}50%{height:96%;}}
+  /* screen: the selected area in brackets, the scanner runs only over it */
+  .gs{position:relative;width:min(100%,116px);aspect-ratio:16/11;border-radius:7px;background:#1b2029;overflow:hidden;}
+  .gs .p{position:absolute;border-radius:4px;background:#252b35;}
+  .gs .p1{left:6%;top:10%;width:34%;height:34%;}.gs .p2{left:6%;top:52%;width:34%;height:36%;}
+  .gs .sel{position:absolute;left:46%;top:10%;width:48%;height:78%;border-radius:5px;background:#2a2f39;}
+  .gs .sel::before,.gs .sel::after{content:"";position:absolute;width:10px;height:10px;border:2px solid var(--screen);}
+  .gs .sel::before{left:-3px;top:-3px;border-right:0;border-bottom:0;border-radius:4px 0 0 0;}
+  .gs .sel::after{right:-3px;bottom:-3px;border-left:0;border-top:0;border-radius:0 0 4px 0;}
+  .gs .sel em{position:absolute;left:0;right:0;height:2px;background:var(--screen);box-shadow:0 0 10px var(--screen);animation:tscan 2.2s ease-in-out infinite alternate;}
+  @keyframes tscan{from{top:6%;}to{top:92%;}}
+  .gs .sel u{position:absolute;left:12%;right:12%;height:4px;border-radius:2px;background:#3b4350;}
+  .gs .sel u:nth-of-type(1){top:22%;}.gs .sel u:nth-of-type(2){top:38%;right:34%;}.gs .sel u:nth-of-type(3){top:54%;}
+  /* any format: text, code, formulas, tables and everything else in turn, with the voice under
+     them */
+  .gf{display:flex;flex-direction:column;align-items:center;gap:9px;width:100%;}
+  .fmt{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;}
+  .fmt span{font-size:10.5px;font-weight:600;letter-spacing:.03em;padding:3px 7px;border-radius:5px;background:rgba(255,255,255,.06);color:var(--faint);transition:background .3s,color .3s;}
+  .fmt span.on{background:color-mix(in srgb,var(--ok) 22%,transparent);color:var(--ok);}
+  .prev{display:grid;width:min(100%,128px);height:50px;}
+  .prev>*{grid-area:1/1;opacity:0;transition:opacity .3s;display:flex;flex-direction:column;justify-content:center;gap:6px;}
+  .prev>.on{opacity:1;}
+  .prev .tx i{display:block;height:6px;border-radius:3px;background:#323945;}
+  .prev .tx i:nth-child(1){width:100%;}.prev .tx i:nth-child(2){width:80%;}.prev .tx i:nth-child(3){width:58%;}
+  .prev .cd{display:block;font:600 12px/1.3 var(--mono);color:var(--ok);padding-left:2px;}
+  .prev .cd span{color:#7d8591;}
+  .prev .fm{align-items:center;font:italic 600 18px/1 "Cambria Math",Cambria,"Times New Roman",serif;color:var(--ok);}
+  .prev .tb{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:3px;align-content:center;}
+  .prev .tb i{display:block;height:9px;border-radius:2px;background:#2b313b;}
+  .prev .tb i:nth-child(-n+3){background:color-mix(in srgb,var(--ok) 38%,#2b313b);}
+  .prev .ls{gap:5px;}
+  .prev .ls i{display:flex;align-items:center;gap:7px;height:6px;}
+  .prev .ls i::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--ok);flex:none;}
+  .prev .ls i::after{content:"";height:6px;border-radius:3px;background:#323945;flex:1;}
+  .prev .ls i:nth-child(2)::after{flex:.7;}
+  .gv{position:relative;width:44px;height:44px;flex:none;}
+  .gv i{position:absolute;inset:0;border-radius:50%;border:2px solid var(--text);opacity:0;animation:tring 2.4s ease-out infinite;}
+  .gv i:nth-child(2){animation-delay:.8s;}.gv i:nth-child(3){animation-delay:1.6s;}
+  .gv svg{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;color:var(--text);}
+  .gv svg *{fill:currentColor;}
+  .gv.big{width:78px;height:78px;}
+  .gv.big svg{width:26px;height:26px;margin:-13px 0 0 -13px;}
+  @keyframes tring{from{transform:scale(.3);opacity:.9;}to{transform:scale(1.35);opacity:0;}}
+  /* the frames of one window lie in a stack, the one with `.on` is visible */
+  .swap{display:grid;max-width:100%;}
+  /* the outgoing frame fades quickly, the incoming one appears a little later: two text frames
+     do not overlap each other */
+  .swap>img{grid-area:1/1;align-self:center;justify-self:center;max-width:100%;height:auto;opacity:0;transition:opacity .14s;}
+  .swap>img.on{opacity:1;transition:opacity .25s .12s;}
+  .ccur{position:absolute;left:0;top:0;width:18px;height:18px;z-index:2;pointer-events:none;opacity:0;margin:-1px 0 0 -2px;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.6));transition:left .8s cubic-bezier(.45,0,.2,1),top .8s cubic-bezier(.45,0,.2,1),opacity .3s;}
+  .ccur.on{opacity:1;}
+  .ccur svg{display:block;width:100%;height:100%;fill:#fff;stroke:#000;stroke-width:1;stroke-linejoin:round;}
+  .ccur::after{content:"";position:absolute;left:-8px;top:-8px;width:18px;height:18px;border-radius:50%;border:2px solid #fff;opacity:0;}
+  .ccur.click::after{animation:cclick .55s ease-out;}
+  @keyframes cclick{0%{opacity:.9;transform:scale(.3);}100%{opacity:0;transform:scale(1.7);}}
+  @media (max-width:1100px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr));}.tiles>.tile:last-child{grid-column:1/-1;}}
+  @media (max-width:520px){.tiles{grid-template-columns:1fr;}.tile .g{height:176px;}}
+  @media (prefers-reduced-motion:reduce){.swap>img,.ccur{transition:none;}.gw i.sel,.geq i,.gs .sel em,.gv i{animation:none;}.geq i{height:60%;}.gv i:first-child{opacity:.5;transform:none;}.prev>*{transition:none;}}
+
+  /* "Remembers": no cards and boxes, two real windows of the same width, overlapping.
+     Both windows are on the stage at once, the mouse presses the record button, and the record
+     comes forward, the request is typed, the answer appears row by row, and a click on the time
+     in the answer opens the conversation text at the right turn; at the end a click on the
+     sessions brings them forward again */
+  /* "Remembers" is a section of its own with its own heading (like "Invisibility"), not the tail
+     of "How it works" */
+  .mem{display:flex;flex-direction:column;}
+  .mem-em{color:var(--text);}
+  /* the stage in fractions of the width: the windows are 640px each, at a 1160px stage they are
+     at natural size, and on a narrower one they shrink together */
+  .mem-stage{position:relative;width:100%;aspect-ratio:1160/640;}
+  .mwin{position:absolute;width:55.172%;border-radius:12px;overflow:hidden;background:var(--sunk);
+    box-shadow:0 34px 70px -28px #000,0 0 0 1px rgba(255,255,255,.1);
+    transition:filter .5s ease,transform .6s cubic-bezier(.2,.8,.2,1);}
+  /* both windows are on the stage from the very start, the active one in front (requirement: two
+     windows at once, the active one simply comes to the front): the one behind is dimmed and a
+     bit smaller, and the one that comes forward rises into place */
+  .mwin-s{top:9%;left:0;z-index:2;}
+  .mwin-r{top:0;left:44.828%;z-index:1;}
+  .mem:not(.opened) .mwin-r,.mem.opened .mwin-s{filter:brightness(.72);transform:translateY(12px) scale(.985);}
+  .mem.opened .mwin-s{z-index:1;}
+  .mem.opened .mwin-r{z-index:2;}
+  .mframe{position:relative;}
+  .mframe .swap>img{width:100%;}
+  /* the frames of the "Remembers" windows change without a dip in brightness (symptom: the screen
+     flickers when a row is clicked): the shared `.swap` transition fades the outgoing frame at
+     once and turns the incoming one on with a delay, and between them the window briefly went
+     twice as dark. Here the incoming frame fades in over the outgoing one, and the outgoing one
+     leaves when the incoming one is already in place */
+  .mframe .swap>img{transition:opacity 0s .22s;}
+  .mframe .swap>img.on{z-index:1;transition:opacity .2s;}
+  /* the request is typed: slices of the input line lie over the empty window, the position comes
+     from mem.json (page.js) */
+  .mtype{position:absolute;z-index:3;left:var(--tx,1.9%);top:var(--ty,86.9%);width:var(--tw,96.2%);height:var(--th,10.6%);}
+  .mtype>img{width:100%;height:100%;}
+  .mtype.swap>img,.mtype.swap>img.on{transition:none;}   /* the slices change more often than the smooth fade-in runs */
+  .mtype.gone{opacity:0;}
+  .mframe .swap>img.rv{opacity:1;z-index:2;transition:none;}
+  /* finale: the real record page (page.js) lies over the frame with the finished answer, and a
+     click on the time starts its own window animation with the text, the same as in the app. The
+     page is exactly the 640px frame, page.js sets the scale by the window width */
+  .mlive{position:absolute;z-index:3;inset:0;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .35s;}
+  .mlive.on{opacity:1;transition:opacity .1s;}
+  .mlive iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;}
+  .mframe .ccur{z-index:5;}   /* the mouse is above the frames (they have z-index 1–2), the request slices and the live page (3) */
+  @media (max-width:900px){
+    .mem-stage{aspect-ratio:auto;display:flex;flex-direction:column;gap:14px;}
+    .mwin{position:relative;left:auto;top:auto;width:100%;max-width:640px;margin-inline:auto;}
+    .mem:not(.opened) .mwin-r,.mem.opened .mwin-s{transform:none;}
+  }
+  @media (prefers-reduced-motion:reduce){.mwin{transition:none;}}
+
+  /* invisibility: short text on top, below it a full-width window that can be moved (requirement:
+     text on top and a bigger window below; that much text is unnecessary, the interactive window
+     explains everything) */
+  .stealth{display:flex;flex-direction:column;gap:clamp(1.2rem,3vw,1.8rem);}
+  /* "Invisibility": a heading and one paragraph across the full width, like "Remembers"
+     (requirement: just a text saying that the app can be made fully invisible, and nothing more) */
+  #stealth .sect-head,#memory .sect-head,#how .sect-head{max-width:none;}
+  .st-lede{font-size:clamp(1.05rem,1.85vw,1.45rem);line-height:1.5;letter-spacing:-.006em;color:var(--dim);text-wrap:pretty;}
+
+  .call{container-type:inline-size;position:absolute;inset:0;overflow:hidden;
+    background:#0d1015;display:flex;flex-direction:column;}
+  .call-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;padding:8px;min-height:0;}
+  .ptile{position:relative;border-radius:8px;background:#151a21;border:1px solid var(--line);display:grid;place-items:center;min-height:0;}
+  .ptile.speaking{border-color:var(--ok-edge);box-shadow:0 0 0 1px var(--ok-edge);}
+  .av{width:clamp(30px,6cqw,84px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:clamp(11px,2.2cqw,26px);color:#0a0c10;background:var(--c);opacity:.72;}
+  .nm{position:absolute;left:8px;bottom:6px;font-size:clamp(11px,1.1cqw,13px);color:var(--dim);background:rgba(0,0,0,.35);padding:1px 6px;border-radius:4px;}
+  .call-bar{display:flex;justify-content:center;gap:8px;padding:8px;border-top:1px solid var(--line);background:#0b0e12;}
+  .call-bar i{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.07);display:block;}
+  .call-bar i.end{background:rgba(240,113,107,.7);width:34px;border-radius:13px;}
+  /* the window is at the center of the frame, where the slider stands: it is at once clear that
+     half of the window is on your screen and the other half is not in the screen share */
+  .slot{position:absolute;left:32%;top:50%;transform:translateY(-50%);width:36%;aspect-ratio:400/440;border-radius:var(--r2);overflow:hidden;
+    box-shadow:0 22px 44px -10px rgba(0,0,0,.85),0 0 0 1px var(--slab-edge);z-index:3;}
+  /* The window has no backing: it is glass, as in the app, and the call shows through it. The
+     veil is painted by the window's own page (`--glass-tint`, see page.js). */
+  .slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;}
+  .slot iframe{position:absolute;left:0;top:0;width:400px;height:440px;border:0;transform-origin:0 0;pointer-events:none;opacity:0;transition:opacity .35s;will-change:transform;}
+  .slot iframe.on{opacity:1;}
+  .slot.absent{background:none;box-shadow:none;border:1px dashed rgba(255,255,255,.2);}
+
+  /* before and after: one call, the slider moves the border between "what I see" and "what is
+     seen in the screen share" */
+  .cmp-wrap{display:flex;flex-direction:column;gap:12px;min-width:0;}
+  .compare{position:relative;aspect-ratio:16/9;border:1px solid var(--slab-edge);border-radius:var(--r3);overflow:hidden;
+    background:#0d1015;user-select:none;-webkit-user-select:none;touch-action:pan-y;cursor:ew-resize;box-shadow:var(--lift);}
+  .compare .layer{position:absolute;inset:0;isolation:isolate;}
+  .compare .layer.theirs{clip-path:inset(0 0 0 var(--p));}
+  .cmp-label{position:absolute;bottom:10px;z-index:4;display:flex;align-items:center;gap:7px;padding:4px 11px;
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--text);white-space:nowrap;
+    background:var(--win);border:1px solid var(--edge-hi);border-radius:4px;
+    pointer-events:none;}
+  .cmp-label.l{left:10px;} .cmp-label.r{right:10px;}
+  .cmp-label i{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:none;}
+  .cmp-label.l i{background:var(--ok);}
+  .cmp-handle{position:absolute;top:0;bottom:0;left:var(--p);width:48px;margin-left:-24px;z-index:5;display:grid;place-items:center;outline:none;}
+  .cmp-handle::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#bcc4d2;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 14px rgba(188,196,210,.16);}
+  .cmp-handle .grip{position:relative;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--text);
+    background:var(--win);border:1px solid var(--edge-hi);box-shadow:0 8px 20px -6px #000;transition:background .12s;}
+  .cmp-handle .grip svg{width:18px;height:18px;}
+  .compare:hover .grip,.compare.drag .grip{background:#20242c;}
+  .cmp-handle:focus-visible .grip{outline:2px solid rgba(242,244,247,.7);outline-offset:3px;}
+  @media (max-width:520px){.cmp-label{bottom:auto;top:8px;font-size:9.5px;padding:3px 8px;letter-spacing:.08em;}}
+  /* narrow screen: the call is taller, the answers window is wider, as before */
+  @media (max-width:760px){.compare{aspect-ratio:5/4;}.slot{left:22%;width:56%;}}
+
+  /* features (requirement: not this, something simpler): the same tiles as in "How it works"
+     (those were accepted), four of them, each with its own small icon: the nine languages light
+     up in turn, 3–4 s run along a line, the hotkey keys are pressed, the files arrive one after
+     another */
+  /* features (requirement: just an icon, text and a divider between the options): four items in
+     a row, each with an icon, a title and a line, with thin dividers between them; without tiles
+     and animations. The earlier tiles with animation are in `archive/features-v108/` */
+  .fi-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));}
+  .fi{display:flex;flex-direction:column;gap:9px;min-width:0;padding:4px clamp(14px,2vw,26px);border-left:1px solid var(--line);}
+  .fi:first-child{padding-left:0;border-left:0;}
+  .fi:last-child{padding-right:0;}
+  .fi-h{display:flex;align-items:flex-start;gap:10px;}
+  .fi-ico{flex:none;margin-top:-1px;color:var(--c);}
+  .fi-ico svg{display:block;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+  .fi h3{font-size:clamp(1rem,1.4vw,1.15rem);font-weight:650;line-height:1.25;letter-spacing:-.008em;}
+  .fi p{font-size:14px;line-height:1.5;color:var(--dim);}
+  @media (max-width:1000px){
+    .fi-row{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:26px;}
+    .fi:nth-child(odd){padding-left:0;border-left:0;}
+    .fi:nth-child(even){padding-right:0;}
+    .fi:nth-child(n+3){padding-top:26px;border-top:1px solid var(--line);}
+    .fi:nth-child(4){border-left:1px solid var(--line);}
+  }
+  @media (max-width:520px){
+    .fi-row{grid-template-columns:1fr;row-gap:0;}
+    .fi,.fi:nth-child(n){padding:22px 0;border-left:0;border-top:1px solid var(--line);}
+    .fi:first-child{padding-top:0;border-top:0;}
+    .fi:last-child{padding-bottom:0;}
+  }
+
+  /* questions */
+  .faq{columns:2 320px;column-gap:14px;}
+  .faq details{break-inside:avoid;margin-bottom:10px;background:var(--slab);border:1px solid var(--slab-edge);border-radius:var(--r2);}
+  .faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:13px 16px;font-weight:600;font-size:14px;}
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary .chev{flex:none;color:var(--dim);transition:transform .15s;}
+  .faq details[open] summary .chev{transform:rotate(180deg);}
+  .faq .a{padding:0 16px 14px;color:var(--dim);font-size:13.5px;line-height:1.6;}
+
+  /* final and footer */
+  /* final (variant A): on the left "Try Argus on your next call." (Argus with the mark, as in the
+     logo), the Windows and Mac chips and a button;
+     on the right a ribbon of "question and answer" cards slowly moves up in a loop and fades out
+     at the top and bottom */
+  .final{padding-block:clamp(2.8rem,6vw,4.4rem);border-top:1px solid var(--line);}
+  .final-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(1.6rem,5vw,4rem);align-items:stretch;}
+  .final-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;min-height:215px;container-type:inline-size;}
+  /* final heading on one line: the size is fitted to the column width, --fw is the width of the
+     phrase in "em" in each language (measured) */
+  .final-h{--fw:19.3;font-size:min(2.1rem,calc(94cqi / var(--fw)));white-space:nowrap;line-height:1.2;letter-spacing:-.01em;font-weight:700;margin-bottom:1.2rem;}
+  .final-h em{font-style:normal;color:var(--me);}
+  html:lang(uk) .final-h{--fw:19.8;}html:lang(en) .final-h{--fw:12.6;}html:lang(es) .final-h{--fw:17.1;}html:lang(pt) .final-h{--fw:21.7;}
+  html:lang(de) .final-h{--fw:18.3;}html:lang(fr) .final-h{--fw:15.7;}html:lang(tr) .final-h{--fw:17.6;}html:lang(pl) .final-h{--fw:19;}
+  .final-h .wm svg{width:auto;height:.7em;aspect-ratio:691/699;margin-right:.01em;color:inherit;flex:none;}
+  .final-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:3.2rem;}
+  .final-tags>span{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border:1px solid var(--slab-edge);border-radius:4px;background:var(--slab);color:var(--dim);font-size:12.5px;}
+  .final-tags svg{width:14px;height:14px;flex:none;}
+  .final-feed{height:215px;width:100%;max-width:460px;justify-self:end;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent);}
+  .final-feed .track{display:flex;flex-direction:column;gap:12px;animation:feedup 40s linear infinite;}
+  @keyframes feedup{to{transform:translateY(calc(-50% - 6px));}}
+  .fcard{border:1px solid var(--slab-edge);border-radius:10px;background:#0d0f13;overflow:hidden;}
+  .fcard .io{padding:11px 14px;}
+  .fcard .io+.io{border-top:1px solid var(--slab-edge);background:rgba(0,0,0,.14);}
+  .fcard .tg{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
+  .fcard .tg.g{color:var(--ok);}
+  .fcard p{font-size:13.5px;line-height:1.45;color:#fff;}
+  .fcard code{display:block;margin-top:6px;padding:6px 9px;background:#08090c;border-left:2px solid var(--ok);border-radius:5px;font:12px/1.5 var(--mono);color:#d7dce4;white-space:pre-wrap;}
+  @media (prefers-reduced-motion:reduce){.final-feed .track{animation:none;}}
+  @media (max-width:760px){.final-grid{grid-template-columns:1fr;}.final-feed{justify-self:start;height:260px;}.final-copy{min-height:0;}}
+  .fine{font-size:12px;color:var(--faint);}
+  footer.site{border-top:1px solid var(--line);padding-block:2.2rem 1.6rem;}
+  .foot-top{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(var(--cols,3),minmax(0,1fr));gap:clamp(1.4rem,4vw,3rem);}
+  @media (max-width:640px){.foot-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}.foot-top>:first-child{grid-column:1/-1;}}
+  .foot-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:26px;line-height:1;}
+  .foot-brand svg{width:18px;height:18px;color:var(--me);}
+  /* the mark and "rgus" read as a single logo word (requirement: a bit bigger and as one logo):
+     the letter A is exactly capital height, tight against the "r", the letters slightly condensed */
+  .wm{display:inline-flex;align-items:baseline;letter-spacing:-.025em;}
+  .brand .wm svg,.foot-brand .wm svg{width:auto;height:.7em;aspect-ratio:691/699;margin-right:-.015em;color:inherit;flex:none;}
+  .foot-tag{margin-top:12px;color:var(--dim);font-size:14px;max-width:40ch;line-height:1.55;}
+  .foot-col h4{margin:0 0 12px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;}
+  .foot-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
+  .foot-col a{color:var(--dim);font-size:14px;}
+  .foot-col a:hover{color:var(--text);}
+  /* The caption by the download button: what the system needs (Windows 10 2004+; a Mac with Apple
+     Silicon and macOS 14+). An Intel Mac and older systems cannot be told apart by the browser
+     string — this is the only place where a person learns whether the build will suit them. */
+  .foot-col li small{display:block;margin-top:2px;color:var(--faint);font-size:12px;line-height:1.4;}
+  /* An explanation for when the "Download" button brought the person back here: there
+     is no file for their system. The server redirects to /?dl=soon or /?dl=other
+     (deploy/landing/nginx/default.conf), and page.js shows it and cleans the address. */
+  .dl-note{position:fixed;left:50%;bottom:clamp(14px,3vw,26px);transform:translateX(-50%);z-index:80;width:max-content;max-width:min(92vw,460px);padding:12px 18px;border:1px solid var(--slab-edge);border-radius:8px;background:var(--win);box-shadow:0 14px 30px -12px #000;color:var(--text);font-size:14px;line-height:1.5;text-align:center;cursor:pointer;}
+  .dl-note[hidden],.dl-note [hidden]{display:none;}
+  .faq .a code{font:12.5px/1.5 var(--mono);padding:1px 6px;border-radius:5px;background:#08090c;border:1px solid var(--slab-edge);color:#d7dce4;word-break:break-all;}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}.stage-view iframe,.slot iframe{transition:none;}}
+
+  /* transition between pages (requirement: going to the same page lifts smoothly and to another
+     one switches abruptly, but everything must be in one style): equally soft everywhere and
+     without relying on browser features. On click the content (the header stays in place) fades
+     and moves up slightly, the page changes, and on the new page the content appears with a
+     slight rise. */
+  body>:not(header.top):not(script):not(style):not(link):not(title){animation:page-in .5s cubic-bezier(.2,.7,.2,1) both;}
+  @keyframes page-in{from{opacity:0;transform:translateY(14px);}}
+  html.leaving body>:not(header.top):not(script):not(style):not(link):not(title){opacity:0;transform:translateY(-8px);transition:opacity .24s ease,transform .24s ease;}
+  @media (prefers-reduced-motion:reduce){body>*{animation:none!important;}html.leaving body>*{transition:none;}}
+</style>
+
+<header class="top">
+  <div class="wrap top-row">
+    <div class="brand">
+      <span class="wm" role="img" aria-label="Argus"><svg viewBox="0 0 691 699" aria-hidden="true"><path d="M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z" fill="currentColor"/><circle cx="345.5" cy="525" r="60" fill="currentColor"/></svg><span aria-hidden="true">rgus</span></span>
+    </div>
+    <nav class="tabs" aria-label="Sections" data-i18n-attr="aria-label:nav.aria">
+      <a href="index.html" class="on" data-i18n="nav.about">About</a>
+      <a href="pricing.html" data-i18n="nav.price">Pricing</a>
+      <a href="help.html" data-i18n="nav.help">Help</a>
+    </nav>
+    <div class="top-end">
+  <div class="langpick" id="langpick">
+          <button type="button" class="btn lang-btn" id="lang-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="lang-menu" aria-label="Language">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9c-2.6-2.7-4-5.7-4-9s1.4-6.3 4-9Z"/></svg><span class="lang-name" id="lang-name">English</span><span class="lang-code" id="lang-code">EN</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
+          </button>
+          <div class="lang-menu" id="lang-menu" role="listbox" aria-label="Language" tabindex="-1" hidden>
+            <button type="button" role="option" class="opt" id="lang-ru" data-v="ru" data-code="RU" aria-selected="false">русский</button>
+            <button type="button" role="option" class="opt" id="lang-uk" data-v="uk" data-code="UK" aria-selected="false">українська</button>
+            <button type="button" role="option" class="opt" id="lang-en" data-v="en" data-code="EN" aria-selected="false">English</button>
+            <button type="button" role="option" class="opt" id="lang-es" data-v="es" data-code="ES" aria-selected="false">Español</button>
+            <button type="button" role="option" class="opt" id="lang-pt" data-v="pt" data-code="PT" aria-selected="false">Português</button>
+            <button type="button" role="option" class="opt" id="lang-de" data-v="de" data-code="DE" aria-selected="false">Deutsch</button>
+            <button type="button" role="option" class="opt" id="lang-fr" data-v="fr" data-code="FR" aria-selected="false">Français</button>
+            <button type="button" role="option" class="opt" id="lang-tr" data-v="tr" data-code="TR" aria-selected="false">Türkçe</button>
+            <button type="button" role="option" class="opt" id="lang-pl" data-v="pl" data-code="PL" aria-selected="false">Polski</button>
+          </div>
+        </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1 data-i18n="hero.h1">Listens and watches with you.<br><em>Suggests an answer — right away.</em></h1>
+        <p class="lede" data-i18n="hero.lede">Answers with text, code, a formula, or voice. When the call is over, turns the recording into a summary, tasks, or an email.</p>
+        <div class="cta-row">
+          <a class="btn lg" href="/download"><span class="dot" aria-hidden="true"></span><span data-i18n="btn.get">DOWNLOAD</span></a>
+        </div>
+        <!--fine--><p class="fine hero-fine" data-i18n="legal.fine">By downloading Argus, you accept the <a href="terms.html">Terms of Use</a> and the <a href="privacy.html">Privacy Policy</a>.</p><!--/fine-->
+      </div>
+
+      <figure class="stage" id="stage">
+        <div class="stage-view" id="stage-view">
+          <img class="poster wide" data-img="poster_dash" width="1200" height="700" alt="Argus window: answer feed on the left, screen frame and conversation transcript on the right" data-i18n-attr="alt:img.stage">
+          <img class="poster narrow" data-img="solo_poster" width="400" height="440" alt="Argus answer window on top of your work" data-i18n-attr="alt:img.stage_narrow">
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sect" id="how">
+    <div class="wrap">
+      <div class="sect-head">
+        <h2 data-i18n="how.h2">Hears, sees, answers, remembers</h2>
+        <p class="st-lede" data-i18n="how.lede">You choose what it listens to and watches. It answers during the conversation and remembers it afterwards.</p>
+      </div>
+      <div class="how">
+        <div class="tiles" id="tiles">
+          <article class="tile" style="--c:var(--them)">
+            <div class="g" aria-hidden="true"><div class="gw"><i class="sel"><b></b></i><i></i><i></i><i class="sel"><b></b></i></div></div>
+            <div><h3><i></i><span data-i18n="tile.sys.h">System audio</span></h3><p data-i18n="tile.sys.p">Hears the windows <b>you pick</b> and answers what is said in them.</p></div>
+          </article>
+          <article class="tile" style="--c:var(--me)">
+            <div class="g" aria-hidden="true"><div class="gm"><svg viewBox="0 0 26 36"><rect x="8" y="2" width="10" height="18" rx="5"/><path d="M3 15v1a10 10 0 0 0 20 0v-1M13 26v7M8 33h10"/></svg><div class="geq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
+            <div><h3><i></i><span data-i18n="tile.mic.h">Your microphone</span></h3><p data-i18n="tile.mic.p">Hears you and can <b>answer what you say</b>.</p></div>
+          </article>
+          <article class="tile" style="--c:var(--screen)">
+            <div class="g" aria-hidden="true"><div class="gs"><span class="p p1"></span><span class="p p2"></span><span class="sel"><u></u><u></u><u></u><em></em></span></div></div>
+            <div><h3><i></i><span data-i18n="tile.scr.h">Your screen</span></h3><p data-i18n="tile.scr.p">Sees the screen or window <b>you pick</b> and works with what is on it.</p></div>
+          </article>
+          <article class="tile" style="--c:var(--ok)">
+            <div class="g" aria-hidden="true"><div class="gf" id="tile-fmt">
+              <div class="fmt"><span class="on" data-i18n="tile.f.text">Text</span><span data-i18n="tile.f.code">Code</span><span data-i18n="tile.f.math">Formulas</span><span data-i18n="tile.f.table">Tables</span><span data-i18n="tile.f.more">And more</span></div>
+              <div class="prev">
+                <div class="tx on"><i></i><i></i><i></i></div>
+                <div class="cd"><span>def</span> f(x):<br>&nbsp;&nbsp;return x*2</div>
+                <div class="fm">S ≈ 12 597</div>
+                <div class="tb"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="ls"><i></i><i></i><i></i></div>
+              </div>
+            </div></div>
+            <div><h3><i></i><span data-i18n="tile.fmt.h">Answer in any format</span></h3><p data-i18n="tile.fmt.p">Text, code, formulas, tables and <b>everything else</b>.</p></div>
+          </article>
+          <article class="tile" style="--c:var(--text)">
+            <div class="g" aria-hidden="true"><div class="gv big"><i></i><i></i><i></i><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg></div></div>
+            <div><h3><i></i><span data-i18n="tile.voice.h">Voice replies</span></h3><p data-i18n="tile.voice.p">Reads the answer <b>aloud</b>, in a voice you pick.</p></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="memory">
+    <div class="wrap">
+      <div class="sect-head">
+        <h2 data-i18n="how.mem.h">Remembers</h2>
+        <p class="st-lede" data-i18n="how.mem.p"><span class="mem-em">Every conversation is its own session.</span> When it ends, open its record and ask for anything: a summary, tasks, an email. A time in the answer is a link to that line.</p>
+      </div>
+      <div class="mem" id="mem" style="--c:var(--in)">
+          <div class="mem-stage" id="mem-stage">
+            <div class="mwin mwin-s">
+              <div class="mframe" data-f="s">
+                <div class="swap" data-swap="sess">
+                  <img class="on" data-img="mem_s_idle" width="640" height="550" alt="Session list: each conversation has its own name and time, with buttons for the record, settings, rename, and delete on hover" data-i18n-attr="alt:img.sessions">
+                  <img data-img="mem_s_hover" width="640" height="550" alt="" aria-hidden="true">
+                  <img data-img="mem_s_press" width="640" height="550" alt="" aria-hidden="true">
+                </div>
+                <span class="ccur" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M2 1l11 6-5 1.5L6 14z"/></svg></span>
+              </div>
+            </div>
+            <div class="mwin mwin-r">
+              <div class="mframe" data-f="r">
+                <div class="swap" data-swap="rec">
+                  <img class="on" data-img="mem_r_0" width="640" height="640" alt="Record window: a hint about what to do with the conversation and a field to ask for it" data-i18n-attr="alt:img.rec0">
+                  <img data-img="mem_r_2" width="640" height="640" alt="" aria-hidden="true">
+                  <img data-img="mem_r_3" width="640" height="640" alt="The record of a conversation: a request for a summary and tasks, the answer with a table, and a PDF file under it" data-i18n-attr="alt:img.record">
+                  <img data-img="mem_r_4" width="640" height="640" alt="" aria-hidden="true">
+                </div>
+                <div class="mtype swap" data-swap="type" aria-hidden="true">
+                  <img data-img="mem_t_1" width="616" height="68" alt="">
+                  <img data-img="mem_t_2" width="616" height="68" alt="">
+                  <img data-img="mem_t_3" width="616" height="68" alt="">
+                  <img data-img="mem_t_4" width="616" height="68" alt="">
+                  <img data-img="mem_t_5" width="616" height="68" alt="">
+                  <img data-img="mem_t_6" width="616" height="68" alt="">
+                </div>
+                <div class="mlive" aria-hidden="true"></div>
+                <span class="ccur" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M2 1l11 6-5 1.5L6 14z"/></svg></span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section class="sect" id="stealth">
+    <div class="wrap">
+      <div class="sect-head">
+        <h2 data-i18n="st.h2">Invisible to screen share</h2>
+        <p class="st-lede" data-i18n="st.p">Argus can be made completely invisible: it stays out of screen shares and recordings, doesn't join the call, and hides with one key.</p>
+      </div>
+      <div class="stealth">
+        <div class="cmp-wrap">
+          <div class="compare" id="compare" style="--p:50%">
+            <div class="layer mine">
+              <div class="call">
+                <div class="call-grid"><div class="ptile speaking" style="--c:#5fd68a"><span class="av" data-av="0">AK</span><span class="nm" data-nm="0">Anna K.</span></div><div class="ptile" style="--c:#c77fd8"><span class="av" data-av="1">IP</span><span class="nm" data-nm="1">Igor</span></div><div class="ptile" style="--c:#d8b54f"><span class="av" data-av="2">MS</span><span class="nm" data-nm="2">Maria S.</span></div><div class="ptile" style="--c:#4fb8d8"><span class="av" data-av="3">Y</span><span class="nm" data-nm="3">You</span></div></div><div class="call-bar" aria-hidden="true"><i></i><i></i><i></i><i class="end"></i></div>
+                <div class="slot" id="slot">
+                  <img data-img="solo_poster" width="400" height="440" alt="Argus answer window on top of a video call" data-i18n-attr="alt:img.solo">
+                </div>
+              </div>
+              <span class="cmp-label l"><i></i><span data-i18n="st.mine">On your screen</span></span>
+            </div>
+            <div class="layer theirs">
+              <div class="call">
+                <div class="call-grid"><div class="ptile speaking" style="--c:#5fd68a"><span class="av" data-av="0">AK</span><span class="nm" data-nm="0">Anna K.</span></div><div class="ptile" style="--c:#c77fd8"><span class="av" data-av="1">IP</span><span class="nm" data-nm="1">Igor</span></div><div class="ptile" style="--c:#d8b54f"><span class="av" data-av="2">MS</span><span class="nm" data-nm="2">Maria S.</span></div><div class="ptile" style="--c:#4fb8d8"><span class="av" data-av="3">Y</span><span class="nm" data-nm="3">You</span></div></div><div class="call-bar" aria-hidden="true"><i></i><i></i><i></i><i class="end"></i></div>
+                <div class="slot absent"></div>
+              </div>
+              <span class="cmp-label r"><i></i><span data-i18n="st.them">In the screen share</span></span>
+            </div>
+            <div class="cmp-handle" id="cmp-handle" role="slider" tabindex="0" aria-orientation="horizontal"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
+                 aria-label="Compare your screen and the screen share" data-i18n-attr="aria-label:st.cmp.aria">
+              <span class="grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="features">
+    <div class="wrap">
+      <div class="sect-head">
+        <h2 data-i18n="feat.h2">A bit more of what's inside</h2>
+      </div>
+      <div class="fi-row">
+        <div class="fi" style="--c:var(--in)">
+          <div class="fi-h"><div class="fi-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9c-2.6-2.7-4-5.7-4-9s1.4-6.3 4-9Z"/></svg></div><h3 data-i18n="feat.n1.h">9 languages</h3></div>
+          <p data-i18n="feat.n1.p">Interface, speech recognition, and answers.</p>
+        </div>
+        <div class="fi" style="--c:var(--ok)">
+          <div class="fi-h"><div class="fi-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></div><h3 data-i18n="feat.n2.h">3–4 seconds</h3></div>
+          <p data-i18n="feat.n2.p">From the question to the answer.</p>
+        </div>
+        <div class="fi" style="--c:var(--text)">
+          <div class="fi-h"><div class="fi-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M7 10h2M11 10h2M15 10h2M7 13h10"/></svg></div><h3 data-i18n="feat.n4.h">Hotkeys for everything</h3></div>
+          <p data-i18n="feat.n4.p">Ask, hide, start, stop. They work over any program.</p>
+        </div>
+        <div class="fi" style="--c:var(--bad)">
+          <div class="fi-h"><div class="fi-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><h3 data-i18n="feat.n3.h">Your own materials</h3></div>
+          <p data-i18n="feat.n3.p">Add files or photos of pages, and the answers will rely on them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--faq--><section class="sect" id="faq">
+    <div class="wrap">
+      <div class="sect-head">
+        <h2 data-i18n="faq.h2">Before you install</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary><span data-i18n="faq.1.q">How is this better than notes after the meeting?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.1.a">Argus answers while the conversation is going and you need the answer right now, not in a recap an hour later. When the conversation is over, you can still ask its record for a summary, tasks, or an email.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.11.q">What does it hear and see?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.11.a">The sound of the windows you pick, your microphone, and the screen or window you pick. Every line is labeled as yours or theirs. You decide what it listens to and watches.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.12.q">How does it answer?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.12.a">With text, code, a formula, a table, or whatever the question needs. It can also read the answer aloud, in a voice you pick. It answers questions from the call and ones you type yourself.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.2.q">Which languages are supported?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.2.a">The interface, speech recognition, and answers work in nine languages: Russian, Ukrainian, English, Spanish, Portuguese (Brazil), German, French, Turkish, and Polish. You can set the answer language explicitly, or leave it on “same as conversation” and it will be detected on its own.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.3.q">Can I connect my own documents?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.3.a">Yes. Add PDF, Word, and PowerPoint files, text, or photos of pages. Each session has its own materials, and Argus uses them in its answers.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.4.q">So no one will notice me for sure?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.4.a">Every setting in the “Invisibility” section really works, and Argus checks it itself rather than just claiming it. But it's a set of specific technical measures, not an absolute guarantee for every version of Windows and every way of recording.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.5.q">Do I need an account?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.5.a">Yes. You sign up with an email and password right in the app, with no email confirmation. A small welcome gift lands on your balance right away so you can try it, and there's nothing else to set up.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.6.q">How much does it cost?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.6.a">There's no subscription. You top up your balance from $5 and pay only for what you use: speech recognition, answers, and voice replies. Money on your balance doesn't expire. The prices are shown in the app, next to the top-up buttons. To let you try it, we give a small amount when you sign up.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.7.q">Is it a finished product?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.7.a">Argus is a small independent project in active development. The core works and is used every day, but some features may still be unstable.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.8.q">What happens to my data?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.8.a">Recordings, history, and materials stay on your computer. Audio, and questions with screen frames, are handled by third-party services; our server stores only your account, balance, and usage as numbers, with no text of your questions.<!--legal--> Details are in the <a href="privacy.html">Privacy Policy</a>.<!--/legal--></div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.9.q">Which programs does it work with?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.9.a">Any of them. Argus hears your computer's sound and your microphone and sees the screen, so it doesn't matter where the conversation happens: a video call, a browser, or a lecture. It runs on Windows 10 (version 2004 or newer) and 11; the macOS version (14+, Apple Silicon) is in beta.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.13.q">My Mac says it can't verify the developer. What do I do?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.13.a">The Mac version is in beta and isn't signed by Apple yet, so macOS asks you to confirm the first launch. You need a Mac with Apple Silicon (M1 or newer) and macOS 14 or later. Open the downloaded file and drag Argus into Applications. Open Argus and click Done, then open System Settings → Privacy &amp; Security, scroll down, and click Open Anyway next to Argus. Then allow the microphone and screen &amp; system audio recording, and restart Argus after you allow screen recording. If it still won't open, run this in Terminal: <code>xattr -dr com.apple.quarantine /Applications/Argus.app</code></div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.14.q">Windows says it protected my PC. What do I do?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.14.a">The Windows version isn't signed yet, so SmartScreen warns you on the first launch. Unpack the downloaded zip first (right-click, then Extract All; don't run Argus from inside the zip), then open Argus.exe. When you see “Windows protected your PC”, click More info, then Run anyway.</div>
+        </details>
+        <details>
+          <summary><span data-i18n="faq.10.q">Can I come back to a conversation later?</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></summary>
+          <div class="a" data-i18n="faq.10.a">Yes. Every conversation stays as a session. Open its record: you get the full text, and you can ask for a summary, tasks, an email, or flashcards, then copy the answer or save it as a PDF.</div>
+        </details>
+      </div>
+    </div>
+  </section><!--/faq-->
+
+  <section class="final">
+    <div class="wrap final-grid">
+      <div class="final-copy">
+        <h2 class="final-h" data-i18n="final.h2">Try <span class="wm" role="img" aria-label="Argus"><svg viewBox="0 0 691 699" aria-hidden="true"><path d="M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z" fill="currentColor"/><circle cx="345.5" cy="525" r="60" fill="currentColor"/></svg><span aria-hidden="true">rgus</span></span> <em>on your next call.</em></h2>
+        <div class="final-tags">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M0 0h11.377v11.372H0zm12.623 0H24v11.372H12.623zM0 12.623h11.377V24H0zm12.623 0H24V24H12.623z" fill="currentColor"/></svg><span data-i18n="final.t1">Windows</span></span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" fill="currentColor"/></svg><span data-i18n="final.t4">Mac</span></span>
+        </div>
+        <a class="btn lg" href="/download"><span class="dot" aria-hidden="true"></span><span data-i18n="btn.get">DOWNLOAD</span></a>
+        <!--fine--><p class="fine" data-i18n="legal.fine">By downloading Argus, you accept the <a href="terms.html">Terms of Use</a> and the <a href="privacy.html">Privacy Policy</a>.</p><!--/fine-->
+      </div>
+      <div class="final-feed" aria-hidden="true"><div class="track"><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c1.q">What's the difference between a process and a thread?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c1.a">A <b>process</b> is an isolated program with its own memory. A <b>thread</b> runs inside it and shares that memory.</p></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c2.q">Can you look at why my test is failing?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c2.a">The inner loop starts at zero, so an item is compared with itself. Start it at <b>i + 1</b>.</p><code>for j in range(i + 1, len(items)):</code></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c3.q">How much will 10,000 grow at 8% over three years?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c3.a">That is compound interest: <b>S = 10 000 · 1.08³ ≈ 12 597</b>.</p></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c4.q">Can we offer single sign-on this quarter?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c4.a">Maybe. Maria sends the estimate by Monday, so promise an answer then.</p></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c5.q">¿Puedes repetirlo?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c5.a">Of course. <b>Claro.</b> Let me say it again, slower.</p></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c1.q">What's the difference between a process and a thread?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c1.a">A <b>process</b> is an isolated program with its own memory. A <b>thread</b> runs inside it and shares that memory.</p></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c2.q">Can you look at why my test is failing?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c2.a">The inner loop starts at zero, so an item is compared with itself. Start it at <b>i + 1</b>.</p><code>for j in range(i + 1, len(items)):</code></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c3.q">How much will 10,000 grow at 8% over three years?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c3.a">That is compound interest: <b>S = 10 000 · 1.08³ ≈ 12 597</b>.</p></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c4.q">Can we offer single sign-on this quarter?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c4.a">Maybe. Maria sends the estimate by Monday, so promise an answer then.</p></div></div><div class="fcard"><div class="io"><div class="tg" data-i18n="final.q">Question</div><p data-i18n="final.c5.q">¿Puedes repetirlo?</p></div><div class="io"><div class="tg g" data-i18n="final.ans">Answer</div><p data-i18n="final.c5.a">Of course. <b>Claro.</b> Let me say it again, slower.</p></div></div></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-top" style="--cols:{{FOOT_COLS}}">
+      <div>
+        <div class="foot-brand">
+          <span class="wm" role="img" aria-label="Argus"><svg viewBox="0 0 691 699" aria-hidden="true"><path d="M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z" fill="currentColor"/><circle cx="345.5" cy="525" r="60" fill="currentColor"/></svg><span aria-hidden="true">rgus</span></span>
+        </div>
+        <p class="foot-tag" data-i18n="foot.tag">Hears the conversation, sees your screen, and suggests an answer right away.</p>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.product">Product</h4>
+        <ul><li><a href="index.html" data-i18n="nav.about">About</a></li><li><a href="pricing.html" data-i18n="price.tag">Pricing</a></li><li><a href="help.html" data-i18n="help.tag">Help</a></li></ul>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.start">Get started</h4>
+        <ul><li><a href="/download/windows" data-i18n="foot.get">Download for Windows</a><small data-i18n="foot.reqwin">Windows 10 2004 or newer</small></li><li><a href="/download/mac" data-i18n="foot.getmac">Download for Mac</a><small data-i18n="foot.reqmac">Apple Silicon, macOS 14 or newer</small></li></ul>
+      </div>
+      <!--legal--><div class="foot-col">
+        <h4 data-i18n="foot.legal">Legal</h4>
+        <ul><li><a href="terms.html" data-i18n="foot.terms">Terms of Use</a></li><li><a href="privacy.html" data-i18n="foot.privacy">Privacy Policy</a></li><!--seller--><li><a href="seller.html" data-i18n="foot.seller">Seller information</a></li><!--/seller--></ul>
+      </div><!--/legal-->
+    </div>
+  </div>
+</footer>
+
+<div class="dl-note" id="dl-note" role="status" aria-live="polite" hidden>
+  <span data-note="soon" data-i18n="dl.soon">This download is being updated. Please check back soon.</span>
+  <span data-note="other" data-i18n="dl.other" hidden>Argus runs on Windows and Mac. Open this page on your computer to download it.</span>
+</div>
+
+<script>
+{{PAGE_JS}}
+</script>

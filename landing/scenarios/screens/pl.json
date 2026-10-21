@@ -1,0 +1,171 @@
+{
+ "_doc": "Данные для кадров «Сессии» и «Запись» на лендинге (screens.py). Выдуманные. Время сессий — сегодня/вчера, часы по часам машины.",
+ "sessions": [
+  {
+   "id": "s-sync",
+   "name": "Cotygodniowe spotkanie zespołu",
+   "day": 0,
+   "at": [
+    10,
+    30
+   ]
+  },
+  {
+   "id": "s-review",
+   "name": "Review pull requesta #214",
+   "day": 0,
+   "at": [
+    9,
+    12
+   ]
+  },
+  {
+   "id": "s-standup",
+   "name": "Poranny standup",
+   "day": 0,
+   "at": [
+    8,
+    45
+   ]
+  },
+  {
+   "id": "s-sso",
+   "name": "Rozmowa z klientem: SSO",
+   "day": 1,
+   "at": [
+    16,
+    40
+   ]
+  },
+  {
+   "id": "s-spanish",
+   "name": "Lekcja hiszpańskiego nr 12",
+   "day": 1,
+   "at": [
+    14,
+    0
+   ]
+  },
+  {
+   "id": "s-stats",
+   "name": "Wykład ze statystyki, tydzień 4",
+   "day": 1,
+   "at": [
+    11,
+    5
+   ]
+  },
+  {
+   "id": "s-deposit",
+   "name": "Prognoza lokaty",
+   "day": 1,
+   "at": [
+    9,
+    30
+   ]
+  },
+  {
+   "id": "s-budget",
+   "name": "Przegląd budżetu",
+   "day": 1,
+   "at": [
+    9,
+    0
+   ]
+  }
+ ],
+ "record": {
+  "id": "s-sync",
+  "name": "Cotygodniowe spotkanie zespołu",
+  "lines": [
+   [
+    "10:30:31",
+    "them",
+    "Cześć wszystkim, słychać mnie?"
+   ],
+   [
+    "10:30:34",
+    "me",
+    "Tak, słychać wyraźnie."
+   ],
+   [
+    "10:30:41",
+    "them",
+    "Świetnie. Anna dołączy za minutę."
+   ],
+   [
+    "10:30:47",
+    "me",
+    "Nie ma problemu, poczekamy na nią."
+   ],
+   [
+    "10:30:52",
+    "them",
+    "Dobra, już jest."
+   ],
+   [
+    "10:30:57",
+    "them",
+    "Cześć, Anno. Dopiero zaczynamy."
+   ],
+   [
+    "10:31:04",
+    "them",
+    "Zacznijmy od wydania. Wyrobimy się na czwartek?"
+   ],
+   [
+    "10:31:12",
+    "me",
+    "W większości tak. Płatności są gotowe. Eksport faktur wymaga jeszcze przeglądu."
+   ],
+   [
+    "10:31:40",
+    "them",
+    "Kto może go dziś przejrzeć?"
+   ],
+   [
+    "10:31:47",
+    "me",
+    "Igor może. Poproszę go o to zaraz po rozmowie."
+   ],
+   [
+    "10:32:20",
+    "them",
+    "Dobrze. Dalej: Acme prosi o logowanie jednokrotne (SSO). Możemy je zaoferować w tym kwartale?"
+   ],
+   [
+    "10:32:33",
+    "me",
+    "Możliwe. Najpierw Maria musi to wycenić."
+   ],
+   [
+    "10:32:50",
+    "them",
+    "Mario, możesz przysłać wycenę do poniedziałku?"
+   ],
+   [
+    "10:32:58",
+    "them",
+    "Tak, wyślę ją w poniedziałek."
+   ],
+   [
+    "10:33:30",
+    "them",
+    "Na koniec: wsparcie potrzebuje notatek o wydaniu przed środą."
+   ],
+   [
+    "10:33:41",
+    "me",
+    "Anna wyśle je we wtorek."
+   ]
+  ],
+  "results": [
+   {
+    "id": "r1",
+    "request": "Podsumowanie i zadania",
+    "text": "## Podsumowanie\nWydanie jest na dobrej drodze na czwartek. Płatności są gotowe, a eksport faktur czeka na przegląd (10:31).\n\nAcme prosi o logowanie jednokrotne (SSO). Możemy je zaoferować w tym kwartale, jeśli wycena na to pozwoli (10:32).\n\n## Zadania\n| Kto | Co | Kiedy |\n| --- | --- | --- |\n| Igor | Przejrzeć eksport faktur | Dziś |\n| Maria | Wysłać wycenę logowania SSO | Poniedziałek |\n| Anna | Przesłać wsparciu notatki o wydaniu | Wtorek |",
+    "pdf": "Cotygodniowe spotkanie zespołu — Podsumowanie i zadania.pdf"
+   }
+  ]
+ }
+}

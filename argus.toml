@@ -1,0 +1,347 @@
+# Argus settings.
+# It is enough to write only what differs from the defaults;
+# the defaults themselves are in src/argus/core/config.py.
+
+[audio]
+# Devices: not set -> system defaults.
+# You can give part of a name ("Headphones") or an index from `argus devices`.
+# mic_device = "Microphone"
+# loopback_device = 16
+
+chunk_ms = 32          # size of an audio chunk
+downmix_average = true # stereo -> mono by averaging the channels
+
+[screen]
+# What to read from the screen: empty means the whole screen, otherwise the window whose
+# title contains this string. The window is pinned in the dashboard, and skip_windows
+# lists what we never read: with a full-screen capture Argus read its own dashboard and
+# fell into a loop.
+target_window = ""    # empty means the whole screen; the window is pinned in the dashboard
+skip_windows = ["Argus"]   # we never read these windows
+output_idx = 0         # which monitor
+fps = 30               # upper limit; the preview is capped at the same rate
+preview_fps = 20       # frames per second in the dashboard
+# region = [0, 0, 2560, 1440]
+
+[vad]
+# Speech slicing thresholds. Tune them on a recording with `argus replay`, not by guesswork.
+threshold = 0.5
+min_speech_ms = 250     # shorter than this counts as a click, not speech
+min_silence_ms = 600    # this much silence = end of phrase
+speech_pad_ms = 250     # padding before speech starts, otherwise the first word is lost
+
+[stt]
+# Recognition is entirely cloud-based: the product no longer has a local engine.
+#
+# For this channel the network engine has its own reason besides size.
+# Latency: 602 ms against 1040 ms for Whisper per utterance. With an end-to-end budget of
+# 3.5 seconds, where the model itself eats more than half, those 400 ms are the only thing
+# here that can still be won back in perceived speed.
+#
+# And the queue: there is one video card, so the local engine was shared by both channels.
+# In an interview you are the one who mostly speaks, and an answer a minute long would
+# occupy it for 4-8 seconds, exactly when the interviewer asks a follow-up question.
+# Sessions do not have this problem: they run over the network, and each channel has its
+# own.
+provider = "realtime-openai"   # realtime-openai | stub
+
+# stub is a placeholder with no network and no money: every utterance caught by the VAD
+# turns into text from [stub_stt] below. For checking the feed and the dashboard, not
+# recognition itself.
+
+language = "ru"        # remove it -> detect the language from the sound, but slower
+min_confidence = 0.35  # below this, the utterance does not go into the feed
+
+# The comparison with gpt-live-transcribe is finished: the one on the left
+# (realtime-openai, gpt-4o-mini-transcribe) is faster. The decision was made on live
+# utterances. Empty means there is nothing to compare with.
+compare_with = ""
+
+[realtime_stt]
+# Recognition settings. Active when stt.provider = "realtime-openai" (or when compare_with
+# above is enabled).
+#
+# The key is taken from the environment and must not be put into the config, because the
+# file is in the repository:
+#   $env:OPENAI_API_KEY = "sk-..."
+model = "gpt-realtime-mini"
+api_key_env = "OPENAI_API_KEY"
+
+# Audio goes through the account server ([account] server below) instead of using a key on
+# this computer: the key stays on the server, and the server counts the money too
+# (server/relay_stt.py). An account login is required. For a build that is distributed
+# this is the only safe option; without [account] server the flag changes nothing and the
+# key from the environment is used.
+relay = true
+
+# A separate model listens to the input (`audio.input.transcription`). It is not a role
+# and not a ban on replying: this model simply has nothing to reply with, as there is no
+# channel for it. Before, a transcriber prompt sat on top of a conversational model, and
+# it occasionally broke into dialogue; now there is nothing to break.
+transcribe_model = "gpt-4o-mini-transcribe"
+
+# "Smart recognition" (session settings -> "Language"): when
+# on, accurate_model listens instead of transcribe_model. Better with a strong accent and
+# unclear speech, but more expensive (the second rate in server/pricing.py); measure the
+# latency on a live utterance. The choice is stored in the session; here is only the
+# default.
+# smart = false
+accurate_model = "gpt-4o-transcribe"
+
+# Terms and proper names of this conversation, as a short comma-separated string. It goes
+# into the model's hint (`transcription.prompt`), not into the role.
+# terms = "GIL, Kubernetes"
+
+# How many of the latest items to keep in a session. Context is what the whole thing was
+# started for, but the history is re-billed on every turn: without trimming, the bill
+# grows quadratically with the length of the conversation. Input transcription adds no
+# items of its own, so 20 means the last twenty utterances, not ten.
+keep_turns = 20
+
+[gpt_live_transcribe]
+# The second engine for comparison (stt.compare_with above). A separate session type,
+# session.type = "transcription", built specifically for recognition rather than a
+# conversational model with transcription on the side. It accumulates context on its own,
+# according to OpenAI; nobody has verified that independently yet.
+#
+# The protocol is built from the documentation, not from the live API, because the model
+# came out recently. If the server rejects a schema mismatch, the full text of the
+# rejection goes into the log, and that is where to sort it out.
+model = "gpt-live-transcribe"
+api_key_env = "OPENAI_API_KEY"
+
+# terms = "GIL, Kubernetes"   # goes into transcription.keywords, comma-separated
+# prompt = "Technical interview, a conversation about algorithms and Python"
+
+keep_turns = 20
+
+[stub_stt]
+# Applies only when stt.provider = "stub" above. `{n}` is the utterance's sequence number,
+# `{source}` is "me" or "them"; both are optional.
+# text = "test utterance #{n}"
+# delay_ms = 500   # check that "Waiting for speech…" really waits, not blinks
+
+# A whole conversation script instead of microphone audio: you press "recognition"
+# and prewritten utterances flow into the feed one after another; the
+# interlocutor's question wakes the model just like a real one. A custom script is a list
+# of tables of the same shape instead of the default in the code (`DEFAULT_DIALOGUE`), for
+# example:
+#
+#   [[stub_stt.dialogue]]
+#   source = "them"
+#   text = "Hello! Tell me about yourself."
+#   [[stub_stt.dialogue]]
+#   source = "me"
+#   text = "Hello, my name is..."
+dialogue_enabled = true
+dialogue_interval_s = 4.0
+
+[gate]
+# Frame filtering before recognition: a single screen read costs ~400 ms.
+min_distance = 3       # how many of the 64 bits in the frame fingerprint must change
+min_interval_s = 3.0   # no more than one recognition per this many seconds
+heartbeat_s = 30.0     # re-read a static screen so that the feed does not freeze
+
+[ocr]
+# The screen is needed here only occasionally and as a whole: the task statement, code in
+# an editor. The model receives the image and reads it itself, while continuously
+# recognised text was needed only as a memory of what was on the screen earlier. The
+# channel does not need such memory, and it costs 1.2 seconds for every noticeably changed
+# frame.
+#
+# Reading is switched off, not capture: the snapshot for the model stays in place.
+enabled = false
+
+provider = "rapidocr"
+# The combination was chosen by measurement: the CH v5 detector produces whole lines, not
+# words.
+det_lang = "CH"
+det_version = "PPOCRV5"
+rec_lang = "ESLAV"     # East Slavic languages: Cyrillic and Latin at once
+rec_version = "PPOCRV5"
+max_width = 1920       # 1280 breaks small text apart, 1920 reads it
+rec_batch = 6          # measurement: 6 is almost twice as fast as 32
+min_confidence = 0.5
+
+[brain]
+provider = "relay"   # claude-code | anthropic-api | openai-api | relay | local | stub
+# relay is the same as openai-api/anthropic-api (which upstream exactly is decided by
+# relay_upstream below), but without a key on the computer the build is given to: the
+# request goes to [account] server and the key stays there (server/relay.py). A configured
+# [account] server and an account login are required. For distribution to others it is the
+# only safe option; "openai-api"/"anthropic-api" in a distributed build mean "my key
+# leaves with it".
+relay_upstream = "openai-api"   # openai-api | anthropic-api: which upstream relay calls
+
+# stub is a placeholder with no network and no money: every question gets the same answer,
+# immediately or after a delay (stub_text, stub_delay_ms). For checking the answer card,
+# the "again" and "edit" buttons, and the "ask" button on
+# an utterance.
+# stub_text = "test answer"
+# stub_delay_ms = 500
+
+# Fast matters more than smart. The model's answer is the longest part of the pipeline,
+# and in an interview a late answer is not better than a bad one, it is just more useless:
+# a pause before every reply is noticed by the interlocutor more than an imperfect wording
+# is. The profile does half of the model's work: on questions about the person it does not
+# make things up but retells ready facts.
+model = "haiku"            # for claude-code; the full name is in api_model
+api_model = "gpt-5.6-luna" # for anthropic-api / openai-api: the regular tier
+# `none`, not `low`: measurement (see tests/scratch on 2026-09-10): `low` keeps the model
+# "thinking" for 2.6-2.8 s before the first token (3.3-3.5 s for the whole short answer),
+# while `none` takes 0.9 s to the first token and 1.8 s for the whole answer. It is the
+# same thing, noticeably faster and no worse in content on short factual questions.
+# `minimal` is not supported for this model (400 Bad Request): only
+# `none`/`low`/`medium`/`high`/`xhigh`/`max`.
+effort = "none"
+
+# "Think longer" is a button on the control bar next to "Ask". Empty means the
+# same api_model thinks harder; here a model one class higher is set: Terra, the same
+# price tier as Sonnet 5.
+deep_model = "gpt-5.6-terra"
+deep_effort = "high"
+
+max_context_chars = 12000  # how much of the feed to put into the prompt
+
+# The model sees the screen image itself, not only the recognised text. While screen
+# tracking is on, a frame goes with every call to the model, without exceptions. Turn it
+# off if you are saving quota: then only the text from the screen remains.
+send_screenshot = true
+
+# `always`: a frame with every call, both for an automatic reply to a heard question and
+# for a manual "Ask". The cost is 1000-1500 tokens and +220 ms per call,
+# including for a spoken question that does not need the screen; this is saved with the
+# "Screen" switch. `ask`: a frame only with "Ask about the
+# screen" (hotkey `ask_screen`); it was set from 2026-08-30 to 2026-10-04.
+screenshot_mode = "always"
+screenshot_width = 1024
+
+[gate_brain]
+# Protection of subscription limits: they are counted in five-hour windows.
+cooldown_s = 8.0           # minimum idle time between calls
+max_calls = 200            # cap per session, insurance against a loop
+react_to_screen = false    # the screen is noisier than speech
+idle_s = 0.0               # trigger on silence; 0 means off
+
+# Reaction to questions (automatic or only on a button) and to the microphone is not here.
+# Both are knobs for a particular conversation, not for the engine, and they live in the
+# channel settings: they are edited through /admin, "Sound" and "Hotkeys",
+# or right from the control bar at the question field.
+
+[record]
+# Record the session always, without the --record flag.
+#
+# A recording cannot be made after the fact, and that is the whole point. A session turns
+# out to be interesting only after it has passed: the engine stumbled on an unfamiliar
+# word, the model answered off target, and there is no audio, nothing to check the fix
+# against. A flag that has to be remembered in advance does not help: it gets remembered
+# exactly when nothing is happening.
+always = true
+
+# Record the screen too, so that later you can check not only hearing but also vision:
+# what the model understands from the picture.
+always_screen = true
+
+# Frames per second in the recording. Capture runs at 30, and there is no point in writing
+# them all: a gigabyte in ten minutes goes to saving the same picture thirty times. Once
+# per second is enough for the question "what was on the screen".
+frames_fps = 1.0
+
+# Shrink the frame to this width. 1280 is what the frame is shrunk to before screen
+# reading, and a picture of the same size goes to the model. Writing 2560 would mean
+# storing twice as many pixels that nobody will look at.
+max_frame_width = 1280
+
+# Cap on all recordings together; old ones are deleted when the total is exceeded.
+#
+# Audio weighs far more than it seems: 16 kHz int16 is 31 KB/s per channel, that is 220 MB
+# per hour for both. Without a cap, constant recording would eat 33 free gigabytes in a
+# week of gaming, and this would be discovered at the worst moment.
+# 0 means no limit.
+keep_gb = 8.0
+
+[ui]
+# Settings page: the gear in the window opens the "settings" window with tabs.
+# packaging/stage.py puts this file into the build as it is, so the page is enabled for
+# people too; without the file (the core default) there is no page.
+admin = true
+
+# The window does not show up in screen sharing, which is what the channel exists for. You
+# see it on your monitor, the interlocutor does not. Win10 2004+; if the system refuses,
+# the program says so in red at startup instead of staying silent.
+#
+# It hides from capture, not from eyes: a camera filming the monitor and a person nearby
+# see everything. And it is not designed against proctoring, which catches things in a
+# different way.
+exclude_from_capture = true
+
+# The main window's taskbar button and its Alt+Tab entry (Windows). The taskbar ends up in
+# the shared screen, and an "Argus" button next to an invisible window gives away that it
+# is open. true: the button is there (the only way back to a minimized window); false:
+# there is none, and the window can be brought back with the shortcut
+# "Open/close main window" or by starting the program
+# a second time; "Minimize" then hides the window. There is also a switch in
+# the settings.
+main_taskbar_button = true
+
+# Dashboard port. There is only one project now, so there is nobody to fight over it, and
+# remembering the flag at every launch means forgetting it one day.
+port = 8420
+
+[account]
+# Account server address. Empty means no accounts at all: the section is not shown in the
+# settings, recognition is switched on by a button without questions, and the program
+# works on the keys from `.env`. That is what development and your own build look like.
+#
+# When filled in, registration with email and password appears, a balance gift on sign-up,
+# and pay-per-use: the person tops up the account, and recognition, replies and voice-over
+# are charged against it at the rates. The server counts everything: any check inside the
+# program can be cut out in ten minutes, because the program sits on someone else's
+# computer.
+#
+# 127.0.0.1 works only on this machine: a build that is distributed has to reach this
+# server over the internet. For public distribution a real server address (the domain/IP
+# where it is deployed) must be set here, otherwise [brain] provider = "relay" and
+# [channel.tts] relay = true will not work.
+server = "https://api.arguspilot.com"
+
+[update]
+# The address the built app updates itself from: the same nginx that serves the builds
+# themselves (not the account server). The site is not exposed on the domain, but the
+# release files (`/latest.json`, `/Argus-*`) are served; `http://203.0.113.10:8080` is the
+# former address, already baked into issued builds, so it must not be turned off. Empty
+# means no checks at all: that is what your own working copy from source looks like (its
+# update is `git pull`), and your own build for yourself.
+#
+# Works only for a built `.exe` (`sys.frozen`, see `update.py`); when running from source
+# this field has no effect.
+server = "https://arguspilot.com"
+
+[legal]
+# The texts of the terms and the privacy policy are not settings: they live in `legal/`,
+# and `legal/build.py` builds them into the app and into the download page.
+#
+# A one-time notice before recognition is first switched on (what is recorded, what goes
+# out, that interlocutors may have the right to know). It must be on in a distributed
+# build.
+notice = true
+
+[channel.tts]
+# Voice-over of replies in a cloned voice (ElevenLabs) is a test feature, not a product
+# one. Off by default: synthesis is paid, per character.
+#
+# relay = false: the key is taken from .env (ELEVENLABS_API_KEY) on this computer.
+# relay = true: synthesis goes through [account] server (server/relay.py) and the key
+# stays there; an account login is required. For distribution to others use only
+# relay = true, otherwise ELEVENLABS_API_KEY leaves with the build.
+relay = true
+# Characters (channel.tts.characters) are intentionally absent here: they are created by
+# `argus clone-voice` and live in argus.local.json. That is the choice of a specific
+# working copy, not something decided about the project.
+enabled = false
+model_id = "eleven_multilingual_v2"  # quality/intonation matter more than speed; eleven_flash_v2_5 if it is the other way round
+max_chars = 500                      # cap on a voiced reply: money
+
+[paths]
+sessions = "sessions"  # recordings for replay
+models = "models"      # model weights

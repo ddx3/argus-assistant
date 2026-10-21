@@ -1,0 +1,103 @@
+{
+  "events": {
+    "reset": {
+      "subject": "Recuperación de contraseña de Argus",
+      "heading": "Nueva contraseña",
+      "paragraphs": [
+        "Para establecer una nueva contraseña, pulse el botón. El enlace es válido durante {minutes} minutos y solo se puede usar una vez."
+      ],
+      "button": "Establecer una nueva contraseña",
+      "note": "¿No lo solicitó? Ignore este correo: su contraseña seguirá siendo la misma."
+    },
+    "welcome": {
+      "subject": "Le damos la bienvenida a Argus",
+      "heading": "Cuenta creada",
+      "paragraphs": [
+        "Usted se registró en Argus con la dirección {email}.",
+        "{gift}",
+        "Abra la aplicación y active el reconocimiento. El saldo se gasta en reconocimiento, respuestas y voz; puede recargarlo en la configuración."
+      ],
+      "gift": "Se añadió a su saldo un regalo de bienvenida de {amount}.",
+      "note": "¿No se registró usted? Escríbanos y eliminaremos la cuenta."
+    },
+    "password_changed": {
+      "subject": "Contraseña de Argus cambiada",
+      "heading": "Contraseña cambiada",
+      "paragraphs": [
+        "La contraseña de la cuenta {email} se cambió el {when}.",
+        "Se cerró la sesión en todas las aplicaciones. Inicie sesión de nuevo con la nueva contraseña."
+      ],
+      "note": "¿No fue usted? Escríbanos y le ayudaremos a recuperar el acceso."
+    },
+    "top_up": {
+      "subject": "Saldo de Argus recargado",
+      "heading": "Gracias por su recarga",
+      "paragraphs": [
+        "El pago se recibió y el dinero ya está en su saldo."
+      ],
+      "rows": [
+        "Importe",
+        "Fecha",
+        "Saldo actual"
+      ],
+      "note": "¿No realizó usted este pago? Escríbanos."
+    },
+    "low": {
+      "subject": "Su saldo de Argus se está agotando",
+      "heading": "El saldo se está agotando",
+      "paragraphs": [
+        "En su saldo quedan {balance}.",
+        "Para que el reconocimiento no se detenga, recargue el saldo en la configuración de la aplicación."
+      ]
+    },
+    "empty": {
+      "subject": "Su saldo de Argus se ha agotado",
+      "heading": "El saldo se ha agotado",
+      "paragraphs": [
+        "El reconocimiento, las respuestas y la voz están detenidos mientras el saldo esté vacío.",
+        "Puede recargarlo en la configuración de la aplicación."
+      ]
+    },
+    "deleted": {
+      "subject": "Cuenta de Argus eliminada",
+      "heading": "Cuenta eliminada",
+      "paragraphs": [
+        "La cuenta {email} se eliminó: la dirección, la contraseña y los inicios de sesión se borraron.",
+        "El saldo restante se perdió junto con la cuenta. Los registros de pagos se conservan sin ningún vínculo con usted."
+      ],
+      "note": "¿No lo hizo usted? Escríbanos."
+    }
+  },
+  "footer": "Este mensaje se envió automáticamente. Consultas: {support}.",
+  "date": {
+    "months": [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre"
+    ],
+    "format": "{d} de {m} de {y}, {time} UTC"
+  },
+  "reset_page": {
+    "title": "Nueva contraseña — Argus",
+    "heading": "Nueva contraseña",
+    "placeholder": "Nueva contraseña",
+    "button": "Guardar",
+    "bad_link": "El enlace no es válido: solicite uno nuevo en la aplicación.",
+    "saved": "Contraseña guardada. Vuelva a la aplicación e inicie sesión de nuevo.",
+    "failed": "Algo salió mal",
+    "offline": "Sin conexión",
+    "short": "La contraseña debe tener al menos {min} caracteres.",
+    "weak": "Esta contraseña es demasiado fácil de adivinar. Elija otra.",
+    "busy": "El servidor está ocupado en este momento. Inténtelo de nuevo en un minuto.",
+    "limit": "Demasiados intentos. Inténtelo de nuevo más tarde."
+  }
+}

@@ -1,0 +1,47 @@
+{
+ "_doc": "Пример разговора для демо на лендинге. Тексты на языке страницы. Это эталон (английский): в остальных языках сохранять те же поля, переводить значения.",
+ "speech": [
+  "Remind me, what is the difference between a process and a thread?",
+  "Sure: a process is a separate program with its own memory, and threads live inside it and share that memory.",
+  "Okay. Can you take a look at why my test is failing?",
+  "I see it: the inner loop compares an item with itself.",
+  "Last one: how much will 10,000 grow at 8% a year over three years?"
+ ],
+ "answers": [
+  "A **process** is an isolated program with its own memory. A **thread** is a line of execution inside a process: threads of one process share its memory.\n\n- processes cost more to create and switch\n- threads exchange data faster, but need synchronization\n- a crashed thread can bring down the whole process",
+  "**Bug:** the inner loop starts at zero, so when `i == j` an item is compared with itself and the function always returns `True`.\n\n```python\ndef has_duplicates(items):\n    return len(set(items)) != len(items)\n```\n\nOr keep the loops and start the inner one at `i + 1`. The set version runs in O(n).",
+  "That is compound interest:\n\n$$S = 10\\,000 \\cdot (1 + 0.08)^3$$\n\n$$S \\approx 12\\,597$$\n\nAnswer: about **12,597**, a gain of **2,597**."
+ ],
+ "code": {
+  "title": "review — pull request #214",
+  "heading": "Duplicate filter",
+  "l1": "The function has_duplicates(items) must",
+  "l2": "return True if the list contains",
+  "l3": "repeated items, and False otherwise.",
+  "input": "input",
+  "expected": "expected  False",
+  "tests": "CI · TESTS"
+ },
+ "math": {
+  "title": "sheets — Deposit forecast",
+  "slide": "SLIDE 7",
+  "heading": "Deposit forecast",
+  "rows": [["Amount", "10,000"], ["Rate", "8% per year"], ["Term", "3 years"], ["Result", "?"]]
+ },
+ "idle": {
+  "title": "notes — Team sync",
+  "heading": "Team sync",
+  "items": ["· service architecture", "· review pull request #214", "· deposit forecast"]
+ },
+ "windows": [
+  {"title": "Weekly team sync", "label": "Weekly team sync", "kind": "call", "w": 1920, "h": 1080},
+  {"title": "Statistics lecture", "label": "Statistics lecture", "kind": "lecture", "w": 1920, "h": 1080},
+  {"title": "Music player", "label": "Music player", "kind": "music", "w": 1280, "h": 720},
+  {"title": "Notes", "label": "Notes", "kind": "notes", "w": 1100, "h": 800}
+ ],
+ "call": {
+  "names": ["Anna K.", "Igor", "Maria S.", "You"],
+  "initials": ["AK", "IP", "MS", "Y"],
+  "sharing": "You are sharing your screen"
+ }
+}

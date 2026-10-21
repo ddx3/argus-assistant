@@ -1,0 +1,74 @@
+services:
+  argus-server:
+    build:
+      context: ../..
+      dockerfile: deploy/server/Dockerfile
+    container_name: argus-server
+    restart: unless-stopped
+    # Memory cap: answers with materials are tens of megabytes per request
+    # (`server/limits.py`), and without a cap one avalanche of requests would eat the whole
+    # machine. With a cap, a container that runs out of memory dies alone, and `restart`
+    # brings it up again; held money is returned on startup (`entitlements.recover_holds`).
+    # The liveness check is the HEALTHCHECK in the Dockerfile (`docker ps` will show
+    # `unhealthy`).
+    mem_limit: 1g
+    pids_limit: 512
+    # No extra kernel capabilities are needed: starting as root only hands the database to
+    # user 10001 (`chown`) and immediately switches to that user (`setpriv`), and after that
+    # the server has neither capabilities nor privilege escalation (`no-new-privileges`).
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+    security_opt:
+      - no-new-privileges:true
+    # The port is not published outward: the server is reached through nginx (the downloads
+    # service below; request limits, proxy secret).
+    expose:
+      - "8421"
+    env_file:
+      - .env
+    volumes:
+      - argus-server-db:/app/data
+    environment:
+      ARGUS_SERVER_DB: /app/data/argus-accounts.sqlite
+    # Request logs store IP addresses, while the privacy policy promises a limited retention
+    # time (`legal/text/privacy.html`, section 5): without this setting docker accumulates
+    # them without limit. Three files of 10 MB: old ones erase themselves.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # The Argus site and the distribution of builds: the landing page (sites/current), the "Download" (/download) buttons, and the files themselves (downloads).
+  # One nginx on ports 80 and 8080 (8080 is the former address, baked into the builds already issued for self-update).
+  # Settings are in nginx/ (in the repository, deploy/landing/nginx); the pages are published by deploy/landing/publish_landing.py.
+  downloads:
+    image: nginx:alpine
+    container_name: argus-downloads
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "8080:80"
+      - "443:443"
+      - "8421:8421"        # the former API address for the builds already issued (nginx/default.conf, the last block)
+    volumes:
+      - ./sites:/usr/share/nginx/sites:ro
+      - ./downloads:/usr/share/nginx/downloads:ro
+      - ./nginx:/etc/nginx/conf.d:ro
+      - ./acme:/usr/share/nginx/acme:ro
+      - /opt/argus-server/certs:/etc/letsencrypt:ro
+    # Request logs store IP addresses, and the privacy policy promises a limited
+    # retention time (`legal/text/privacy.html`, section 5): without this, docker
+    # keeps them without limit. Three files of 10 MB each; the old ones erase themselves.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  argus-server-db:

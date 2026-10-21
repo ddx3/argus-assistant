@@ -1,0 +1,103 @@
+{
+  "events": {
+    "reset": {
+      "subject": "Redefinição de senha do Argus",
+      "heading": "Nova senha",
+      "paragraphs": [
+        "Para definir uma nova senha, clique no botão. O link vale por {minutes} minutos e só pode ser usado uma vez."
+      ],
+      "button": "Definir nova senha",
+      "note": "Não pediu isso? Basta ignorar esta mensagem, sua senha continua a mesma."
+    },
+    "welcome": {
+      "subject": "Boas-vindas ao Argus",
+      "heading": "Conta criada",
+      "paragraphs": [
+        "Seu cadastro no Argus foi feito com {email}.",
+        "{gift}",
+        "Abra o aplicativo e ligue o reconhecimento. O saldo é gasto com reconhecimento, respostas e voz; é possível recarregá-lo nas configurações."
+      ],
+      "gift": "Um presente de boas-vindas de {amount} foi adicionado ao seu saldo.",
+      "note": "Não fez este cadastro? Escreva para nós e excluiremos a conta."
+    },
+    "password_changed": {
+      "subject": "Senha do Argus alterada",
+      "heading": "Senha alterada",
+      "paragraphs": [
+        "A senha de {email} foi alterada em {when}.",
+        "Sua conta foi desconectada de todos os aplicativos. Entre de novo com a nova senha."
+      ],
+      "note": "Não reconhece esta alteração? Escreva para nós e ajudaremos a recuperar o acesso."
+    },
+    "top_up": {
+      "subject": "Saldo do Argus recarregado",
+      "heading": "Obrigado pela recarga",
+      "paragraphs": [
+        "O pagamento foi recebido e o valor já está no seu saldo."
+      ],
+      "rows": [
+        "Valor",
+        "Data",
+        "Saldo agora"
+      ],
+      "note": "Não fez este pagamento? Escreva para nós."
+    },
+    "low": {
+      "subject": "O saldo do Argus está acabando",
+      "heading": "O saldo está acabando",
+      "paragraphs": [
+        "Restam {balance} no seu saldo.",
+        "Para o reconhecimento não parar, recarregue o saldo nas configurações do aplicativo."
+      ]
+    },
+    "empty": {
+      "subject": "O saldo do Argus acabou",
+      "heading": "O saldo acabou",
+      "paragraphs": [
+        "O reconhecimento, as respostas e a voz ficam parados enquanto o saldo estiver zerado.",
+        "É possível recarregá-lo nas configurações do aplicativo."
+      ]
+    },
+    "deleted": {
+      "subject": "Conta do Argus excluída",
+      "heading": "Conta excluída",
+      "paragraphs": [
+        "A conta {email} foi excluída: o endereço, a senha e os acessos foram apagados.",
+        "O saldo restante foi perdido junto com a conta. Os registros de pagamento são mantidos sem vínculo com seus dados."
+      ],
+      "note": "Não fez isso? Escreva para nós."
+    }
+  },
+  "footer": "Esta mensagem foi enviada automaticamente. Dúvidas: {support}.",
+  "date": {
+    "months": [
+      "janeiro",
+      "fevereiro",
+      "março",
+      "abril",
+      "maio",
+      "junho",
+      "julho",
+      "agosto",
+      "setembro",
+      "outubro",
+      "novembro",
+      "dezembro"
+    ],
+    "format": "{d} de {m} de {y}, {time} UTC"
+  },
+  "reset_page": {
+    "title": "Nova senha — Argus",
+    "heading": "Nova senha",
+    "placeholder": "Nova senha",
+    "button": "Salvar",
+    "bad_link": "O link não funciona — solicite um novo no aplicativo.",
+    "saved": "Senha salva. Volte ao aplicativo e entre de novo.",
+    "failed": "Algo deu errado",
+    "offline": "Sem conexão",
+    "short": "A senha deve ter pelo menos {min} caracteres.",
+    "weak": "Esta senha é fácil demais de adivinhar. Escolha outra.",
+    "busy": "O servidor está ocupado no momento. Tente novamente em um minuto.",
+    "limit": "Tentativas demais. Tente novamente mais tarde."
+  }
+}

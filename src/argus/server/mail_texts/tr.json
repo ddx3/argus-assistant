@@ -1,0 +1,103 @@
+{
+  "events": {
+    "reset": {
+      "subject": "Argus şifre sıfırlama",
+      "heading": "Yeni şifre",
+      "paragraphs": [
+        "Yeni bir şifre belirlemek için düğmeye basın. Bağlantı {minutes} dakika geçerlidir ve yalnızca bir kez kullanılabilir."
+      ],
+      "button": "Yeni şifre belirle",
+      "note": "Bunu siz istemediniz mi? Bu e-postayı yok sayın, şifreniz aynı kalır."
+    },
+    "welcome": {
+      "subject": "Argus'a hoş geldiniz",
+      "heading": "Hesap oluşturuldu",
+      "paragraphs": [
+        "Argus'a {email} adresiyle kaydoldunuz.",
+        "{gift}",
+        "Uygulamayı açın ve tanımayı başlatın. Bakiye; tanıma, yanıtlar ve sesli yanıtlar için harcanır. Bakiyeyi ayarlardan yükleyebilirsiniz."
+      ],
+      "gift": "Bakiyenize {amount} tutarında hoş geldin hediyesi eklendi.",
+      "note": "Kaydolan siz değil misiniz? Bize yazın, hesabı silelim."
+    },
+    "password_changed": {
+      "subject": "Argus şifresi değiştirildi",
+      "heading": "Şifre değiştirildi",
+      "paragraphs": [
+        "{email} hesabının şifresi {when} tarihinde değiştirildi.",
+        "Tüm uygulamalardan çıkış yapıldı. Yeni şifrenizle yeniden giriş yapın."
+      ],
+      "note": "Bunu siz yapmadınız mı? Bize yazın, erişimi geri almanıza yardımcı olalım."
+    },
+    "top_up": {
+      "subject": "Argus bakiyesi yüklendi",
+      "heading": "Bakiye yüklemeniz için teşekkürler",
+      "paragraphs": [
+        "Ödeme alındı ve para bakiyenize eklendi."
+      ],
+      "rows": [
+        "Tutar",
+        "Tarih",
+        "Şu anki bakiye"
+      ],
+      "note": "Bu ödemeyi siz yapmadınız mı? Bize yazın."
+    },
+    "low": {
+      "subject": "Argus bakiyeniz azalıyor",
+      "heading": "Bakiye azalıyor",
+      "paragraphs": [
+        "Bakiyenizde {balance} kaldı.",
+        "Tanımanın kesilmemesi için uygulama ayarlarından bakiye yükleyin."
+      ]
+    },
+    "empty": {
+      "subject": "Argus bakiyeniz bitti",
+      "heading": "Bakiye bitti",
+      "paragraphs": [
+        "Bakiye boşken tanıma, yanıtlar ve sesli yanıtlar durdurulur.",
+        "Bakiyeyi uygulama ayarlarından yükleyebilirsiniz."
+      ]
+    },
+    "deleted": {
+      "subject": "Argus hesabı silindi",
+      "heading": "Hesap silindi",
+      "paragraphs": [
+        "{email} hesabı silindi: adres, şifre ve girişler silindi.",
+        "Kalan bakiye hesapla birlikte gitti. Ödeme kayıtları sizinle bağlantısı olmadan saklanır."
+      ],
+      "note": "Bunu siz yapmadınız mı? Bize yazın."
+    }
+  },
+  "footer": "Bu ileti otomatik olarak gönderildi. Sorularınız için: {support}.",
+  "date": {
+    "months": [
+      "Ocak",
+      "Şubat",
+      "Mart",
+      "Nisan",
+      "Mayıs",
+      "Haziran",
+      "Temmuz",
+      "Ağustos",
+      "Eylül",
+      "Ekim",
+      "Kasım",
+      "Aralık"
+    ],
+    "format": "{d} {m} {y}, {time} UTC"
+  },
+  "reset_page": {
+    "title": "Yeni şifre — Argus",
+    "heading": "Yeni şifre",
+    "placeholder": "Yeni şifre",
+    "button": "Kaydet",
+    "bad_link": "Bağlantı çalışmıyor — uygulamadan yenisini isteyin.",
+    "saved": "Şifre kaydedildi. Uygulamaya dönün ve yeniden giriş yapın.",
+    "failed": "Bir şeyler ters gitti",
+    "offline": "Bağlantı yok",
+    "short": "Şifre en az {min} karakter olmalıdır.",
+    "weak": "Bu şifre tahmin edilmesi çok kolay. Lütfen başka bir şifre seçin.",
+    "busy": "Sunucu şu anda meşgul. Lütfen bir dakika sonra tekrar deneyin.",
+    "limit": "Çok fazla deneme yapıldı. Lütfen daha sonra tekrar deneyin."
+  }
+}

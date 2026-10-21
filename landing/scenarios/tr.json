@@ -1,0 +1,101 @@
+{
+ "speech": [
+  "Hatırlatsana, süreç ile iş parçacığı arasındaki fark neydi?",
+  "Tabii: süreç, kendi belleği olan ayrı bir programdır; iş parçacıkları ise onun içinde yaşar ve o belleği paylaşır.",
+  "Tamam. Testim neden patlıyor, bir bakar mısın?",
+  "Görüyorum: iç döngü bir öğeyi kendisiyle karşılaştırıyor.",
+  "Son bir şey: 10.000, yıllık %8 ile üç yılda ne kadar olur?"
+ ],
+ "answers": [
+  "**Süreç**, kendi belleği olan yalıtılmış bir programdır. **İş parçacığı** ise sürecin içindeki bir yürütme hattıdır: aynı sürecin iş parçacıkları ortak belleği paylaşır.\n\n- süreçleri oluşturmak ve aralarında geçiş yapmak daha pahalıdır\n- iş parçacıkları veriyi daha hızlı paylaşır, ama eşitleme gerekir\n- çöken bir iş parçacığı tüm süreci de çökertebilir",
+  "**Hata:** iç döngü sıfırdan başlıyor, bu yüzden `i == j` olduğunda bir öğe kendisiyle karşılaştırılıyor ve fonksiyon her zaman `True` döndürüyor.\n\n```python\ndef has_duplicates(items):\n    return len(set(items)) != len(items)\n```\n\nYa da döngüleri koruyup iç döngüyü `i + 1` değerinden başlatabilirsin. Küme kullanan sürüm O(n) sürede çalışır.",
+  "Bu bileşik faiz:\n\n$$S = 10\\,000 \\cdot (1 + 0{,}08)^3$$\n\n$$S \\approx 12\\,597$$\n\nYanıt: yaklaşık **12.597**, yani kazanç **2.597**."
+ ],
+ "code": {
+  "title": "review — pull request #214",
+  "heading": "Yinelenen öğe filtresi",
+  "l1": "has_duplicates(items) fonksiyonu, liste",
+  "l2": "tekrar eden öğe içeriyorsa True,",
+  "l3": "içermiyorsa False döndürmelidir.",
+  "input": "girdi",
+  "expected": "beklenen  False",
+  "tests": "CI · TESTLER"
+ },
+ "math": {
+  "title": "sheets — Mevduat tahmini",
+  "slide": "SLAYT 7",
+  "heading": "Mevduat tahmini",
+  "rows": [
+   [
+    "Tutar",
+    "10.000"
+   ],
+   [
+    "Faiz",
+    "yıllık %8"
+   ],
+   [
+    "Vade",
+    "3 yıl"
+   ],
+   [
+    "Sonuç",
+    "?"
+   ]
+  ]
+ },
+ "idle": {
+  "title": "notes — Ekip toplantısı",
+  "heading": "Ekip toplantısı",
+  "items": [
+   "· servis mimarisi",
+   "· pull request #214 incelemesi",
+   "· mevduat tahmini"
+  ]
+ },
+ "call": {
+  "names": [
+   "Ayşe K.",
+   "Emre",
+   "Zeynep S.",
+   "Sen"
+  ],
+  "initials": [
+   "AK",
+   "EY",
+   "ZS",
+   "S"
+  ],
+  "sharing": "Ekranınızı paylaşıyorsunuz"
+ },
+ "windows": [
+  {
+   "title": "Haftalık ekip toplantısı",
+   "label": "Haftalık ekip toplantısı",
+   "kind": "call",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "İstatistik dersi",
+   "label": "İstatistik dersi",
+   "kind": "lecture",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Müzik çalar",
+   "label": "Müzik çalar",
+   "kind": "music",
+   "w": 1280,
+   "h": 720
+  },
+  {
+   "title": "Notlar",
+   "label": "Notlar",
+   "kind": "notes",
+   "w": 1100,
+   "h": 800
+  }
+ ]
+}

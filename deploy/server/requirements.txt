@@ -1,0 +1,34 @@
+# Versions are pinned from `uv.lock`: in production the server installs exactly what the
+# tests run, not "the latest as of today" (otherwise an edit to this file would rebuild
+# the pip layer with the newest packages that no test has seen). Update together with
+# `uv.lock`: `tests/test_server_deploy.py` compares them and fails if they diverge.
+#
+# `uvicorn` without `[standard]`: the extensions (httptools, uvloop) are not in `uv.lock`,
+# and the tests run on h11 and the plain event loop, the same as in production. The
+# recognition sockets (`relay_stt.py`) require `websockets>=13`, and it is named here
+# directly instead of arriving by accident through an extension.
+fastapi==0.141.1
+starlette==1.6.0
+uvicorn==0.52.4
+websockets==17.1
+pydantic==2.13.4
+pydantic-core==2.46.4
+httpx==0.28.1
+httpcore==1.0.9
+httpcore2==2.12.0
+httpx2==2.12.0
+anthropic==1.2.0
+openai==3.10.0
+anyio==4.14.2
+annotated-doc==0.0.5
+annotated-types==0.8.0
+certifi==2026.7.22
+click==8.5.0
+docstring-parser==0.18.0
+h11==0.16.0
+idna==3.19
+jiter==0.16.0
+sniffio==1.3.1
+truststore==0.10.4
+typing-extensions==4.16.0
+typing-inspection==0.4.4

@@ -1,0 +1,16 @@
+# Normalize text files to LF in the repository.
+* text=auto
+
+# Scripts and build files for macOS must keep LF line endings even when they are checked
+# out on Windows (core.autocrlf=true): bash and Swift do not work with CRLF.
+*.sh text eol=lf
+*.swift text eol=lf
+*.plist text eol=lf
+.github/workflows/*.yml text eol=lf
+deploy/server/Dockerfile text eol=lf
+
+# Generated pages: keep them out of the repository language statistics.
+deploy/server/downloads/** linguist-generated
+legal/text/** linguist-generated
+landing/img/** linguist-generated
+src/argus/ui/static/legal-*.html linguist-generated

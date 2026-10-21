@@ -1,0 +1,84 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+build_release/
+dist_release/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# session recordings and model weights are large and do not go into the repository
+sessions/
+
+# chats: settings, answer history, materials and frames are the person's private data.
+# Anchored with a leading slash: without it the rule would also match the package
+# `src/argus/chats/`.
+/chats/
+
+# account server secrets live only on the server itself
+deploy/server/.env
+models/
+.pytest_cache/
+.ruff_cache/
+
+# keys sit next to the project, but not in the repository
+.env
+
+# admin panel edits are specific to each working copy and do not go into the repository
+# (with the asterisk: copies such as argus.local.json.before-rename or .bak are private too)
+argus.local.json*
+
+# keys, certificates and environment files exist only on machines, not in the repository
+.env.*
+!.env.example
+*.key
+*.p12
+*.pfx
+*.pem
+*.cer
+
+# personal trial files in the project root (screenshots, voice samples)
+/_sample/
+/_wgc_test.png
+/ocr_test.png
+/full-480.png
+
+# account login: the refresh token lives only on this machine
+argus.account.json
+
+# account server started locally with `argus account-server --dev`:
+# its own database and token-signing secret, for development only
+argus-accounts.sqlite
+argus-accounts.sqlite-shm
+argus-accounts.sqlite-wal
+argus-accounts.secret
+
+# local tooling files, not project code
+.claude/
+
+# stray debug output of a single request
+debug_prompt.txt
+
+# logs of local runs (argus run / discord-bot) are not project code
+*.log
+
+# build stamp: packaging/stage.py writes it into the built folder, it is not a source file
+VERSION
+
+# marker "the recording notice has been read": lives only on this machine
+argus.legal.json
+
+# macOS: the package build and the audio helper (packaging/build_macos.sh, macos/helper)
+dist-mac/
+build-mac/
+macos/helper/.build/
+macos/helper/.swiftpm/
+# Secret for signing requests from nginx to the account server: lives only on the server.
+**/proxy-secret.inc
+# Finished landing pages and screenshots for checking: they are built by
+# landing/build_landing.py and are not stored in the repository.
+/landing/out/

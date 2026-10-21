@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Recording · Argus</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181a20'/%3E%3Cg transform='translate(5 4.5) scale(.0787)' fill='%23fff'%3E%3Cpath d='M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z'/%3E%3Ccircle cx='345.5' cy='525' r='60'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="/chrome.css">
+<script src="/chrome.js" defer></script>
+<script src="/winbar.js" defer></script>
+<script src="/update-button.js" defer></script>
+<script src="/account.js"></script>
+<style>
+  :root {
+    --bg:#0a0c10; --text:#f2f4f7; --dim:#9aa1ad; --faint:#5b6270; --meta:#868e9b;
+    --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.14);
+    --me:#4fb8d8; --them:#c77fd8; --ok:#5fd68a; --warn:#e0b23e; --bad:#f0716b;
+    /* The selected text line gets the ordinary neutral highlight, like list items and the item
+       under the cursor (requirement: the selected line is not blue but the usual color). */
+    --hit-bg:var(--btn-hover, rgba(255,255,255,.09)); --hit-edge:var(--line2);
+    /* Page spacings are one ladder, not a scatter of numbers (requirements: standardize the
+       spacings above the recording block, below it, above the input field and between messages;
+       use the same spacing around the card and around the input field; make the spacing above the
+       field smaller). The large step of the feed is --gap-block: above the recording card, below
+       it, between messages, above the input field and below it to the window edge. It is also the
+       "quiet band" at the pinned blocks: below the card and above the field, text scrolling away
+       hides behind this step up to their edge, so the visible gap beside them is the same at rest
+       and when scrolling. Inside a message: request -> answer is --gap-item, answer -> icons is
+       --gap-tight, between paragraphs of the answer is --gap-text. */
+    --gap-block:24px; --gap-item:12px; --gap-tight:8px; --gap-text:10px;
+    /* Inside the blocks there is a ladder of its own (requirement: all blocks must have
+       consistent paddings): text and icons stand --inset-x from the side edges of the block (card
+       header, the text window with search and lines, the request bubble, the input field, 14px
+       everywhere), and --inset-y from the top and bottom (card, search and list 10px; the input
+       field 8px, because inside it there is a 34px button). --inset-gap is between neighboring
+       parts of a block (the icon and the title in the header). */
+    --inset-x:14px; --inset-y:10px; --inset-gap:12px;
+  }
+  * { box-sizing:border-box; }
+  html, body { height:100%; }
+  body { margin:0; background:var(--bg); color:var(--text); font:14px/1.5 "Segoe UI",system-ui,sans-serif;
+         display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden; }
+
+  /* ---------- header: the same shell as on the home and work screens ---------- */
+  /* Only what cannot be done without: back, settings and one main button into the work window.
+     The session name is not here: it is in the "Conversation recording" card
+     at the start of the feed, and the same card expands into the text. */
+  header { flex:none; }
+  .bar { display:flex; align-items:center; gap:12px; padding:9px 12px 9px 0; }  /* flush against the left edge of the window (2026-10-07) */
+  .bar a.iconbtn { display:inline-grid; place-items:center; text-decoration:none; color:var(--dim); }
+  .bar a.iconbtn svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .notice { display:flex; align-items:center; gap:12px; padding:8px 18px; font-size:13px;
+            border-top:1px solid var(--slab-edge); border-left:3px solid var(--warn); background:var(--slab); }
+  .notice[hidden] { display:none; }
+  .notice .push { margin-left:auto; }
+
+  /* ---------- like a chat: centered feed, field at the bottom, recording text expands in it ---------- */
+  .shell { flex:1; min-height:0; display:flex; }
+  .chat { flex:1; min-width:0; display:flex; flex-direction:column; }
+  .scroller { flex:1; min-height:0; overflow:auto; display:flex; flex-direction:column; }
+  /* Feed width with side margins: inside it is exactly the same 760px as the input field at the
+     bottom (`.dock-in`), so in a narrow window the edges of the card, the answers and the field
+     match. */
+  .thread { flex:1 0 auto; width:100%; max-width:calc(760px + 2 * var(--pad)); margin:0 auto; padding:var(--gap-block) var(--pad) 0; display:flex; flex-direction:column; }
+  .dock { flex:none; position:sticky; bottom:0; z-index:1; padding:var(--gap-block) var(--pad) calc(var(--gap-block) + env(safe-area-inset-bottom, 0px));
+          /* The feed slides under the input field and fades toward it, rather than ending against a
+             solid band (requirement: like a typical chat, where the text scrolls, goes under the blocks
+             and under the input field, and only fades there). The upper `--gap-block` of the dock is a
+             smooth transition from transparent to the page background; under the field itself and below
+             it the background is solid. At rest the space above the field is empty (it is padding), and
+             the fade is visible only on text that is scrolling away. */
+          background:linear-gradient(to bottom, transparent 0, var(--bg) var(--gap-block)); }
+  /* The field is opaque: the semi-transparent fill of the block (`--slab`) lies on a solid
+     background, otherwise text that went under the field would show through it. */
+  .dock .composer { background:linear-gradient(var(--slab), var(--slab)), var(--bg); }
+  /* The top of the dock is a transparent fade, and the feed text shows under it (including the
+     icons under an answer): it does not catch clicks, only the field itself does. */
+  .dock { pointer-events:none; }
+  .dock-in { max-width:760px; margin:0 auto; display:grid; gap:10px; pointer-events:auto; }
+
+  /* While the feed has no answers at all, the hint stands in the center of the remaining space,
+     like a greeting in a chat: what this page is and what can be done here. */
+  .thread.blank #turns { grid-template-rows:1fr; padding-top:0; }
+  /* Only in the feed (`.thread`): the settings window on this page (`chrome.js`) also calls its
+     own explanations `.hint` (and hides them with the `hidden` attribute), and a generic `.hint`
+     with `display:grid` showed them. */
+  .thread .hint { align-self:center; justify-self:center; max-width:520px; padding-bottom:7%; text-align:center; color:var(--dim); display:grid; gap:10px; }
+  .thread .hint h2 { margin:0 0 2px; font-size:17px; font-weight:600; color:var(--text); }
+  .thread .hint p { margin:0; }
+
+  /* The conversation recording is like an attached file at the start of the feed, full width;
+     the session name is in it. A click expands a window under it with search and text, on top
+     of the feed, shifting nothing. The whole card (header and expanded text) sticks to the top:
+     whatever is being read, it stays in front of the eyes, the text opens with one click from
+     any place in the feed, and the expanded text stays put while the answers scroll under it
+     (requirement: this window must be pinned too). So the `.s-card` wrapper is a direct child of
+     the feed, not part of another wrapper (an element can stick only within its parent). */
+  .s-card { position:sticky; top:var(--gap-block); z-index:2; flex:none; }
+  /* No recording means no card at all (the header is hidden by the script, `drawSource`), not a
+     gray one that can be clicked for nothing; and the layer under it would not paint over the
+     top of the feed. */
+  .s-card:has(> .s-head[hidden]) { display:none; }
+  /* Behind the card is a solid rectangle of the page background: it covers the whole card and
+     extends up to the edge of the feed (`--gap-block` plus a margin). It covers text scrolling
+     under the card in the gap above it, in the corners cut by the rounding, and under the
+     semi-transparent fill of the blocks themselves. The background is not on the blocks
+     themselves: their rounding clips it, and at a fractional screen scale a fringe remained
+     along the arc, and text is visible in it. Here the block fill (`--slab`) lies on a solid
+     background, so nothing shows through along the arc. Above the card the backing is solid
+     (text hides under the header, as in a chat); below the card is a fade (`::after` below).
+     The layer catches clicks: invisible text under it must not be clickable. At the sides the
+     layer is wider than the card by 6px: the row of icons under an answer (`.acts`) sticks out
+     4px to the left (a negative margin for optical alignment), and without the extra width the
+     edge of an icon peeked out beside the window and the pinned card (this fixes text sometimes
+     being visible on the left, under this window). */
+  .s-card::before { content:""; position:absolute; z-index:-1; left:-6px; right:-6px; top:calc(-1px - var(--gap-block)); bottom:0;
+                    background:var(--bg); }
+  /* Under the card there is not a solid band but a fade: text moving up under the pinned card
+     smoothly goes into the page background at its lower edge (requirement: like a typical
+     chat). The layer does not catch clicks: the text visible under it is clickable. */
+  .s-card::after { content:""; position:absolute; z-index:-1; left:-6px; right:-6px; top:100%; height:var(--gap-block);
+                   background:linear-gradient(to bottom, var(--bg), transparent); pointer-events:none; }
+  .s-head { display:flex; align-items:center; gap:var(--inset-gap); width:100%; height:auto;
+            padding:var(--inset-y) var(--inset-x); text-align:left; color:var(--text); cursor:pointer;
+            background:var(--slab); border:1px solid var(--slab-edge); border-radius:9px;
+            transition:border-radius .3s cubic-bezier(.2,.9,.25,1); }
+  .s-head[hidden] { display:none; }
+  .thread.reading .s-head { border-radius:9px 9px 0 0; }
+  .s-ico { flex:none; width:38px; height:38px; padding:9px; border-radius:7px; background:var(--btn-hover);
+           fill:none; stroke:var(--dim); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .s-chev { flex:none; width:18px; height:18px; fill:none; stroke:var(--dim); stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+            transition:transform .34s cubic-bezier(.2,.9,.25,1); }
+  .thread.reading .s-chev { transform:rotate(180deg); }
+  .s-body { min-width:0; flex:1; display:grid; gap:2px; }
+  .s-body b { font-weight:600; }
+  .s-name { font-size:13.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  /* The expanded text lies ON TOP of the feed, not in it (requirement: on opening, everything
+     must not shift, the window should just cover the text): below the card header, out of
+     flow. The card stays one header tall, and the answers under it neither move nor scroll.
+     The fill is solid: `--slab` over `--bg`, otherwise the answers under the window would be
+     readable through it. */
+  .s-open { position:absolute; top:100%; left:0; right:0; z-index:1; display:grid; gap:0; padding:0;
+            border:1px solid transparent; border-top:0; border-radius:0 0 9px 9px;
+            box-shadow:0 18px 30px -18px #000; }
+  /* As with the header (`.s-card::before`, wider than the window by 6px at the sides; see there
+     for why): behind the window is a solid rectangle of the page color, and the rounded fill
+     with its border lies on top of it. A background on the window itself would be clipped by
+     the rounding, and in the bottom corners (and along the arc at a fractional scale) the
+     answers under the window would show through. */
+  .s-open::before { content:""; position:absolute; z-index:-1; top:0; left:-7px; right:-7px; bottom:-1px; background:var(--bg); }
+  .s-open::after { content:""; position:absolute; z-index:-1; top:0; left:-1px; right:-1px; bottom:-1px; box-sizing:border-box;
+                   border:1px solid var(--slab-edge); border-top:0; border-radius:0 0 9px 9px; background:var(--slab); }
+  .s-open[hidden] { display:none; }
+  /* The window opens out of the card header (requirement: a nicer opening animation): it drops
+     from the top down like a blind, the lines slide in one after another, and the found line
+     flashes. Closing is shorter and has no sequence. The open state is the class `.on`: it is
+     set by `openText` after the window is shown (there is no transition from `display:none`).
+     The clip is wider than the window at the edges: at the sides it has a backing (`::before`),
+     at the bottom a shadow. */
+  .s-open { transform-origin:50% 0; opacity:0; transform:translateY(-8px) scaleY(.97); clip-path:inset(0 -24px 100% -24px);
+            transition:opacity .14s ease, transform .2s ease, clip-path .2s ease; }
+  .s-open.on { opacity:1; transform:none; clip-path:inset(0 -24px -48px -24px);
+               transition:opacity .22s ease, transform .44s cubic-bezier(.2,.9,.25,1), clip-path .44s cubic-bezier(.2,.9,.25,1); }
+  .s-open.opening .row { animation:rowIn .42s cubic-bezier(.2,.9,.25,1) both; animation-delay:calc(var(--i, 0) * 16ms + 120ms); }
+  @keyframes rowIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  /* The line that a time link led to flashes brighter than the ordinary highlight, a ring
+     spreads from it, and then it fades. */
+  .row.flash { animation:hitFlash 1.2s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes hitFlash {
+    0%   { background:rgba(255,255,255,.28); box-shadow:0 0 0 1px rgba(255,255,255,.6), 0 0 0 0 rgba(255,255,255,.24); }
+    45%  { box-shadow:0 0 0 1px rgba(255,255,255,.6), 0 0 0 8px rgba(255,255,255,0); }
+    100% { background:var(--hit-bg); box-shadow:0 0 0 1px var(--hit-edge); }
+  }
+  /* The answers under the open window do NOT dim (requirement: nothing in the background
+     should darken): the window lies on top, and the background stays as it was. */
+  @media (prefers-reduced-motion: reduce) {
+    .s-head, .s-chev, .s-open, .s-open.on { transition:none; }
+    .s-open.opening .row, .row.flash { animation:none; }
+  }
+  /* Height ceiling: the text window must not reach the input field. Everything around it
+     (header, card title, search, input field) is subtracted from the window height; in a short
+     window it is not less than 140px. */
+  /* The text window is sized like the line feed on the work screen (`.body` in index.html;
+     requirement: make it the same, with all paddings, the scrollbar and so on). The paddings
+     (`--inset-y` at the top and bottom, `--inset-x` at the sides) are provided by the scrollable
+     list itself, so the scrollbar stands at the very edge of the card and does not step inward.
+     Lines go as a simple list at 9px, with no backing of their own and no hover highlight;
+     scrolling is not passed on to the feed under the window. */
+  /* The search field is exactly as wide as the text: from the left edge of the text (13px) to
+     its right edge. If the list has a scrollbar (it takes width inside the list and narrows the
+     text), the field narrows by the same amount: `--sbw` is measured by the script (`fitFind`),
+     not a number in CSS, because the scrollbar width differs between systems and scales. */
+  .s-open #find { width:auto; margin:var(--inset-y) calc(var(--inset-x) + var(--sbw, 0px)) 0 var(--inset-x); }
+  .s-lines { position:relative; padding:var(--inset-y) var(--inset-x); border-radius:0 0 8px 8px;
+             max-height:clamp(140px, calc(100vh - 430px), 520px); overflow-y:auto; overscroll-behavior:contain; }
+  #turns { flex:1 0 auto; display:grid; gap:var(--gap-block); align-content:start; padding-top:var(--gap-block); }
+
+  /* the request on the right, the answer without borders */
+  .turn { display:grid; gap:var(--gap-item); }
+  .you { justify-self:end; max-width:82%; padding:8px var(--inset-x); border-radius:10px; background:var(--btn-hover); white-space:pre-wrap; overflow-wrap:anywhere; }
+  .ans { display:grid; gap:var(--gap-tight); }
+  .out { display:grid; gap:var(--gap-text); font-size:14.5px; line-height:1.6; overflow-wrap:anywhere; }
+  .out p, .out ul, .out ol, .out blockquote, .out pre, .out table { margin:0; }
+  .out ul, .out ol { padding-left:22px; display:grid; gap:4px; }
+  /* A heading is grouped with its content: there is twice as much air above it as below (24px
+     against 6px with the common --gap-text step). Before, it stood at equal distances from the
+     previous list and from its own, so the sections were not visible and the page looked
+     unfinished. A subheading that is a bold line (`.sub`) works the same way. */
+  .out h2, .out h3, .out h4, .out h5, .out p.sub { margin:14px 0 -4px; font-size:14.5px; font-weight:600; }
+  .out > :first-child { margin-top:0; }
+  .out h2 { font-size:16px; }
+  .out blockquote { padding:6px 10px; border-left:3px solid var(--me); background:var(--field); border-radius:0 6px 6px 0; }
+  .out pre { padding:8px 10px; background:var(--field); border-radius:6px; overflow:auto; font:12.5px/1.45 Consolas,ui-monospace,Menlo,monospace; }
+  .out code { font:12.5px Consolas,ui-monospace,Menlo,monospace; background:var(--field); padding:0 4px; border-radius:4px; }
+  /* `break-word`, not the inherited `anywhere`: that one squeezes the columns down to a single
+     letter (a short abbreviation gets split letter by letter). */
+  .out table { width:100%; border-collapse:collapse; font-size:13.5px; overflow-wrap:break-word; }
+  .out th { text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); padding:0 8px 4px 0; border-bottom:1px solid var(--line2); }
+  .out td { padding:5px 8px 5px 0; border-bottom:1px solid var(--line); vertical-align:top; }
+  .out hr { border:0; border-top:1px solid var(--line); width:100%; }
+  .ans.wait .out { color:var(--dim); }
+  .ans.bad .out { color:var(--bad); }
+  .cite { display:inline-block; margin:0 1px; padding:0 5px; border:1px solid var(--line2); border-radius:5px; vertical-align:1px;
+          background:var(--btn); color:inherit; font:12px/1.4 Consolas,ui-monospace,Menlo,monospace; cursor:pointer; }
+  .nb { white-space:nowrap; }  /* the color is ordinary, like the answer text, not blue (requirement) */
+  .cite:hover { background:var(--btn-hover); }
+
+  /* actions under the answer: on hover and on the last answer */
+  /* Actions under an answer are the shared `.iconbtn.act` icons (chrome.css: 30px, icon 17px,
+     the same as for answers on the work screen): no captions and no tooltips. */
+  .acts { display:flex; flex-wrap:wrap; align-items:center; gap:2px; margin-left:-4px; opacity:0; transition:opacity .12s; }
+  .turn:hover .acts, .turn:focus-within .acts, .turn:last-child .acts { opacity:1; }
+  @media (hover:none) { .acts { opacity:1; } }
+  .acts .say { margin-left:6px; color:var(--meta); font-size:12px; }
+  /* A finished PDF is a file under the answer: just the name with an underline, no icon (a PDF
+     icon is already next to it; requirement: do not duplicate the icon, only the text with a
+     line below). A click opens it with the default program; the full path is in the tooltip
+     (it must be clear where the file is saved, and pressing the file opens it). */
+  .acts .file { display:inline-block; max-width:100%; margin-left:6px; padding:0; border:0; border-radius:0; background:none;
+                color:var(--dim); font:inherit; font-size:12px; line-height:22px; cursor:pointer;
+                text-decoration:underline; text-decoration-color:var(--line2); text-underline-offset:4px; text-decoration-thickness:1px; }
+  .acts .file:hover:not(:disabled) { background:none; border-color:transparent; color:var(--text); text-decoration-color:var(--text); }
+  .acts .file span { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  /* "Edit": the request is edited right in its own bubble; Enter replaces the answer
+     under it, Esc cancels. */
+  .you-edit { justify-self:end; width:min(100%, 560px); display:flex; align-items:flex-end; gap:6px; padding:6px 6px 6px var(--inset-x);
+              border:1px solid var(--slab-edge); border-radius:10px; background:var(--btn-hover); }
+  .you-edit:focus-within { border-color:var(--glass-edge-top); }
+  .you-edit textarea { flex:1; min-width:0; max-height:160px; padding:5px 0; border:0; outline:0; resize:none;
+                       background:transparent; color:var(--text); font:inherit; line-height:1.5; }
+
+  /* The input field itself is the shared `.composer` from chrome.css (the same as the question
+     line on the work screen); here is only the growth ceiling: beyond it, scrolling appears
+     inside the field. */
+  .composer textarea { max-height:160px; }
+
+  /* ---------- recording text inside the card ---------- */
+  /* Only the text search, and built from the shared field tokens (chrome.css), not a bare
+     `input[type=text]`: that would hit every text field on the page, including the password in
+     the "Account" tab when the eye toggles it to `text`. */
+  #find { background:var(--field-fill); color:var(--text); border:1px solid var(--field-edge); border-radius:var(--field-r);
+          padding:6px 11px; font:inherit; height:var(--field-h); width:100%; min-width:0; }
+  #find:focus { outline:none; border-color:var(--glass-edge-top); }
+  #find::placeholder { color:var(--dim); }
+  .empty { color:var(--dim); font-size:13px; margin:0; }
+
+  /* A line takes exactly the same space as plain text with a 9px interval (the margins around
+     it are balanced with negative offsets), and under the cursor and when selected it is
+     highlighted the same way (requirement: the same hover on mouse-over). The highlight is
+     wider than the text by 6px at the sides and by 2px at the top and bottom, and the text does
+     not move. */
+  .row { margin:-2px -6px 7px; padding:2px 6px; border-radius:6px; }
+  .row:hover, .row.hit { background:var(--hit-bg); box-shadow:0 0 0 1px var(--hit-edge); }
+  .row .t { color:var(--dim); font-variant-numeric:tabular-nums; margin-right:6px; font-size:12.5px; }
+  .row .who { font-weight:600; margin-right:5px; }
+  .row .who.me { color:var(--me); }
+  .row .who.them { color:var(--them); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="iconbtn hdr-btn" id="home" href="/" aria-label="Back to the session">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </a>
+    <button type="button" class="iconbtn hdr-btn" id="settings-btn" aria-label="Settings">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+      </svg>
+    </button>
+  </div>
+  <div class="notice" id="notice" role="status" hidden>
+    <span id="notice-text"></span>
+    <button type="button" class="push" id="notice-go">Go to the live session</button>
+  </div>
+  <!-- Recognition is running in another session: opening this one as the work screen would stop
+       it. -->
+  <div class="notice" id="switch" role="status" hidden>
+    <span id="switch-text"></span>
+    <button type="button" class="push" id="switch-go">Stop and go</button>
+    <button type="button" id="switch-no">No</button>
+  </div>
+</header>
+
+<main class="shell">
+  <section class="chat" aria-label="Requests about the recording">
+    <div class="scroller" id="scroller">
+      <div class="thread" id="thread" aria-live="polite">
+        <div class="s-card" id="sourcecard">
+          <button type="button" class="s-head" id="sourcebtn" aria-expanded="false" aria-controls="sourcebody">
+            <svg class="s-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+            <span class="s-body">
+              <b>Conversation recording</b>
+              <span class="s-name" id="source-name" data-i18n="off"></span>
+            </span>
+            <svg class="s-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="s-open" id="sourcebody" hidden>
+            <input type="text" id="find" placeholder="Find in the recording" aria-label="Find in the recording" autocomplete="off">
+            <div class="s-lines" id="lines"></div>
+          </div>
+        </div>
+        <div id="turns"></div>
+      </div>
+      <!-- The field sits inside the scrollable area (it sticks to the bottom): this way the scrollbar
+           narrows the feed and the field alike, and the edges of the card, the answers and the field
+           do not diverge. -->
+      <div class="dock">
+        <div class="dock-in">
+          <form class="composer" id="askform" autocomplete="off">
+            <textarea id="askinput" rows="1" placeholder="What should I do with the recording?" aria-label="What to do with the recording" maxlength="2000"></textarea>
+            <button type="submit" id="askgo" class="go" aria-label="Send">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// An address of the form /chat/<id>/record: the id is the second piece of the path.
+const id = location.pathname.split("/")[2];
+
+// The gear opens the settings window right here, instead of leading to the work screen
+// (requirement: pressing settings must not throw us off this page). The window is built by
+// `chrome.js` from the `#settings-btn` button. By default it shows only the general settings,
+// as on the home page: this page does not open a session by itself, and an edit of "session
+// settings" would land on the session that is open now, not on this one. With the session
+// tabs the window is opened by `openSettings` (below), once the session is open on the server.
+document.body.dataset.settingsScope = "app";
+
+let state = null;
+let busy = false;
+// Which answer is being redone in place (`{id, request}`) and which answer is being edited
+// (id): both are drawn inside their own card in the feed, not at the bottom.
+let redo = null;
+let editing = null;
+
+// ---------- markdown parsing: the same as `recap/markdown.py` for PDF ----------
+// The "Copy code" icon on a code block: the shared `.iconbtn.act`
+// (chrome.css), and the click is handled by chrome.js. The same line is in index.html: the
+// icon must be one for both pages, and the test `test_copy_answer.py` checks them against each
+// other.
+const CODE_COPY = '<button type="button" class="iconbtn act codecopy" aria-label="Copy code">' +
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg></button>';
+function inline(text) {
+  let t = esc(text);
+  // We hide code under placeholders before the rest of the parsing: inside it, `*`, `**` and
+  // "(12:30)" are just characters (`a ** b`, `print((12:30))`), not markup and not a link to a
+  // line.
+  const keep = [];
+  t = t.replace(/`([^`\n]+)`/g, (_, code) => "\u0001" + (keep.push("<code>" + code + "</code>") - 1) + "\u0002");
+  t = citeLinks(t);
+  // Bold and italic only if there is no space right after the opening asterisk and before the
+  // closing one: "2 * 3 * 4" is multiplication, not italics (the same in `md` of the work
+  // screen, index.html, and in `recap/markdown.py` for PDF).
+  t = t.replace(/\*\*(?!\s)(.+?)(?<!\s)\*\*/g, "<b>$1</b>");
+  t = t.replace(/(^|[^\w*])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![\w*])/g, "$1<i>$2</i>");
+  return t.replace(/\u0001(\d+)\u0002/g, (all, i) => keep[i] ?? all);
+}
+// A time in parentheses is a link to a line in the text: a fact can be checked against the
+// recording with one click. A range "(15:06-15:07)" and a list "(15:01, 15:09)" (a button for
+// each) also become buttons; before, only a single time did, and buttons and bare text stood
+// side by side. The punctuation mark after the parenthesis (".", ",") travels with the button
+// in one non-breaking piece: otherwise the period broke off onto the next line. It works on a
+// line of text (see `inline`), not on finished markup: code blocks do not get into it, and
+// parentheses in them stay code.
+function citeLinks(t) {
+  return t.replace(CITES, (all, list, tail) => {
+    const chips = list.split(/\s*[,;]\s*/).map((s) => `<button type="button" class="cite" data-t="${s.match(TIME)[0]}">${s}</button>`).join(" ");
+    return `<span class="nb">${chips}${tail}</span>`;
+  });
+}
+// Nested lists: if the next item is deeper by indentation, it is a list inside the item; a
+// different marker kind on the same level ("-" after "1.") is already a different list;
+// numbering that starts at something other than one starts from that number. The same parsing
+// as `mdItems` in index.html and `_render_items` in recap/markdown.py (PDF).
+function renderItems(items, pos, indent) {
+  const first = items[pos];
+  const tag = first.num ? "ol" : "ul";
+  let out = tag === "ol" && first.ord !== 1 ? `<ol start="${first.ord}">` : `<${tag}>`;
+  while (pos < items.length && items[pos].indent >= indent) {
+    const it = items[pos];
+    if (it.indent === indent && it.num !== first.num) break;
+    pos += 1;
+    let nested = "";
+    if (pos < items.length && items[pos].indent > it.indent) {
+      const r = renderItems(items, pos, items[pos].indent);
+      nested = r.html; pos = r.pos;
+    }
+    out += `<li>${it.text.split("\n").map(inline).join("<br>")}${nested}</li>`;
+  }
+  return { html: out + `</${tag}>`, pos };
+}
+function renderMd(src) {
+  const lines = String(src ?? "").replace(/\r\n?/g, "\n").split("\n");
+  const ITEM = /^(\s*)([-*•]|\d+[.)])\s+(.*)$/;
+  const SEP = /^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?$/;
+  const cells = (row) => row.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
+  // What breaks a paragraph and the continuation of a list item: an empty line, a block of its
+  // own, a heading, a rule, a quote, a table, an item.
+  const breaks = (k) => {
+    const r = lines[k], l = r.trim();
+    return !l || l.startsWith("```") || l.startsWith(">") || /^#{1,6}\s/.test(l) || /^(-{3,}|\*{3,}|_{3,})$/.test(l) ||
+      ITEM.test(r) || (l.includes("|") && k + 1 < lines.length && SEP.test(lines[k + 1].trim()));
+  };
+  let out = "", i = 0;
+  while (i < lines.length) {
+    const raw = lines[i], line = raw.trim();
+    let m;
+    if (!line) { i++; continue; }
+    if (line.startsWith("```")) {
+      const code = []; i++;
+      while (i < lines.length && !lines[i].trim().startsWith("```")) code.push(lines[i++]);
+      i++;
+      out += `<div class="codeblock"><pre>${esc(code.join("\n"))}</pre>${CODE_COPY}</div>`;
+    } else if ((m = line.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/))) {
+      const level = Math.min(m[1].length + 1, 5);
+      out += `<h${level}>${inline(m[2])}</h${level}>`; i++;
+    } else if (/^(-{3,}|\*{3,}|_{3,})$/.test(line)) {
+      out += "<hr>"; i++;
+    } else if (line.startsWith(">")) {
+      const body = [];
+      while (i < lines.length && lines[i].trim().startsWith(">")) body.push(lines[i++].trim().replace(/^>+\s?/, ""));
+      out += `<blockquote>${body.map(inline).join("<br>")}</blockquote>`;
+    } else if (line.includes("|") && i + 1 < lines.length && SEP.test(lines[i + 1].trim())) {
+      const head = cells(line); i += 2;
+      const rows = [];
+      while (i < lines.length && lines[i].includes("|") && lines[i].trim()) rows.push(cells(lines[i++]));
+      out += "<table><thead><tr>" + head.map((c) => `<th>${inline(c)}</th>`).join("") + "</tr></thead><tbody>" +
+        rows.map((r) => "<tr>" + r.map((c) => `<td>${inline(c)}</td>`).join("") + "</tr>").join("") + "</tbody></table>";
+    } else if (ITEM.test(raw)) {
+      const items = [];
+      while (i < lines.length) {
+        const im = lines[i].match(ITEM);
+        if (im) {
+          items.push({ indent: im[1].replace(/\t/g, "    ").length, num: /\d/.test(im[2][0]), ord: parseInt(im[2], 10), text: im[3] });
+          i++;
+          continue;
+        }
+        // Continuation of an item: an indented line that does not start a new block ("1. Step" and an
+        // explanation under it).
+        if (items.length && lines[i].trim() && /^\s{2,}\S/.test(lines[i]) && !breaks(i)) {
+          items[items.length - 1].text += "\n" + lines[i].trim();
+          i++;
+          continue;
+        }
+        // An empty line between items does not break the list if an item follows again: the model
+        // puts it between steps, and otherwise each step would become a separate list numbered from
+        // one.
+        if (!lines[i].trim()) {
+          let j = i;
+          while (j < lines.length && !lines[j].trim()) j++;
+          if (j < lines.length && ITEM.test(lines[j])) { i = j; continue; }
+        }
+        break;
+      }
+      // An item with an indent smaller than the first ends the first list but does not vanish: the
+      // rest go as the following lists.
+      for (let pos = 0; pos < items.length;) {
+        const r = renderItems(items, pos, items[pos].indent);
+        out += r.html;
+        pos = r.pos;
+      }
+    } else {
+      const body = [];
+      while (i < lines.length && (body.length === 0 || !breaks(i))) body.push(lines[i++].trim());
+      // A paragraph of one bold line ("**Decided**", "**Result:**") is a subheading: it has its own
+      // space above, as `##` does.
+      const only = body.length === 1 && /^\*\*[^*]+\*\*:?$/.test(body[0]);
+      out += `<p${only ? ' class="sub"' : ""}>${body.map(inline).join("<br>")}</p>`;
+    }
+  }
+  return out;
+}
+const TIME = /\d{1,2}:\d{2}(?::\d{2})?/;
+const CITES = /\(\s*(\d{1,2}:\d{2}(?::\d{2})?(?:\s*[–—-]\s*\d{1,2}:\d{2}(?::\d{2})?)?(?:\s*[,;]\s*\d{1,2}:\d{2}(?::\d{2})?(?:\s*[–—-]\s*\d{1,2}:\d{2}(?::\d{2})?)?)*)\s*\)([.,;:!?]*)/g;
+
+async function api(method, url, body) {
+  // A POST always has a body, even if it is an empty `{}`: the local server accepts it that way
+  // (a guard against foreign pages).
+  const payload = body || (method === "POST" ? {} : null);
+  const r = await fetch(url, {
+    method, headers: payload ? { "Content-Type": "application/json" } : {},
+    body: payload ? JSON.stringify(payload) : undefined,
+  });
+  const data = await r.json().catch(() => ({ ok: false, error: "Something went wrong" }));
+  if (!r.ok || !data.ok) throw new Error(data.error || "Didn't work");
+  return data;
+}
+
+// ---------- header and state ----------
+function drawHead() {
+  document.title = `${state.chat.name} · Recording · Argus`;
+  drawSource();
+  // When answers already exist, the field hints that a request may continue them.
+  $("askinput").placeholder = state.results.length ? "Refine the answer or ask for something else" : "What should I do with the recording?";
+  const locked = state.recording;
+  $("notice").hidden = !locked;
+  $("notice-text").textContent = "Recording is on in this session. You can work with it after it stops.";
+  document.body.classList.toggle("locked", locked);
+  setBusy(busy);
+}
+// "Again" and "edit" are also requests to the model: while requesting is
+// not allowed (a request or a recording is running), they are disabled, like the field and
+// the send button.
+function syncActs(off = busy || !state || state.recording || state.busy || !state.stats.lines) {
+  document.querySelectorAll('.acts [data-do="retry"], .acts [data-do="edit"], .you-edit button').forEach((b) => { b.disabled = off; });
+}
+function setBusy(on) {
+  busy = on;
+  // `state.busy`: the server is still performing a request from a previous page load, and a new
+  // one would get the refusal "This session is still working on the previous request."
+  const off = on || !state || state.recording || state.busy || !state.stats.lines;
+  $("askgo").disabled = off;
+  // The whole field is disabled while there is nothing to ask about (no text) or a recording is
+  // running: there is no point typing into it when sending is impossible (requirement from
+  // 2026-10-07). We do not disable it during the request itself, otherwise focus is lost.
+  $("askinput").disabled = !state || state.recording || !state.stats.lines;
+  syncActs(off);
+}
+
+// ---------- feed: conversation recording, requests and answers in order ----------
+// The card with the recording: "Conversation recording" and the session
+// name (the header has no name). It stands in the markup, not in the feed that gets redrawn:
+// what is expanded must not collapse.
+function drawSource() {
+  const has = state.lines.length > 0;
+  $("source-name").textContent = state.chat.name;
+  // No recording means no card (requirement: if there is no recording, this block should not be
+  // shown).
+  $("sourcebtn").hidden = !has;
+  if (!has) closeText();
+}
+// An empty feed: what this page is and what can be done here.
+function hintHTML() {
+  if (!state.lines.length) {
+    return '<div class="hint"><h2>This is where you\'ll work with the recording</h2>' +
+      '<p>Once a conversation is recorded in this session, you can turn it into a summary, notes, tasks, an email, or flashcards.</p>' +
+      '<p>You can record a conversation on the session\'s working screen: the “back” arrow at the top left.</p></div>';
+  }
+  return '<div class="hint"><h2>Work with the recording</h2>' +
+    '<p>Write in the field below what to do with the conversation: a summary, notes, tasks, an email, flashcards.</p>' +
+    '<p>You can refine the answer (“shorter”, “in English”), redo it in place, copy it, or save it as a PDF. The time in an answer leads to the right line, and the full text opens from the card at the top.</p></div>';
+}
+const ICON_SVG = (paths) => `<svg viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>`;
+const ICON_BTN = (what, title, paths) =>
+  `<button type="button" class="iconbtn act" data-do="${what}" aria-label="${title}">${ICON_SVG(paths)}</button>`;
+const FILE_ICON = '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>';
+function editHTML(r) {
+  return `<form class="you-edit"><textarea rows="1" maxlength="2000" aria-label="Edit the request" data-i18n="off">${esc(r.request)}</textarea>` +
+    ICON_BTN("edit-cancel", "Cancel", '<path d="M6 6l12 12M18 6L6 18"/>') +
+    `<button type="submit" class="iconbtn act" aria-label="Answer this request again">${ICON_SVG('<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>')}</button></form>`;
+}
+function turnHTML(r) {
+  // The answer is being redone in place: in its place is "Reading the recording…", and
+  // then the new text takes the same place.
+  if (redo && redo.id === r.id) return waitTurn(redo.request);
+  const you = editing === r.id ? editHTML(r) : `<div class="you" data-i18n="off">${esc(r.request)}</div>`;
+  const file = r.pdf
+    ? `<button type="button" class="file" data-do="openpdf" aria-label="Open ${esc(r.pdf.name)}"><span data-i18n="off">${esc(r.pdf.name)}</span></button>`
+    : "";
+  return `<div class="turn" data-id="${esc(r.id)}">${you}` +
+    `<div class="ans"><div class="out" data-i18n="off">${renderMd(r.text)}</div>` +
+    '<div class="acts">' +
+    ICON_BTN("retry", "Answer this request again. The new answer replaces this one", '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>') +
+    ICON_BTN("edit", "Edit the request. The answer under it is replaced", '<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>') +
+    ICON_BTN("copy", "Copy answer", '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>') +
+    ICON_BTN("pdf", "Make a PDF (the file appears right here)", FILE_ICON) +
+    file +
+    '<span class="say" role="status"></span></div></div></div>';
+}
+function waitTurn(title) {
+  return `<div class="turn"><div class="you" data-i18n="off">${esc(title)}</div><div class="ans wait"><div class="out">Reading the recording…</div></div></div>`;
+}
+// A request from a previous page load is still running on the server: the page does not have
+// its text, so only the waiting state is shown.
+function busyTurn() {
+  return '<div class="turn"><div class="ans wait"><div class="out">Reading the recording…</div></div></div>';
+}
+function errorTurn(title, message) {
+  return `<div class="turn"><div class="you" data-i18n="off">${esc(title)}</div><div class="ans bad"><div class="out">${esc(message)}</div></div></div>`;
+}
+// The results in the state are newest first (the server returns them that way); in the feed
+// they go in order, as in a chat.
+function drawThread(tail = "", stick = false) {
+  const turns = [...state.results].reverse().map(turnHTML).join("");
+  const blank = !state.results.length && !tail;
+  $("thread").classList.toggle("blank", blank);
+  $("turns").innerHTML = turns + tail + (blank ? hintHTML() : "");
+  if (state) syncActs();
+  if (stick) $("scroller").scrollTop = $("scroller").scrollHeight;
+}
+
+async function ask(title, text) {
+  text = String(text || "").trim();
+  if (busy || !text || !state || state.recording || state.busy || !state.stats.lines) return;
+  setBusy(true);
+  // As in a chat: once sent, the field is empty at once, not after the answer (before, the text
+  // stayed in the field until the answer arrived). This applies only if the field held exactly
+  // this request: "again" and "edit" send text from elsewhere, and what the person typed must
+  // not be lost. If it fails, the request goes back into the field.
+  const fromField = $("askinput").value.trim() === text;
+  if (fromField) { $("askinput").value = ""; grow(); }
+  drawThread(waitTurn(title || text), true);
+  let failed = "";
+  try {
+    const data = await api("POST", `/record/${id}/request`, { instruction: text, title: title || "" });
+    state.results.unshift(data.result);
+  } catch (err) {
+    failed = err.message;
+    if (fromField && !$("askinput").value) { $("askinput").value = text; grow(); }
+  }
+  drawThread(failed ? errorTurn(title || text, failed) : "", true);
+  drawHead();
+  setBusy(false);
+}
+
+// "Again" and "edit": the same request, but the answer is replaced in place (`replace`), not
+// added beside it. If it fails, the old answer stays as it was, and the reason is written in
+// its action row.
+async function redoResult(result, instruction) {
+  instruction = String(instruction || "").trim();
+  if (busy || !instruction || !state || state.recording || state.busy || !state.stats.lines) return;
+  setBusy(true);
+  redo = { id: result.id, request: instruction };
+  editing = null;
+  drawThread();
+  let failed = "";
+  try {
+    const data = await api("POST", `/record/${id}/request`, { instruction, title: "", replace: result.id });
+    const at = state.results.findIndex((r) => r.id === result.id);
+    if (at >= 0) state.results[at] = data.result; else state.results.unshift(data.result);
+  } catch (err) { failed = err.message; }
+  redo = null;
+  drawThread();
+  if (failed) {
+    const say = document.querySelector(`#thread .turn[data-id="${result.id}"] .say`);
+    if (say) say.textContent = failed;
+  }
+  drawHead();
+  setBusy(false);
+}
+
+function grow() {
+  const box = $("askinput");
+  box.style.height = "auto";
+  box.style.height = Math.min(box.scrollHeight, 160) + "px";
+}
+$("askinput").addEventListener("input", grow);
+// Enter sends, Shift+Enter is a new line (as in a chat).
+$("askinput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); $("askform").requestSubmit(); }
+});
+$("askform").addEventListener("submit", (e) => { e.preventDefault(); ask("", $("askinput").value); });
+
+// Editing a request in its bubble: Enter replaces the answer under it, Shift+Enter is a new
+// line, Esc cancels.
+$("thread").addEventListener("submit", (e) => {
+  const form = e.target.closest(".you-edit");
+  if (!form) return;
+  e.preventDefault();
+  const turn = form.closest(".turn");
+  const result = state.results.find((r) => r.id === turn?.dataset.id);
+  if (result) redoResult(result, form.querySelector("textarea").value);
+});
+$("thread").addEventListener("keydown", (e) => {
+  const box = e.target.closest(".you-edit textarea");
+  if (!box) return;
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); box.form.requestSubmit(); }
+  else if (e.key === "Escape") { e.preventDefault(); editing = null; drawThread(); }
+});
+$("thread").addEventListener("input", (e) => {
+  const box = e.target.closest(".you-edit textarea");
+  if (box) { box.style.height = "auto"; box.style.height = Math.min(box.scrollHeight, 160) + "px"; }
+});
+
+$("thread").addEventListener("click", async (e) => {
+  const cite = e.target.closest(".cite");
+  if (cite) { openText(cite.dataset.t); return; }
+  const btn = e.target.closest("[data-do]");
+  const turn = e.target.closest(".turn");
+  if (!btn || !turn || !turn.dataset.id) return;
+  const result = state.results.find((r) => r.id === turn.dataset.id);
+  const say = turn.querySelector(".say");
+  const todo = btn.dataset.do;
+  if (todo === "retry") {
+    redoResult(result, result.request);
+  } else if (todo === "edit") {
+    editing = result.id;
+    drawThread();
+    const box = document.querySelector(`#thread .turn[data-id="${result.id}"] .you-edit textarea`);
+    if (box) { box.style.height = Math.min(box.scrollHeight, 160) + "px"; box.focus(); box.setSelectionRange(box.value.length, box.value.length); }
+  } else if (todo === "edit-cancel") {
+    editing = null;
+    drawThread();
+  } else if (todo === "openpdf") {
+    say.textContent = "Opening…";
+    try { await api("POST", `/record/${id}/results/${result.id}/pdf/open`); say.textContent = ""; }
+    catch (err) { say.textContent = err.message; }
+  } else if (todo === "copy") {
+    // The answer goes to the clipboard as it looks: bold stays bold, not `**bold**`. If it
+    // worked, the icon turns into a white check mark for a second; if not, it turns red (both are
+    // done by `argusCopy` in chrome.js), and only then does the text under the answer say what to
+    // do. There is no "Copied" caption: the check mark is enough, and a caption
+    // would hang under the answer until another one pushed it out.
+    say.textContent = (await argusCopy(renderMd(result.text), btn)) ? "" : "Failed: select the text and press Ctrl+C";
+  } else if (todo === "pdf") {
+    btn.disabled = true; say.textContent = "Preparing the PDF…";
+    try {
+      const data = await api("POST", `/record/${id}/results/${result.id}/pdf`);
+      result.pdf = data.pdf;
+      drawThread();      // a file appeared under the answer
+    } catch (err) { say.textContent = err.message; }
+    btn.disabled = false;
+  }
+});
+
+// ---------- recording text: expands over the feed under the card ----------
+// It is expanded by a click on the card and by a time link in an answer; a repeated click on
+// the card closes it. The text window lies over the answers (`.s-open`, out of flow), so the
+// feed does not move or scroll on opening and closing: there is no former position to
+// restore. The window opens and closes with a transition (CSS on `.s-open`): open is the class
+// `.on`, and `hidden` is removed earlier and put back when the closing has finished playing.
+// The lines slide in one after another on opening (`.opening`, while the opening runs).
+let closeTimer = 0;
+function openText(time) {
+  const body = $("sourcebody");
+  clearTimeout(closeTimer);
+  const wasOpen = body.classList.contains("on");
+  if (!wasOpen) {
+    body.hidden = false;
+    body.classList.add("opening");
+    $("thread").classList.add("reading");
+    $("sourcebtn").setAttribute("aria-expanded", "true");
+  }
+  if (time) $("find").value = "";
+  drawLines();
+  if (!wasOpen) {
+    void body.offsetWidth;                  // commit the initial state: without it there will be no transition
+    body.classList.add("on");
+    setTimeout(() => body.classList.remove("opening"), 900);
+  }
+  // We go to the needed line when the window has already dropped halfway; an already open
+  // window goes at once.
+  if (time) goTo(time, wasOpen ? 0 : 200);
+}
+function closeText() {
+  const body = $("sourcebody");
+  if (body.hidden) return;
+  body.classList.remove("on", "opening");
+  $("thread").classList.remove("reading");
+  $("sourcebtn").setAttribute("aria-expanded", "false");
+  clearTimeout(closeTimer);
+  closeTimer = setTimeout(() => { body.hidden = true; }, 260);
+}
+$("sourcebtn").addEventListener("click", () => { if ($("sourcebody").classList.contains("on")) closeText(); else openText(); });
+
+function drawLines() {
+  const q = $("find").value.trim().toLowerCase();
+  const box = $("lines");
+  if (!state.lines.length) {
+    box.innerHTML = '<p class="empty">There\'s no text in this session yet. Turn on recording and it will appear here.</p>';
+    return;
+  }
+  let n = 0;    // the index of the shown line: it determines the delay with which the line slides in when the
+                // window opens
+  box.innerHTML = state.lines.map((l) => {
+    if (q && !l.text.toLowerCase().includes(q)) return "";
+    return `<div class="row" data-key="${esc(l.key)}" data-t="${esc(l.t)}" style="--i:${Math.min(n++, 14)}">` +
+      `<span class="t">${esc(l.t)}</span><span class="who ${l.who}">${l.who === "me" ? "Me" : "Them"}</span>` +
+      `<span class="said" data-i18n="off">${esc(l.text)}</span></div>`;
+  }).join("") || '<p class="empty">Nothing found.</p>';
+}
+$("find").addEventListener("input", drawLines);
+// The width of the text list's scrollbar -> `--sbw` on the window: the search field narrows by
+// it and stays exactly as wide as the text. We watch the size of the list itself: the
+// scrollbar appears and disappears with the search, with the window size and with scrolling.
+const fitFind = () => {
+  const list = $("lines");
+  $("sourcebody").style.setProperty("--sbw", Math.max(0, list.offsetWidth - list.clientWidth) + "px");
+};
+new ResizeObserver(fitFind).observe($("lines"));
+
+function goTo(time, delay = 0) {
+  const rows = [...document.querySelectorAll("#lines .row")];
+  const row = rows.find((r) => r.dataset.t === time) || rows.find((r) => r.dataset.t.startsWith(time));
+  rows.forEach((r) => r.classList.remove("hit", "flash"));
+  if (!row) return;
+  row.classList.add("hit");
+  const box = $("lines");
+  const top = Math.max(0, row.offsetTop - box.clientHeight / 2 + row.offsetHeight / 2);
+  // First the list scrolls smoothly to the line, then the highlight (`.flash`) flashes on it: it
+  // is noticeable once the line is already in place.
+  setTimeout(() => box.scrollTo({ top, behavior: "smooth" }), delay);
+  setTimeout(() => { row.classList.remove("flash"); void row.offsetWidth; row.classList.add("flash"); }, delay + 320);
+}
+
+// ---------- navigation ----------
+// The work screen opens the session, and opening turns off recognition in the one that was
+// running before it (it is paid and does not move into someone else's conversation). The
+// "Recording" page is read even in the middle of a call in another session, so
+// before navigating we ask, as the home page does.
+async function goLive(hash = "") {
+  const dest = `/chat/${id}${hash}`;
+  let other = null;
+  try {
+    const r = await (await fetch("/chats")).json();
+    const active = (r.chats || []).find((c) => c.active);
+    if (r.running && active && active.id !== id) other = active;
+  } catch { /* could not find out, so we go on as before */ }
+  if (!other) { location.href = dest; return; }
+  $("switch-text").innerHTML = `Recording is running in the session “<b data-i18n="off">${esc(other.name)}</b>”. If you switch here, it will stop.`;
+  $("switch-go").textContent = "Stop and go";
+  $("switch-go").onclick = () => { location.href = dest; };
+  $("switch").hidden = false;
+}
+
+// The gear: the settings window right here, together with the settings of this session
+// (requirement: on the page for working with a chat, also show the settings of the chat
+// itself). The server returns session settings for an open session, so we open this one first,
+// as when going to the work screen, only without the navigation itself (a request to
+// `/chat/<id>` opens it on the server, and the response body is not needed). An already open
+// one goes at once. If a recording is running in another session, we ask: opening would stop
+// it. If we could not find out, we show at least the general settings, without another
+// session's "session settings".
+async function activateChat() { await fetch(`/chat/${id}`, { cache: "no-store" }); }
+function showSettings(withChat) {
+  if (withChat) delete document.body.dataset.settingsScope;
+  else document.body.dataset.settingsScope = "app";
+  window.argusWin?.open();
+}
+async function openSettings() {
+  let active = null, running = false, known = false;
+  try {
+    const r = await (await fetch("/chats")).json();
+    running = !!r.running;
+    active = (r.chats || []).find((c) => c.active) || null;
+    known = true;
+  } catch { /* the server did not answer */ }
+  if (!known) { showSettings(false); return; }
+  if (active && active.id === id) { showSettings(true); return; }
+  if (running && active) {
+    $("switch-text").innerHTML = `Recording is running in the session “<b data-i18n="off">${esc(active.name)}</b>”. To open this session's settings, you have to open the session, and the recording will stop.`;
+    $("switch-go").textContent = "Stop and open";
+    $("switch-go").onclick = async () => {
+      $("switch").hidden = true;
+      try { await activateChat(); showSettings(true); } catch { showSettings(false); }
+    };
+    $("switch").hidden = false;
+    return;
+  }
+  try { await activateChat(); showSettings(true); } catch { showSettings(false); }
+}
+// In the capture phase and with `stopImmediatePropagation`: `chrome.js` attaches its own
+// handler to the same button, which would open the window at once, before the session is
+// open.
+$("settings-btn").addEventListener("click", (e) => { e.stopImmediatePropagation(); openSettings(); }, true);
+// "Back" from here leads to the session itself (the work screen), and the next "back" from
+// there leads to all sessions (requirement from 2026-10-07). The same transition and the same
+// warning as for "Work window ->": opening a session means stopping the
+// recording in another one.
+$("home").href = `/chat/${id}`;
+$("home").addEventListener("click", (e) => { e.preventDefault(); goLive(); });
+$("switch-no").addEventListener("click", () => { $("switch").hidden = true; });
+$("notice-go").addEventListener("click", () => { location.href = `/chat/${id}`; });
+
+// ---------- loading ----------
+// The server changes without this page too: another window stops the recording, and a request
+// from a previous page load is still running. One load at opening is not enough: the
+// "recording is running" lock would hang until the page is refreshed, and a new request would
+// get the refusal "This session is still working on the previous request." and show it as an
+// answer. So while a recording or a request is running, the state is read every few seconds,
+// and also when the user returns to the tab or the window.
+let pollTimer = 0, loading = false, lastLoad = 0;
+// What is visible on the page and changes without us: the lock, the waiting, the answers.
+// Lines do not count: while a recording is running, their number grows on every read, and
+// redrawing the list would reset the scroll position of the expanded text.
+const looks = (s) => [s.recording, s.busy, ...s.results.map((r) => r.id + ":" + r.text.length)].join("|");
+function poll() {
+  clearTimeout(pollTimer);
+  if (state && (state.recording || state.busy) && !document.hidden) pollTimer = setTimeout(() => load(false), 4000);
+}
+async function load(first = true) {
+  if (loading) return;
+  // Our own request or edit is in progress: a redraw under them would knock out what was typed
+  // and erase the waiting card.
+  if (!first && (busy || redo || editing)) { poll(); return; }
+  loading = true;
+  try {
+    const data = await api("GET", `/record/${id}`);
+    const same = !first && !!state && looks(state) === looks(data);
+    state = data;
+    if (same) drawHead();
+    else { drawHead(); drawLines(); drawThread(state.busy ? busyTurn() : "", first); }
+  } catch (err) {
+    // The first load failed, so we say so; a background load failed, so what is on the page stays
+    // as it was.
+    if (first) {
+      $("sourcebtn").hidden = true;
+      $("turns").innerHTML = `<div class="hint"><p>${esc(err.message)}</p></div>`;
+    }
+  } finally {
+    loading = false;
+    lastLoad = Date.now();
+    poll();
+  }
+}
+// Returning to the tab and to the window arrives as a double event and often: we read the
+// whole recording, so we do it no more than once in a couple of seconds.
+const refreshSoon = () => { if (!document.hidden && Date.now() - lastLoad > 2000) load(false); };
+document.addEventListener("visibilitychange", refreshSoon);
+window.addEventListener("focus", refreshSoon);
+load();
+</script>
+</body>
+</html>

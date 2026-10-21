@@ -1,0 +1,171 @@
+{
+ "_doc": "Данные для кадров «Сессии» и «Запись» на лендинге (screens.py). Выдуманные. Время сессий — сегодня/вчера, часы по часам машины.",
+ "sessions": [
+  {
+   "id": "s-sync",
+   "name": "Haftalık ekip toplantısı",
+   "day": 0,
+   "at": [
+    10,
+    30
+   ]
+  },
+  {
+   "id": "s-review",
+   "name": "Pull request #214 incelemesi",
+   "day": 0,
+   "at": [
+    9,
+    12
+   ]
+  },
+  {
+   "id": "s-standup",
+   "name": "Sabah standup'ı",
+   "day": 0,
+   "at": [
+    8,
+    45
+   ]
+  },
+  {
+   "id": "s-sso",
+   "name": "Müşteri görüşmesi: tek oturum açma",
+   "day": 1,
+   "at": [
+    16,
+    40
+   ]
+  },
+  {
+   "id": "s-spanish",
+   "name": "İspanyolca dersi, 12. ders",
+   "day": 1,
+   "at": [
+    14,
+    0
+   ]
+  },
+  {
+   "id": "s-stats",
+   "name": "İstatistik dersi, 4. hafta",
+   "day": 1,
+   "at": [
+    11,
+    5
+   ]
+  },
+  {
+   "id": "s-deposit",
+   "name": "Mevduat tahmini",
+   "day": 1,
+   "at": [
+    9,
+    30
+   ]
+  },
+  {
+   "id": "s-budget",
+   "name": "Bütçe gözden geçirme",
+   "day": 1,
+   "at": [
+    9,
+    0
+   ]
+  }
+ ],
+ "record": {
+  "id": "s-sync",
+  "name": "Haftalık ekip toplantısı",
+  "lines": [
+   [
+    "10:30:31",
+    "them",
+    "Herkese merhaba, beni duyabiliyor musunuz?"
+   ],
+   [
+    "10:30:34",
+    "me",
+    "Evet, gayet net."
+   ],
+   [
+    "10:30:41",
+    "them",
+    "Harika. Anna bir dakika içinde katılıyor."
+   ],
+   [
+    "10:30:47",
+    "me",
+    "Sorun değil, onu bekleyebiliriz."
+   ],
+   [
+    "10:30:52",
+    "them",
+    "Tamam, şimdi geldi."
+   ],
+   [
+    "10:30:57",
+    "them",
+    "Merhaba Anna. Yeni başlıyoruz."
+   ],
+   [
+    "10:31:04",
+    "them",
+    "Sürümle başlayalım. Perşembeye yetişiyor muyuz?"
+   ],
+   [
+    "10:31:12",
+    "me",
+    "Büyük ölçüde. Ödeme akışı bitti. Fatura dışa aktarımı hâlâ incelenmeyi bekliyor."
+   ],
+   [
+    "10:31:40",
+    "them",
+    "Bugün kim inceleyebilir?"
+   ],
+   [
+    "10:31:47",
+    "me",
+    "Igor inceleyebilir. Bu görüşmeden hemen sonra ona soracağım."
+   ],
+   [
+    "10:32:20",
+    "them",
+    "İyi. Sıradaki konu: Acme tek oturum açma istedi. Bunu bu çeyrekte sunabilir miyiz?"
+   ],
+   [
+    "10:32:33",
+    "me",
+    "Belki. Önce Maria'nın efor tahmini yapması gerekiyor."
+   ],
+   [
+    "10:32:50",
+    "them",
+    "Maria, efor tahminini pazartesiye kadar gönderebilir misin?"
+   ],
+   [
+    "10:32:58",
+    "them",
+    "Evet, pazartesi göndereceğim."
+   ],
+   [
+    "10:33:30",
+    "them",
+    "Son bir şey: destek ekibinin sürüm notlarına çarşambadan önce ihtiyacı var."
+   ],
+   [
+    "10:33:41",
+    "me",
+    "Anna bunları salı günü gönderecek."
+   ]
+  ],
+  "results": [
+   {
+    "id": "r1",
+    "request": "Özet ve görevler",
+    "text": "## Özet\nSürüm perşembe için yolunda. Ödeme akışı bitti, fatura dışa aktarımı inceleme bekliyor (10:31).\n\nAcme tek oturum açma istedi. Efor tahmini uygun çıkarsa bunu bu çeyrekte sunabiliriz (10:32).\n\n## Görevler\n| Kim | Ne | Ne zaman |\n| --- | --- | --- |\n| Igor | Fatura dışa aktarımını incelemek | Bugün |\n| Maria | Tek oturum açma için efor tahminini göndermek | Pazartesi |\n| Anna | Sürüm notlarını destek ekibine göndermek | Salı |",
+    "pdf": "Haftalık ekip toplantısı — Özet ve görevler.pdf"
+   }
+  ]
+ }
+}

@@ -1,0 +1,1139 @@
+/* The shared part of two pages: the header, transitions, buttons.
+
+   Before this file, the dashboard and the settings each lived with their own styles, and
+   they diverged not by design but by oversight: one has a gray header, the other has a
+   channel strip; one has transitions as a link, the other as a group; on one a disabled
+   button is semi-transparent, on the other just pale. A person moves between them ten times
+   per setting and sees two different programs.
+
+   Here is only what has to match. Everything that is specific to the pages, the grid of the
+   dashboard and the settings fields, stays with them. */
+
+:root {
+  --column:1240px;
+  --pad:20px;
+  --header:60px;      /* the header height is measured; the side list sticks below it */
+
+  /* ---- glass. A white tint over the canvas, not a mix of the panel itself with transparency.
+     This is the second attempt after the first one, which on a gentle dark background was
+     indistinguishable from a flat fill (checked on the live header, the effect was not
+     visible at all). There is no window of its own with a transparent background yet (see
+     the comment at `body[data-solo]` in index.html: WebView2 in a WinForms form paints a
+     transparent page system gray, the attempt already cost a separate investigation and was
+     postponed).
+
+     The highlight under the canvas went through many attempts. Four in a row: blue twice did
+     not work out, either a spot at the header alone or too bright; white was just a slight
+     brightness difference, which gives the blur something to take. On the fifth it was
+     removed altogether, and the flat canvas turned out worse. The sixth was colored (indigo,
+     azure, turquoise) and was rejected as too colorful; the seventh was three neutral spots,
+     rejected as terrible in a narrow window; the eighth was one diagonal sweep, judged worse
+     than before; the ninth was a return to the second: a cold light in the corner, see
+     `--bloom` and `body::before` below; the tenth was the same light at the bottom right as
+     well, and it got much worse; the eleventh was the decision to remove the gradient
+     everywhere for now: the canvas is flat, `--bloom` is off.
+
+     On the dashboard (index.html, `body{overflow:hidden}`) its own content never slides under
+     the header anyway: the header holds as a separate surface by its background and edge, and
+     the blur takes what the canvas gives. In the settings (admin.html, an ordinary page that
+     scrolls) the same rule additionally takes the section headings, which really do slide
+     under the header. A large surface is damped more than a small one, as in Apple's HIG: the
+     larger a glass element, the more opaque it is, otherwise it drowns in what is under it.
+     Hence two densities, not one. */
+  --glass-blur:32px;
+  --glass-sat:1.6;
+  --glass:rgba(255,255,255,.07);         /* header, popup, toast */
+  --glass-strong:rgba(255,255,255,.08);  /* slide-out panel, window on top */
+  --glass-edge:rgba(255,255,255,.13);    /* edge of the glass: catches the light along the rim */
+  /* It also used to paint a highlight along the top edge of glass surfaces with an inset
+     shadow over the ordinary border. Removed across the whole project: the border is even on
+     all sides, with no emphasized "lit" edge. The variable itself stayed: it is also the
+     light edge on hover and focus of buttons and fields, which is a different thing and was
+     not touched. */
+  --glass-edge-top:rgba(255,255,255,.20);
+  --lift:0 20px 40px -26px rgba(0,0,0,.65); /* shadow that lifts a glass surface off the canvas */
+
+  /* ---- transparency in the color itself (the reference palette). We do not touch the shapes,
+     only what fills them. The input field, the code insert, the track, and the body of the
+     settings panel used to be painted with solid almost-black fills (`--sunk`, `--bg`) and
+     stuck out of the glass as black holes. Now it is the same glass, only darker: the canvas
+     shows through it. */
+  --field:rgba(0,0,0,.30);       /* input field, track, code insert: dark glass */
+  /* A single-line input field is one for the whole app (2026-10-08; requirement: input fields
+     are not standardized): 35px, 6px corner, a thin border, no fill, like the settings fields.
+     All fields (settings, sign-in and registration, dialogs, search, top-up amount) take their
+     size and look from here, not from numbers of their own. */
+  --field-h:35px; --field-r:6px; --field-edge:var(--line2); --field-fill:transparent;
+  --sheet:rgba(10,12,16,.74);    /* the body of the slide-out panel: the blurred dashboard shows through it */
+  /* A large surface under content: the dashboard panel, the answer card, the settings section
+     card. In the mockup there is no gray backing under the text at all: the text lies
+     directly on the dark canvas, and only the strips remain glass (the header, the question
+     row, the window strip: `--glass`). So the backing is almost the canvas, and the shape is
+     held by a thin edge, `--slab-edge`. */
+  --slab:rgba(255,255,255,.03);
+  --slab-edge:rgba(255,255,255,.09);
+  /* The light in the corner of the canvas is OFF (2026-10-06; decision: remove the gradient
+     everywhere for now): `none`, the canvas is the flat `--bg` (#0a0c10). To bring it back,
+     put in the previous value: a cold light in the top left corner, from `--bg` to #171b21 at
+     the corner, as in the window of the mockup (the tint is cold, not pure white):
+       radial-gradient(120% 90% at 30% 0%, rgba(196,226,255,.07) 0%,
+                       rgba(196,226,255,.017) 55%, transparent 100%)
+     It is a layer over a flat background, not a gradient instead of it: the glass window
+     (`?glass=1`) paints the page with a transparent veil, and an opaque gradient would kill
+     that transparency. Other things were tried and did not get better: colored spots ("northern
+     lights") were too colorful; three neutral spots gave dirty smears with rings in a narrow
+     window; one diagonal sweep was judged worse than before; the same second light at the
+     bottom right was judged much worse. */
+  --bloom:none;
+
+  /* Buttons use the same language as the blocks (the header, panels, cards): at rest the fill
+     `--btn` and the edge `--btn-edge` are `--slab` and `--slab-edge`; on hover both the fill
+     (`--btn-hover`) and the edge (`--glass-edge-top`) get lighter. Buttons and windows have no
+     colored accents: "pressed" and "selected" are a permanent hover, not a separate color. The
+     tokens here are one for all the pages (before, `--btn` and `--btn-hover` were repeated in
+     index.html and admin.css). */
+  --btn:var(--slab);
+  --btn-hover:rgba(255,255,255,.09);
+  --btn-edge:var(--slab-edge);
+  /* The button edge on hover. Outside the windows it lightens together with the fill; in the
+     windows (`.win`, `.dialog`, `.sheet`…, the "windows" block below) there is no edge at all,
+     and it stays transparent: the control there is a soft plate, not a frame. */
+  --btn-edge-hover:var(--glass-edge-top);
+  /* Windows: settings and account (`.win`), dialogs (`.dialog`), the window picker and the
+     notification (`.sheet`), dropdown lists (`.combo-menu`), and the popup settings at the
+     question field. A solid dark fill, darker than before (24,27,33; 2026-10-07, requirement:
+     make them darker in the color scheme), but lighter than the canvas `--bg`, otherwise the
+     window would drown in the dimmed page under it. The window edge is only a hairline: a
+     window is a separate surface, not a button, and it holds its shape with a shadow. */
+  --win:#101318;
+  --win-edge:rgba(255,255,255,.07);
+  /* The keyboard focus ring is light, not an accent: the same neutral response as everywhere
+     else (the edge lightens instead of being colored). */
+  --focus:rgba(242,244,247,.7);
+  /* The border of an input field with the cursor in it: white at .5 gives about 5:1 against
+     the window (`--win`), a focus indicator that is actually visible (at least 3:1 is needed).
+     The previous focus border `--glass-edge-top` (.20) differed from the resting border (.14)
+     by a factor of only 1.2. No bright ring: the app keeps to calm gray tones. */
+  --focus-edge:rgba(255,255,255,.5);
+  /* Text that has to be read (a placeholder in an empty field, a small line about terms, the
+     version, table captions): `--faint` (#5b6270) gives about 3:1 on dark surfaces, but small
+     text needs 4.5:1. `--meta` gives 5.6:1, the same as on the home page and on the record
+     page (it is declared there on its own, and the value is the same). `--faint` stays for
+     what need not be read: icons, dividers, disabled marks. */
+  --meta:#868e9b;
+  /* The size of captions and empty states in the account block. Before, it lived only in
+     design/argus.css, which no page of the app includes, and `var(--t-small)` was invalid
+     there: the font inherited 14px instead of 12.5. */
+  --t-small:12.5px;
+}
+
+/* Under the canvas is a layer for the light from `--bloom` (above; it is `none` now, and
+   the canvas is flat): glass has something to show, and the background has depth. Before,
+   there were two blue spots in the accent color, at the top left and at the bottom right.
+   They painted the whole canvas teal, while in the mockup it is a neutral dark blue. The
+   size is in percent of the window, not in pixels: a pixel radius was not enough on a taller
+   window. It is shared by the dashboard and the settings (one file for both pages). */
+body::before {
+  content:""; position:fixed; z-index:-1; inset:0; pointer-events:none;
+  background:var(--bloom);
+}
+
+/* ---------- header ---------- */
+
+/* The strip uses the same colors as the other blocks of the window: the backing `--slab`
+   and the edge `--slab-edge`. Before, it was glass (`--glass`: lighter than the blocks below
+   by 8-10 levels, with the edge one and a half times brighter), and the buttons in it used
+   `--btn`/`--line2`: on a light strip they came out as light plates with a bright border,
+   unlike everything else in the window. Now the buttons everywhere use the same tokens
+   (`--btn`/`--btn-edge`, above), and the header has no rules of its own for them. */
+header { position:sticky; top:0; z-index:20;
+         background:var(--slab);
+         backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+         -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+         border-bottom:1px solid var(--slab-edge);
+         box-shadow:0 8px 20px -18px #000; }
+
+/* The strip in the channel color above the header is gone. It used to tell apart three
+   copies of the project running on neighboring ports in three tabs: the tab with the right
+   one was found by color sooner than by title. Now there is one copy, there is nothing to
+   tell apart, and in the slid-out settings panel the strip simply turned into a blue line
+   under its heading that meant nothing. */
+
+/* ---------- transitions ---------- */
+
+/* As a single group in a recessed backing: this shows that it is a switch with two
+   positions, not two separate links.
+
+   Direction and positioning are set right here. Both pages have a second `nav`, the side
+   list of sections, and a rule by tag name once already reached the transitions: they lined
+   up in a column and made the header twice as tall. */
+.tabs { display:flex; flex-direction:row; position:static; gap:2px; padding:3px;
+        flex:0 0 auto; background:var(--slab);
+        border:1px solid var(--slab-edge); border-radius:9px; }
+.tabs a { display:block; padding:4px 14px; border-radius:6px; font-size:13px;
+          color:var(--dim); text-decoration:none; border:1px solid transparent;
+          transition:background .12s, color .12s; }
+/* Dim at rest on the settings page too: there the general `.admin-root a` paints links with
+   the accent (`admin.css`, loaded later, and it wins at equal specificity), and the tab came
+   out teal. With `:not()` this rule is stronger and does not touch hover. */
+.tabs a:not(.here):not(:hover) { color:var(--dim); }
+.tabs a:hover { color:var(--text); background:var(--btn-hover); }
+.tabs a.here { color:var(--text); background:var(--btn-hover); border-color:var(--glass-edge-top);
+               box-shadow:0 1px 2px rgba(0,0,0,.35); }
+.tabs a[hidden] { display:none; }
+
+/* ---------- settings and account: a panel, not a menu ---------- */
+
+/* Before, there was a menu button behind three bars here, and behind it a side panel with
+   two items: "settings" and "account". A panel for two items is not needed: the buttons took
+   its place directly, `.hdr-btn` below, while the slide-out panel itself stayed, only now it
+   has two independent entrances instead of one shared. */
+
+.scrim {
+  position:fixed; inset:0; z-index:60; background:rgba(8,10,13,.7);
+  /* The dashboard under the panel only dims, without blur. Before, it also slid into blur,
+     like system sheets, and the colored circles, level bars, and the green lamp turned into
+     dirty smears next to the panel (there is no blur anywhere in the main window). The
+     dimming is denser than before (.55): a sharp dashboard under it would otherwise compete
+     with the panel in peripheral vision. */
+  opacity:0; transition:opacity .18s ease;
+}
+.sheet-open .scrim { opacity:1; }
+.scrim[hidden] { display:none; }
+
+/* ---------- windows: the flat look (2026-10-07) ----------
+
+   The outlines of buttons were removed (requirement: a global change across the project, so
+   that everything is in a modern style), and the same look applies in all the windows:
+   settings and account (`.win`), dialogs (`.dialog`, home.html), the window picker and the
+   notification (`.sheet`, index.html), dropdown lists, the popup settings at the question
+   field, the documents window, and the alarm popup (`.alarm`, "Reconnect audio"). A control in a window is not a frame but a soft plate slightly lighter
+   than the window itself: at rest the fill is `--btn`, on hover `--btn-hover`, with no border
+   in either state. The border shows up only as a sign of state ("field in focus", "waiting
+   for a key combination", "file over the zone").
+
+   This is done not by rewriting every rule but by substituting tokens: the shared rules
+   (`button`, `select`, `.ac-input`, `.chip`…) already read `--btn`, `--btn-edge`,
+   `--btn-edge-hover`, and `--input-fill`/`--input-edge`, and the window gives them other
+   values; outside the windows everything stays as it was. A new control built on these
+   tokens will become flat in a window by itself. If the same is wanted on all pages, the
+   values move from here to `:root`, and nothing else needs to change.
+
+   `--input-fill`/`--input-edge` are deliberately absent from `:root`: the field rules read
+   them with a fallback (`var(--input-fill, var(--field))`), and without a window the field
+   stays dark glass with an edge. In a window it has the color of the window itself
+   (`--win`), with no border: the border on focus serves as the boundary (requirement,
+   2026-10-07: do this for all input fields; buttons and select stay plates). */
+.win, .dialog, .sheet, .legal-view, .combo-menu, .ask-settings-pop, .ask-recap-pop, .alarm {
+  --btn:rgba(255,255,255,.055);
+  --btn-edge:transparent;
+  --btn-edge-hover:transparent;
+  --input-fill:var(--win);
+  --input-edge:transparent;
+}
+
+/* The main button of a window or page is the same plate as the blocks in the header
+   (`.power`, `.src`, "Work with the recording" in index.html): the fill
+   `--btn`, the edge `--btn-edge`, the label is dim and lightens on hover together with the
+   fill and edge. On 2026-10-07 it was a tinted fill without an edge (from `.work` of the
+   record page, then without a shadow, to remove the volume). Then the plates in the header
+   were brought back, and for the "Work with the recording" button the requirement was to redo this
+   button everywhere, so now it looks like this everywhere. In windows (the "flat look",
+   above) the edge on the tokens is transparent, and the same `.cta` there is a flat plate;
+   what makes it the main one is only that "Cancel" next to it is a bare `.ghost`.
+   Examples: "New session" on the home page, "Create" in a dialog,
+   "Sign in" and "Top up" in the account, "Got it, turn on" in a
+   notification. An icon on the left or right is any `svg` inside, 16px, in the
+   text color. (There was also "Work window" on the record page; it was
+   removed on 2026-10-07.) */
+.cta { display:inline-flex; align-items:center; justify-content:center; gap:9px;
+       height:35px; padding:0 14px; background:var(--btn); color:var(--dim);
+       border:1px solid var(--btn-edge); border-radius:6px; font:inherit; cursor:pointer;
+       -webkit-user-select:none; user-select:none; text-decoration:none;
+       transition:background .12s, border-color .12s, color .12s; }
+.cta svg { flex:none; width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.2;
+           stroke-linecap:round; stroke-linejoin:round; }
+/* `:hover:not(:disabled)` instead of a bare `:hover`: it has the same specificity as the
+   general button rule (`button:hover:not(:disabled)`, below), otherwise the order in the
+   file would decide whose fill and edge win on hover. A link is never `:disabled`, so the
+   condition is always true. */
+.cta:hover:not(:disabled), .cta:active:not(:disabled) {
+  background:var(--btn-hover); border-color:var(--btn-edge-hover); color:var(--text); }
+.cta:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.cta:disabled { opacity:.45; cursor:default; }
+.cta[hidden] { display:none; }
+/* Irreversible actions ("Delete"): the same shell, red text. The fill does not turn
+   red, and the buttons in the app stay gray. */
+.cta.danger, .cta.danger:hover:not(:disabled) { color:var(--bad); }
+
+/* Settings and account are one window in the middle of the screen, like in the reference
+   app: tabs on the left, and on the right whatever is on the selected one. Before, these
+   were two side panels, and each had everything in one long list, so you had to scroll to
+   the setting you needed. Now a tab is one section, and the account is a tab like the
+   others.
+
+   The window is solid, colored `--win`, like the dropdown lists and the picker window: no
+   glass, no blur, no accent. The tabs are assembled by `chrome.js` (`openWindow`): settings
+   bring theirs from the schema (`admin.js`), and the account brings its own (`account.js`).
+   The window itself owns here only the frame, the left column, and the scrollable right
+   part. */
+.win {
+  position:fixed; z-index:61; left:50%; top:50%;
+  width:min(960px, calc(100vw - 48px)); height:min(680px, calc(100vh - 48px));
+  display:grid; grid-template-columns:236px minmax(0, 1fr);
+  background:var(--win); border:1px solid var(--win-edge); border-radius:10px;
+  box-shadow:0 30px 80px -24px #000; overflow:hidden;
+  opacity:0; transform:translate(-50%, -48%) scale(.985);
+  transition:opacity .16s ease, transform .16s ease;
+}
+.sheet-open .win { opacity:1; transform:translate(-50%, -50%); }
+.win[hidden] { display:none; }
+
+/* The left column is slightly lighter than the right part and separated by an edge, as in
+   the reference app, where the tabs sit on their own strip (2026-10-07: it used to be
+   darker, now it follows the model). The close cross is in its top corner, not in a header
+   above the content: the window has no header. */
+.win-side { display:flex; flex-direction:column; min-width:0; min-height:0;
+            padding:14px 12px 12px; background:rgba(255,255,255,.03);
+            border-right:1px solid var(--slab-edge); }
+/* The cross is larger (2026-10-08; requirement: make it bigger, since 38px was found too
+   big): it was 26px with a 16px icon, now it is 30px and 19px. The selector has two
+   classes: the general `.iconbtn` further down the file sets its own size, and with one
+   class it won (30px was never applied here). */
+.iconbtn.win-close { width:30px; height:30px; margin:0 0 12px 0; }
+.iconbtn.win-close svg { width:19px; height:19px; }
+.win-tabs { flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:2px; }
+/* The caption of a group of tabs: "This session", "App". The first
+   has its own setting for each session, the second one is shared, and by the tab name
+   ("Language", "Audio") this cannot be told apart. It is quiet and not in
+   capitals: it is not one more item. */
+.win-group { margin:16px 0 5px; padding:0 12px; font-size:11.5px; color:var(--dim); }
+.win-group:first-child { margin-top:2px; }
+
+/* A tab is a button without a border: a gray icon and a name; the selected one has a light
+   fill (`--btn-hover`), like the selected item in other lists of the app, with no accent
+   color. The selector has a class, not just `button`: the general button rule above paints
+   the border and background on hover and would override the local ones. */
+.win-tab { display:flex; align-items:center; gap:12px; width:100%; height:38px; padding:0 12px;
+           background:none; border:1px solid transparent; border-radius:6px;
+           color:var(--dim); font:inherit; font-size:14px; text-align:left; white-space:nowrap; }
+.win-tab svg { flex:none; width:18px; height:18px; fill:none; stroke:currentColor;
+               stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+.win-tab span { min-width:0; overflow:hidden; text-overflow:ellipsis; }
+.win-tab:hover:not(:disabled) { background:rgba(255,255,255,.05); border-color:transparent; color:var(--text); }
+.win-tab[aria-selected="true"],
+.win-tab[aria-selected="true"]:hover:not(:disabled) { background:var(--btn-hover); border-color:transparent;
+                                                       color:var(--text); }   /* not bold (2026-10-08): the selected one is visible by the fill and the color */
+.win-tab:focus-visible { outline:2px solid var(--focus); outline-offset:-2px; }
+.win-foot { flex:none; padding:10px 12px 0; font-size:11px; color:var(--meta); }
+.win-foot:empty { display:none; }
+
+/* The right part is the only thing that scrolls. The panels lie in a column so that the
+   account sign-in form has something to divide equally (`margin:auto`, below). */
+.win-main { min-width:0; min-height:0; overflow-y:auto; padding:30px 38px 36px; }
+.win-panels { display:flex; flex-direction:column; min-height:100%; }
+.win-panel { flex:1; min-width:0; }
+.win-panel[hidden] { display:none; }
+.win-head { margin:0 0 22px; }
+.win-title { margin:0; font-size:16px; font-weight:600; color:var(--text); }
+.win-lead { margin:6px 0 0; max-width:62ch; font-size:13px; line-height:1.5; color:var(--dim); }
+.win-lead:empty { display:none; }
+/* Account: sign-in and registration are one narrow form, and it stands in the middle of the
+   window rather than pressed to the tab header: `margin:auto` on `.ac-auth` (below) divides
+   all the free space in the column equally, which requires the column itself to have a
+   height. */
+.win-panel.account { display:flex; flex-direction:column; }
+.win-panel.account[hidden] { display:none; }
+.win-panel.account > .sheet-body { flex:1; }
+
+/* A narrow window: the left column becomes a strip of tabs at the top, with icons and names
+   in a row, while the group captions and the version number hide, since there is no room
+   for them. */
+@media (max-width:760px) {
+  .win { width:calc(100vw - 16px); height:calc(100vh - 16px);
+         grid-template-columns:minmax(0, 1fr); grid-template-rows:auto minmax(0, 1fr); }
+  .win-side { flex-direction:row; align-items:center; gap:8px; padding:8px;
+              border-right:0; border-bottom:1px solid var(--slab-edge); }
+  .iconbtn.win-close { margin:0; }
+  .win-tabs { flex-direction:row; gap:4px; overflow-x:auto; overflow-y:hidden; }
+  /* The scrollbar is visible, even if thin: eleven tabs do not fit into 690px, and without it
+     you cannot see that "Payment" and "Account" are on the right (the mouse
+     wheel does not scroll sideways; `chrome.js` converts it to horizontal). */
+  .win-tabs::-webkit-scrollbar { height:8px; }
+  .win-group, .win-foot { display:none; }
+  .win-tab { width:auto; flex:none; height:34px; padding:0 10px; gap:8px; }
+  .win-main { padding:20px 16px 24px; }
+}
+
+/* The embedded look of the settings page itself. The transitions hide, since the outer panel
+   provides them; the "Cancel"/"Save" buttons are gone from the header altogether, because
+   the page saves itself (`scheduleSave` in admin.js) and the buttons had nothing left to do.
+   The "restart needed" bar stays visible: it has not moved anywhere. */
+body[data-embedded] .top { display:none; }
+body[data-embedded] header {
+  position:static; background:none; backdrop-filter:none; -webkit-backdrop-filter:none;
+  border-bottom:0; box-shadow:none;
+}
+
+.sheet-head { display:flex; align-items:center; gap:8px; padding:2px 4px 10px; }
+.sheet-head b { font-size:13px; letter-spacing:.06em; }
+/* The shift to the right is for the case when the panel one day puts something else here
+   next to the cross, not just the cross itself; for now there is only the cross. */
+.sheet-head-tools { display:flex; align-items:center; gap:8px; margin-left:auto; }
+
+/* ---------- buttons ---------- */
+
+/* Icon buttons live here and only here.
+
+   Before, their look lived in the dashboard styles, while the size of the menu button was in
+   the shared file, and the shared file lost: it is included earlier, and at equal
+   specificity the rule lower down wins. Because of that, the menu button ended up the wrong
+   size twice, and both times the cause was not where it was being looked for.
+
+   No outline (2026-10-07; requirement: get rid of the outlines on such buttons so that
+   everything is in a modern style): at rest only the icon is visible, and on hover a soft
+   fill shows up under it. A small square with a border around every icon in the header, in
+   the answer cards, and in rows read as an extra cage around something that is clear from
+   the icon anyway. The place for the border stays: a transparent 1px one, so the button
+   sizes do not change and pages without `box-sizing:border-box` do not shift by a pixel.
+   Buttons with text, fields, and lists keep the border: it is a different kind of element. */
+.iconbtn {
+  padding:0; width:26px; height:26px;
+  display:inline-grid; place-items:center; flex:0 0 auto; cursor:pointer;
+  background:transparent; border:1px solid transparent; border-radius:6px;
+  transition:background .12s;
+}
+.iconbtn svg {
+  width:14px; height:14px; fill:none; stroke:var(--dim, #9aa1ad);
+  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+  transition:stroke .12s;
+}
+/* Hover: the fill shows up, and the icon lightens to ordinary text. The edge does not appear
+   on hover or when pressed: the general button rule below (`button:hover`) paints it, and
+   here it is explicitly kept transparent. */
+.iconbtn:hover:not(:disabled) { background:var(--btn-hover); border-color:transparent; }
+.iconbtn:hover:not(:disabled) svg { stroke:var(--text); }
+.iconbtn:active:not(:disabled) { background:rgba(255,255,255,.05); border-color:transparent; }
+.iconbtn:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.iconbtn:disabled { opacity:.5; cursor:default; }
+/* Our own `display:inline-grid` above beats the browser's `[hidden]`. Without this line, a
+   button hidden by the markup until it is ready (account and settings in index.html while
+   their server is not configured) would stay in place as an empty clickable button instead
+   of disappearing altogether. */
+.iconbtn[hidden] { display:none; }
+
+/* The ghost variant has a shell that is transparent at rest. Since no icon button has an
+   outline now, it looks the same as the ordinary one; the class is kept because the markup
+   relies on it (the "i" with an explanation in `admin.js`, the window cross in `chrome.js`),
+   and so do the rules next to it. Nothing needs to be added on hover/focus/press: the
+   ordinary `.iconbtn` rules above are more specific and override this fill by themselves. */
+.iconbtn.ghost { background:none; border-color:transparent; }
+
+/* Icons in the header (back, settings, detach, "Record", and others) are plates
+   with a border again, like the `.power`/`.src` blocks next to them (2026-10-07;
+   requirement: bring the buttons back everywhere in the header). The other icons, at
+   answers, in list rows, and in windows, are still bare: the rule applies only to buttons
+   inside `<header>`. `.ghost` and the "i" with an explanation stay bare (their rules are
+   stronger). A pressed one (`aria-pressed`) has the hover fill permanently, as before. */
+header .iconbtn { background:var(--btn); border-color:var(--btn-edge); }
+header .iconbtn:hover:not(:disabled),
+header .iconbtn:active:not(:disabled) { background:var(--btn-hover); border-color:var(--btn-edge-hover); }
+
+/* The buttons in the header itself, settings and account, are larger than the other icons,
+   and the rule stands BELOW the general one: they have the same specificity, and the order
+   decides. This was stepped on twice in one week, once across two files and the second time
+   within one. The size follows the tallest neighbor in the header, the recognition switch:
+   thirty-five. */
+.hdr-btn { width:35px; height:35px; }
+.hdr-btn svg { width:18px; height:18px; }
+
+/* The small variant is 22px, sized for a card row, not for the header: the arrow "show the
+   whole question", "again"/"edit" at an answer, and the cross that deletes a material in
+   settings. Before, each of them carried its own copy of the same shell (the same
+   background, the same border, the same hover), rewritten anew for these four pixels of
+   height; a fix to one no longer reached the others by itself. The icon stays 14px, like the
+   base `.iconbtn`: only the shell itself changes. */
+.iconbtn.sm { width:22px; height:22px; }
+/* Action icons under an answer have the same size on all screens: the work screen (again,
+   fix, copy) and "Recording" (the same plus PDF). They are small, like the ordinary
+   `.sm` (22px, icon 14px). Larger ones (30/17) were made on the Record page on request, and
+   later the requirement was given to make them smaller, as they used to be on the record
+   page (2026-10-07). The size is set here, not on each page: otherwise they would drift
+   apart again. */
+.iconbtn.act { width:22px; height:22px; }
+.iconbtn.act svg { width:14px; height:14px; }
+
+/* Confirmation on the copy button (`flash` in chrome.js; at an answer on the work screen, at
+   an answer on "Recording", and at a code block): for a second the icon becomes a
+   white check mark, not a green icon (requirement, 2026-10-08: just a white check mark), and
+   if the copy failed it turns red. The check mark is a second `svg.done` in the button:
+   hidden at rest, and with `.copied` the previous icon hides and the check mark takes its
+   place. The rules stand below the `.iconbtn:hover svg` hover and are not weaker than it,
+   so a mouse left over the button after the click repaints nothing. */
+.iconbtn > svg.done { display:none; }
+.iconbtn.copied > svg { display:none; }
+.iconbtn.copied > svg.done { display:block; stroke:var(--text); }
+.iconbtn.failed:not(:disabled) svg { stroke:var(--bad); }
+
+/* A code block in an answer (the work screen and "Recording"; the wrapper and the icon
+   are put there by `md` and `renderMd`, and the click is handled by `chrome.js`): the "copy
+   code" icon is the shared `.iconbtn.act` in the top right corner of the block, always
+   visible (requirement, 2026-10-08: always show the copy button). The wrapper is exactly the
+   size of the code block (the block itself has its own outer margin, which collapses through
+   the wrapper), and the icon does not move when a long line of code scrolls. The icon has no
+   background, like any icon: the fill shows up only on hover, by the shared `.iconbtn:hover`
+   rule (requirement, 2026-10-08: remove the background, it should appear only on hover).
+   Before, there was a solid `--bg` to hide the letters under the icon; the price of dropping
+   it is that on a long first line the icon lies over the text. Do not add background rules
+   of your own here: the shared ones give both transparency at rest and a smooth appearance
+   of the fill. */
+.codeblock { position:relative; }
+.codeblock > .codecopy { position:absolute; top:5px; right:5px; }
+
+/* The general fallback focus, for everything that has none of its own (`.iconbtn`,
+   `.ac-input`, and others with a targeted rule nearby win by their specificity). Without it,
+   a field or button without a rule of its own picks up the system WebView2 outline, which is
+   an alien white on dark glass, exactly the substitution that was already fixed for `#q` in
+   index.html. */
+:where(button,a,input,textarea,select,summary):focus-visible {
+  outline:2px solid var(--focus); outline-offset:2px;
+}
+
+button {
+  background:var(--btn); color:var(--dim); border:1px solid var(--btn-edge);
+  border-radius:7px; padding:6px 15px; cursor:pointer; font:inherit;
+  transition:background .12s, border-color .12s, color .12s;
+}
+/* The text is dimmer at rest and lightens to ordinary on hover, together with the border and
+   fill: the same technique as `.key` in design/argus.css and `.iconbtn` above (that one has
+   long done this through `stroke`, here the same is done through `color`), a tidy neutral
+   response, one for all the buttons. An accent fill belongs to one button on the screen
+   (`.go`, below), not to all of them at once and not from a mere hover. */
+button:hover:not(:disabled) { background:var(--btn-hover);
+                              border-color:var(--btn-edge-hover); color:var(--text); }
+button:disabled { opacity:.45; cursor:default; }
+button.small { padding:3px 10px; font-size:12px; }
+/* It used to hold its dim color in a separate line; now exactly the same value is already on
+   the ordinary button at rest (above), so there is nothing to repeat. The difference between
+   the "ghost" button and the ordinary one stayed where it was: the fill and the border are
+   transparent, not the text. */
+button.ghost { background:transparent; border-color:var(--btn-edge); }
+button.ghost:hover:not(:disabled) { background:var(--btn); }
+/* In a window (the "flat look", above) it has no edge at all: it is a bare button with text,
+   like "Cancel" in a dialog. The fill on hover is the same as for the other buttons
+   of the window, not the pale resting `--btn`. */
+:is(.win, .dialog, .sheet, .legal-view) button.ghost:hover:not(:disabled) { background:var(--btn-hover); }
+/* An up arrow instead of the word "Ask" (2026-10-08; requirement: replace the
+   send icon with an up arrow everywhere, as in typical chat apps; before that it was a paper
+   plane, and before that an up arrow: on 2026-10-07 it was changed to a plane, and on
+   2026-10-08 the arrow was returned). A square button sized to the height of the field and
+   the neighboring icons (`.ask #ask` in index.html keeps the same 35px), not elastic to the
+   length of a caption. The background and border are the same as on the ordinary button: the
+   same dim-at-rest/bright-on-hover response, only through `stroke:currentColor` on the svg,
+   not `color` on the text. There is still no second accent fill on the screen.
+
+   With an outline, unlike the other icon buttons (`.iconbtn` above, which have none): it is
+   the main action at the question field, and the outline keeps it with the field as one
+   pair, rather than a bare icon in the corner (requirement, 2026-10-07: bring the outline
+   back here). */
+button.go { background:var(--btn); border-color:var(--btn-edge);
+            padding:0; display:inline-flex; align-items:center; justify-content:center; }
+button.go svg { width:16px; height:16px; fill:none; stroke:currentColor;
+                stroke-width:2.3; stroke-linecap:round; stroke-linejoin:round; }
+/* The background is repeated explicitly, not inherited: the general button rule is more
+   specific than `button.go { background }` without pseudo-classes, and on hover it would
+   repaint the main button the same gray as all the others. */
+button.go:hover:not(:disabled) {
+  background:var(--btn-hover); border-color:var(--glass-edge-top);
+}
+
+/* While there is nothing to do, the main button must not look broken. Transparency gives
+   exactly that impression, so instead we dim the button to the ordinary state: it is in
+   place, it is just waiting. */
+button.go:disabled { background:transparent; color:var(--faint, #5b6270);
+                     border-color:var(--line); opacity:1; }
+
+/* There used to be a permanent ring around the button here, and it was removed. It was meant
+   as a soft glow, but came out as a hard ring without blur (`0 0 0 3px`), and on a dark
+   background a semi-transparent accent in it reads not as a glow but as a muddy border
+   around a border. The accent fill is already the only bright spot next to the gray
+   buttons, and it does not need a glow for weight. */
+
+/* An input field with its own "send" button inside one frame (`.composer`): "Recording"
+   (a textarea that grows up to six lines) and the question row on the work screen
+   and in windows (one line, `input`). One look everywhere (requirement, 2026-10-07: make a
+   similar input field everywhere in the project; then: one icon everywhere and one color
+   everywhere, like the blocks of the main screen). The fill and edge are the same as for the
+   blocks (`--slab`, `--slab-edge`, like `.panel` on the work screen), not the dark glass
+   `--field`. The send button is always `button.go` with an up arrow, and its icon and size
+   come from `.go`. The frame and fill belong to the wrapper, not to the field itself: inside,
+   the field is bare, and focus is visible by the frame of the whole row. The button is on
+   the right, at the bottom edge: as the field grows, it stays at the last line. The corners
+   are 9px, like the cards and the question row before, not almost round. */
+/* The left padding of 14px is the same `--inset-x` as in the blocks of "Recording"
+   (record.html): the text in the field stands where it does in a card and in a bubble. */
+.composer { display:flex; align-items:flex-end; gap:8px; padding:8px 8px 8px 14px;
+            border:1px solid var(--slab-edge); border-radius:9px; background:var(--slab); }
+/* Focus in a field is a noticeable edge (`--focus-edge`, about 5:1 against the window), not
+   the earlier `--glass-edge-top`: the frame at rest is .09, on focus .20, a change of 1.2:1,
+   and the eye cannot catch which field is accepting input (at least 3:1 is needed). The
+   fields have no bright ring: the app keeps to calm gray tones; the ring (`--focus`) is for
+   buttons and lists. */
+.composer:focus-within { border-color:var(--focus-edge); }
+/* A disabled field is dim as a whole (text, placeholder, frame), with an ordinary cursor. */
+.composer:has(:is(textarea, input):disabled) { opacity:.45; cursor:default; }
+.composer > :is(textarea, input[type=text]) { flex:1; min-width:0; width:auto; height:auto; padding:6px 0;
+            border:0; border-radius:0; outline:0; resize:none; background:transparent;
+            color:var(--text); font:inherit; line-height:1.5; }
+.composer > :is(textarea, input[type=text]):disabled { cursor:default; }
+.composer > :is(textarea, input[type=text])::placeholder { color:var(--dim); }
+.composer > button, .composer > .attach { flex:none; }
+.composer > button { width:34px; height:34px; padding:0; border-radius:7px; display:grid; place-items:center; }
+
+/* ---------- scrollbars ---------- */
+
+/* `color-scheme` comes first, and it matters more than the bars themselves: it colors
+   everything that is drawn not by the page but by the browser: dropdown lists, the file
+   picker field, the autofill highlight. Without it, on a dark page they are white, and that
+   is more noticeable than any scrollbar. */
+:root { color-scheme:dark; }
+
+/* Next, the bars themselves. We use the WebKit pseudo-elements, not the standard
+   `scrollbar-color`/`scrollbar-width`. First, the interface lives in WebView2, that is, in
+   Chromium, and the fallback path here is theoretical. Second, with the standard properties
+   you cannot set the rounding and the inset from the edge, and without them the bar remains
+   a separate object on top of the page. They must not be mixed: as soon as `scrollbar-color`
+   is set, Chromium stops applying the pseudo-elements altogether. */
+::-webkit-scrollbar { width:10px; height:10px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-corner { background:transparent; }
+
+/* A transparent border with `background-clip` is the only way to move the thumb away from
+   the edge: `margin` on a pseudo-element does not work. */
+::-webkit-scrollbar-thumb {
+  background:var(--line2); border-radius:8px;
+  border:2px solid transparent; background-clip:padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,.22); background-clip:padding-box; }
+
+/* Fallback path for engines without the pseudo-elements. */
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width:thin; scrollbar-color:var(--line2) transparent; }
+}
+
+/* ---------- shared blocks: tiles, note ----------
+
+   They were in `admin.css` while only the settings page drew them. They moved here when the
+   account block appeared in the slide-out menu of the dashboard too: the pages have
+   different markup but the same block inside, and half of the styling would look like a
+   breakage rather than a different page. */
+.tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+         gap:10px; }
+.tile { background:var(--slab); border:1px solid var(--slab-edge); border-radius:8px;
+        padding:10px 13px; }
+.tile .k { font-size:11px; color:var(--dim); letter-spacing:.04em; }
+.tile .v { font-size:20px; font-variant-numeric:tabular-nums; margin-top:2px; }
+.tile .v small { font-size:12px; color:var(--dim); }
+.tile.bad .v { color:var(--bad); } .tile.ok .v { color:var(--ok); }
+
+.note { background:var(--slab); border:1px solid var(--slab-edge);
+        border-left:2px solid var(--line2); border-radius:10px;
+        padding:10px 13px; font-size:12.5px; color:var(--dim); }
+.note.warn { border-left-color:var(--warn); }
+.note.bad { border-left-color:var(--bad); }
+.note b, .note strong { color:var(--text); font-weight:600; }
+
+/* ---------- account block ----------
+
+   One markup for two places: a section in the settings and the panel opened by the person
+   button in the header. Their widths differ, 840 and up to 760, so everything here stretches
+   and does not sit in a grid of fixed-width columns. */
+
+/* ---------- sign-in and registration ----------
+
+   The row used to be one per field and button together: the email on its own line, the
+   password and "Sign in" tight together on one. In a panel narrower than the
+   settings section, the button either dropped to a second line or squeezed against a
+   squashed field. Now each field has its own row, and the button follows across their full
+   width: a form, not a table of values and captions. */
+.ac-auth { display:flex; flex-direction:column; gap:12px; width:100%;
+           max-width:320px; }
+/* In the account panel the form stands alone and centers itself through `margin:auto`: in a
+   flex column it divides the free space equally on all four sides. Without it the form would
+   be pressed to the top edge of the panel rather than standing in the middle. In the
+   settings section this class is not involved: there the form is one item among many in a
+   scrolling list, and there is nothing to center it against. */
+.sheet-body.account .ac-auth { margin:auto; }
+
+.ac-heading { font-size:16px; text-align:center; margin:0 0 2px; }
+
+.ac-input { width:100%; height:var(--field-h); background:var(--field-fill); border:1px solid var(--field-edge);
+            border-radius:var(--field-r); color:var(--text); padding:0 12px;
+            font:inherit; font-size:14px; }
+/* The border lightens to white and is not painted with the accent: the same neutral
+   response as the header buttons, not a separate color for fields. */
+.ac-input:focus { outline:none; border-color:var(--focus-edge); }
+.ac-input::placeholder { color:var(--meta); }
+/* The field that caused the form to be refused. This is only for the check on this side: the
+   server's refusal does not name a field, see `drawSignIn` in account.js. */
+.ac-input.bad { border-color:var(--bad, #f0716b); }
+
+/* The browser sometimes fills a field by itself, from a password saved for this address,
+   without a single keystroke. Then "neither email nor password" to the eye and "only the
+   email is filled" in fact are different pictures, and the message about an empty password
+   looks as if the email was forgotten. Chromium's default yellow autofill fill is removed by
+   the common trick, a huge background transition duration, and the outline is painted with
+   the accent in the same way that the dashboard marks "chosen automatically rather than by
+   the user" (`select.dev.pinned` in index.html): here it is the same thing about a field. The
+   fill here stays solid (`--sunk`, not the transparent `--field`): a transparent one would
+   not cover what Chromium paints under it by itself. */
+.ac-input:autofill,
+.ac-input:-webkit-autofill {
+  -webkit-text-fill-color:var(--text);
+  -webkit-box-shadow:0 0 0 1000px var(--sunk, #08090b) inset;
+  transition:background-color 600000s ease-in-out 0s;
+  border-color:var(--me, #4fb8d8);
+}
+
+/* One line for all the reasons: an empty field, a foreign email format, a short password, a
+   taken email, a wrong pair at sign-in, a closed account, a network drop. The causes are
+   different, the place is the same. It stands between the fields and the button: where the
+   eye lands by itself after pressing "Sign in". */
+.ac-error { color:var(--bad, #f0716b); font-size:12.5px; }
+.ac-error[hidden] { display:none; }
+
+/* The eye lies on top of the field, not next to it: a password is typed blind, and it is
+   easier to check it by eye without taking your gaze off the same line. The field is
+   `position:relative`, the eye is `absolute` inside it, with the text padded for the icon, so
+   a long password does not run behind it. */
+.ac-pass { position:relative; }
+.ac-pass .ac-input { padding-right:36px; }
+/* WebView2 (Edge) has its own built-in eye for `type="password"`, drawn exactly where ours
+   stands. Two eyes on one field are confusing: which one should be pressed? We remove the
+   native one completely and keep only ours. */
+.ac-pass .ac-input::-ms-reveal,
+.ac-pass .ac-input::-ms-clear {
+  display:none; width:0; visibility:hidden; pointer-events:none;
+}
+.ac-eye { position:absolute; top:0; right:0; height:100%; width:36px;
+          padding:0; display:grid; place-items:center;
+          background:none; border:0; cursor:pointer; }
+/* `:not(:disabled)` here again is not about the disabled state (this button does not use
+   it) but about specificity: without it, on hover the general button rule wins and paints
+   the transparent icon with a gray rectangle, the same trap that was already fixed for
+   `.linklike`. */
+.ac-eye:hover:not(:disabled) { background:none; }
+.ac-eye svg { width:17px; height:17px; fill:none; stroke:var(--dim, #9aa1ad);
+              stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;
+              transition:stroke .12s; }
+.ac-eye:hover svg { stroke:var(--text); }
+.ac-eye:focus-visible { outline:2px solid var(--focus); outline-offset:-2px; }
+
+/* The main form button is `.cta` (markup in account.js); here is only the width: the full
+   width of the form. The height is the shared 35px, like the field above it: the former 40px
+   for the button and about 45px for the field were three different "standards" on one form
+   (2026-10-08; requirement: standardize this). */
+.ac-submit { width:100%; font-size:14px; }
+/* The form buttons ("Sign in", "Create account", "Send
+   link") follow "variant A" from the variants page (2026-10-08; variant A was
+   chosen): a gray plate without an outline, dim text, and on hover a lighter fill and text.
+   The fill is a literal number, not `--btn`: outside a window (the sign-in screen on the
+   home page) `--btn` is half as pale as in a window, and the form came out different. The
+   outline is off: a gray outline on a plate read as a separate frame (the second attempt,
+   B). The transitions "Sign up" / "I already have an account"
+   / "Back to sign in" are still links (`.linklike`): the
+   requirement to style registration the same way concerned the "Create account" button,
+   not the link. */
+.ac-submit { background:rgba(255,255,255,.055); border:1px solid transparent; color:var(--dim); }
+.ac-submit:hover:not(:disabled), .ac-submit:active:not(:disabled) {
+  background:var(--btn-hover); border-color:transparent; color:var(--text); }
+
+/* At the right edge, right under the password field: where it is looked for when the
+   password does not fit. The eye is already on this field, not at the end of the form by the
+   button. `align-self`, not text-align on the whole line: `.ac-auth` is a flex column, and
+   this takes out only this one line from the full-width stack. */
+.ac-forgot { align-self:flex-end; font-size:12.5px; margin-top:-6px; }
+
+.ac-swap { margin:0; text-align:center; font-size:12.5px; color:var(--dim); }
+
+/* Not a button with a border in the middle of a phrase but an ordinary link inside text. A
+   border there would read as a separate object glued into someone else's sentence, not as
+   part of the same sentence. */
+.linklike { display:inline; padding:0; background:none; border:0;
+            color:var(--dim); font:inherit; font-size:inherit;
+            cursor:pointer; text-decoration:underline;
+            text-underline-offset:2px; }
+/* `:not(:disabled)` in the selector is not for the disabled state (a link has none) but for
+   specificity: without it, the general button rule paints the background with a gray
+   rectangle over the text, and the link turns for a moment into a button with a border,
+   exactly what it was freed from. */
+.linklike:hover:not(:disabled) { background:none; color:var(--text); }
+.linklike:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+
+/* The account is arranged like a payment page in familiar services, as one ribbon without
+   tabs: flat sections with an ordinary heading, while the numbers live in tables and on the
+   chart. Colors and edges are the app's tokens (`--slab`, `--line`, `--btn`), so it fits in
+   with the rest, and all the "seriousness" is in the grid and the air, not in the coloring:
+   no filled tiles, no uppercase letter-spaced labels, and no color while everything is fine. */
+.sheet-body.account { gap:0; }
+
+/* Who you are: the first plate of the "Account" tab (2026-10-08; requirement:
+   everything here is crooked). A tile with a letter, the same as the icon tiles in the
+   settings rows (40px, 6px corner), and the email and "Sign out" at the right as an
+   ordinary button. The plate spans the whole width of the tab, like the others: the earlier
+   row with a 26px circle stood 2px to the right of their edges and right against the plate
+   under it. */
+.ac-top { display:flex; align-items:center; gap:14px; padding:12px 16px; }
+.ac-box.ac-top { margin-top:0; }
+.ac-ava { flex:none; display:grid; place-items:center; width:40px; height:40px;
+          border-radius:6px; border:1px solid var(--line2, var(--line));
+          background:var(--slab, rgba(255,255,255,.03)); color:var(--dim);
+          font-size:15px; font-weight:600; }
+.ac-top .ac-mail { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis;
+                   white-space:nowrap; font-size:14px; font-weight:600; color:var(--text); }
+.ac-top .out { flex:none; }
+
+.ac-sec { margin-top:30px; }
+.ac-sec.first { margin-top:16px; }
+.ac-h { margin:0; display:flex; align-items:baseline; gap:10px;
+        font-size:14px; font-weight:600; color:var(--text); }
+.ac-sub { margin:3px 0 0; font-size:12.5px; line-height:1.5; color:var(--dim); }
+
+/* The frame around the block is the same plate as the settings cards. */
+.ac-box { margin-top:12px; background:var(--slab, rgba(255,255,255,.03));
+          border:1px solid var(--slab-edge, var(--line)); border-radius:11px; }
+.ac-box.stale { opacity:.55; }
+.ac-sec.first > .ac-box:first-child { margin-top:0; }
+.ac-empty { padding:24px 18px; text-align:center; font-size:var(--t-small); color:var(--dim); }
+
+/* Balance. The largest thing on the panel, and without color while everything is fine:
+   green in this app means "on the air", that is, an action, while an account in order is
+   silence. Only what deserves a look is marked with color. The top-up button stands to the
+   right of the amount, level with it; when narrow, it goes under it. */
+.ac-bal { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+          gap:16px 20px; padding:20px 22px 18px; }
+.ac-bal-main { min-width:0; }
+.ac-k { display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--dim); }
+.ac-sum { margin-top:6px; font-size:40px; line-height:1.05; font-weight:600;
+          letter-spacing:-.025em; font-variant-numeric:tabular-nums; }
+/* The cents and the dollar sign are quieter than the whole part: at first glance it reads
+   "how many dollars", and the details show if you look closer. */
+.ac-sum .ac-cents { font-size:.55em; font-weight:500; letter-spacing:0; color:var(--dim); }
+.ac-sum .ac-cur { margin-right:1px; font-size:.62em; font-weight:500; vertical-align:.32em;
+                  color:var(--dim); letter-spacing:0; }
+.ac-note { margin-top:8px; font-size:var(--t-small); color:var(--dim); }
+.ac-sum.warn { color:var(--warn); }
+.ac-sum.bad  { color:var(--bad); }
+.ac-note.warn { color:var(--warn); }
+.ac-note.bad  { color:var(--bad); }
+.ac-badge { padding:1px 8px; border-radius:20px; border:1px solid var(--line2, var(--line));
+            font-size:11px; font-weight:500; line-height:1.6; }
+.ac-badge.warn { color:var(--warn); border-color:rgba(224,178,62,.4); }
+.ac-badge.bad  { color:var(--bad);  border-color:rgba(240,113,107,.4); }
+/* "Top up" is the main button of the tab, `.cta` (markup in account.js); here
+   only the size: slightly taller and wider than ordinary. */
+.ac-add { flex:none; height:38px; padding:0 22px; }
+
+/* Three figures under the amount: what was spent and how long the balance will last. They
+   are separated by a thin line, like table cells; on a narrow panel they stack in a column. */
+.ac-stats { display:flex; border-top:1px solid var(--line); }
+.ac-stat { flex:1 1 0; min-width:0; padding:13px 22px 14px;
+           border-left:1px solid var(--line); }
+.ac-stat:first-child { border-left:0; }
+.ac-stat span { display:block; font-size:12px; color:var(--dim); }
+.ac-stat b { display:block; margin-top:3px; font-size:16px; font-weight:600;
+             font-variant-numeric:tabular-nums; }
+@media (max-width:540px) {
+  .ac-stats { flex-direction:column; }
+  .ac-stat { border-left:0; border-top:1px solid var(--line); padding:11px 22px; }
+  .ac-stat:first-child { border-top:0; }
+}
+
+/* A custom amount (the "Payment" tab, `mountBilling`): a field with a dollar sign
+   inside one frame. The edge lightens when the field has focus. */
+.ac-pay { flex:1 1 230px; display:flex; align-items:stretch; height:36px;
+          overflow:hidden; background:var(--input-fill, var(--field));
+          border:1px solid var(--input-edge, var(--line));
+          border-radius:8px; transition:border-color .15s; }
+.ac-pay:focus-within { border-color:var(--focus-edge); }
+.ac-pay .ac-pre { display:flex; align-items:center; padding:0 2px 0 12px; color:var(--dim); }
+.ac-pay input { flex:1; min-width:0; background:none; border:0; outline:none;
+                padding:0 8px; font:inherit; color:var(--text);
+                font-variant-numeric:tabular-nums; -moz-appearance:textfield; }
+.ac-pay input::-webkit-outer-spin-button,
+.ac-pay input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+.ac-pay input::placeholder { color:var(--meta); }
+
+/* The "Payment" tab (`mountBilling` in account.js; 2026-10-08; requirement: instead
+   of the account, make a separate tab with payment). The amount tiles are gray, like all the
+   buttons of the app: the selected one is lighter and has an edge, with no accent color. In
+   a window (`.win`) the `--btn*` tokens are flat, and the edge is visible only on the
+   selected one. */
+.pay-tiles { display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-top:12px; }
+.pay-tile { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+            height:64px; padding:0 8px; border-radius:6px; cursor:pointer; font:inherit; color:var(--text);
+            background:var(--btn); border:1px solid var(--btn-edge); font-variant-numeric:tabular-nums;
+            transition:background .12s, border-color .12s; }
+.pay-tile b { font-size:20px; font-weight:600; }
+.pay-tile span { font-size:12px; color:var(--dim); }
+.pay-tile:hover { background:var(--btn-hover); border-color:var(--btn-edge-hover); }
+/* `:hover` of the selected tile is a separate selector: the general button rule
+   (`button:hover:not(:disabled)`, above in the file) is stronger than `[aria-pressed]`, and
+   in a window, where the edge on hover is transparent, it erased the edge of the selected
+   one exactly when the mouse was still over it after the click, so the selection did not
+   differ from a simple hover. The same technique as `.win-tab[aria-selected]`. */
+.pay-tile[aria-pressed="true"],
+.pay-tile[aria-pressed="true"]:hover:not(:disabled) { background:var(--btn-hover); border-color:var(--glass-edge-top); }
+.pay-tile:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.pay-custom { display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; margin-top:10px; }
+.pay-custom .ac-pay { flex:0 0 220px; height:38px; }
+.pay-custom .ac-pay.on { border-color:var(--glass-edge-top); }
+/* In a window the fill and edge of fields are flat (the `--input-*` tokens are substituted),
+   and the amount field would vanish on the dark window: we draw it with the same outline as
+   the single-line settings fields, 35px. */
+.win .pay-custom .ac-pay { height:var(--field-h); border:1px solid var(--field-edge); background:var(--field-fill); border-radius:var(--field-r); }
+.win .pay-custom .ac-pay.on { border-color:var(--glass-edge-top); }
+.win .pay-custom .ac-pay:focus-within { border-color:var(--focus-edge); }
+.pay-custom .ac-sub { margin:0; }
+.ac-error + .pay-sum, .pay-custom ~ .pay-sum { margin-top:14px; }
+.ac-error:not([hidden]) { margin-top:8px; }
+.pay-sum[hidden] { display:none; }
+.pay-sum-h { padding:12px 22px 0; font-size:12.5px; color:var(--dim); }
+.pay-sum .ac-stats { border-top:0; }
+.pay-go { width:100%; height:44px; margin-top:14px; font-size:15px; color:var(--text); }
+.pay-go:disabled { color:var(--dim); }
+.pay-fine { margin-top:10px; text-align:center; }
+
+/* Waiting for payment and the result are one plate instead of the choice of an amount. */
+.pay-status { display:flex; align-items:flex-start; gap:16px; padding:20px 22px; }
+.pay-status h3 { margin:0; font-size:16px; font-weight:600; }
+.pay-status p { margin:4px 0 0; color:var(--dim); font-size:13px; }
+.pay-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.pay-mark { flex:none; width:22px; height:22px; margin-top:2px; }
+.pay-mark svg { width:22px; height:22px; stroke:var(--ok); stroke-width:2; }
+.pay-url { display:block; margin-top:8px; padding:8px 10px; border-radius:6px; font:12px/1.4 Consolas,ui-monospace,Menlo,monospace;
+           color:var(--dim); word-break:break-all; -webkit-user-select:all; user-select:all; background:rgba(255,255,255,.04); }
+.pay-spin { flex:none; width:20px; height:20px; margin-top:2px; border-radius:50%;
+            border:2px solid var(--line2); border-top-color:var(--text); animation:pay-spin .9s linear infinite; }
+@keyframes pay-spin { to { transform:rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .pay-spin { animation:none; } }
+.pay-message { text-align:center; }
+.pay-message p { margin:6px 0 16px; color:var(--dim); }
+@media (max-width:560px) { .pay-tiles { grid-template-columns:repeat(2, 1fr); } }
+
+/* The spending chart: bars by day, each stacked from services. The shades are of one color,
+   with the denser ones lower in the stack; multicolor would only get in the way here. Today
+   is slightly brighter, and the bar under the cursor is the brightest. The tooltip is its
+   own (`.ac-tip`). */
+.ac-chartbox { padding:16px 18px 10px; }
+.ac-chead { display:flex; align-items:flex-start; justify-content:space-between;
+            flex-wrap:wrap; gap:10px 18px; margin-bottom:8px; }
+.ac-chead .ac-k { font-size:12px; }
+.ac-big { margin-top:2px; font-size:24px; font-weight:600; letter-spacing:-.015em;
+          font-variant-numeric:tabular-nums; }
+.ac-legend { display:flex; flex-wrap:wrap; gap:6px 14px; padding-top:3px;
+             font-size:12px; color:var(--dim); }
+.ac-legend span { display:inline-flex; align-items:center; gap:6px; }
+.ac-chartwrap { position:relative; }
+.ac-chart { display:block; max-width:100%; height:auto; overflow:visible; }
+.ac-chart text { font-size:10.5px; fill:var(--dim); font-variant-numeric:tabular-nums; }
+.ac-chart .grid line.dash { stroke:var(--line); stroke-width:1; stroke-dasharray:2 5; }
+.ac-chart .grid line.base { stroke:var(--line2, var(--line)); stroke-width:1; }
+.ac-chart .zero { fill:var(--text); opacity:.18; }
+.ac-chart .ac-bar > g { fill:var(--text); transition:filter .12s; }
+.ac-chart .ac-bar .k0 { opacity:.78; }
+.ac-chart .ac-bar .k1 { opacity:.46; }
+.ac-chart .ac-bar .k2 { opacity:.24; }
+.ac-chart .ac-bar.now > g { filter:brightness(1.15); }
+.ac-chart .ac-bar:hover > g { filter:brightness(1.35); }
+.ac-chart .hit { fill:transparent; cursor:default; }
+.sw { display:inline-block; width:9px; height:9px; border-radius:3px; background:var(--text); }
+.sw.k0 { opacity:.78; } .sw.k1 { opacity:.46; } .sw.k2 { opacity:.24; }
+.ac-tip { position:absolute; z-index:2; min-width:150px; padding:9px 11px;
+          background:var(--panel, #171b21); border:1px solid var(--line2, var(--line));
+          border-radius:8px; font-size:12px; pointer-events:none;
+          box-shadow:0 6px 18px rgba(0,0,0,.35); }
+.ac-tip[hidden] { display:none; }
+.ac-tip b { display:block; color:var(--dim); font-weight:500; }
+.ac-tip strong { display:block; margin:1px 0 5px; font-size:15px; font-variant-numeric:tabular-nums; }
+.ac-tip div { display:flex; align-items:center; gap:6px; color:var(--dim); }
+.ac-tip div em { margin-left:auto; padding-left:14px; font-style:normal; color:var(--text);
+                 font-variant-numeric:tabular-nums; }
+.ac-tip .none { color:var(--meta); }
+
+/* Tables. Thin lines between rows, column captions in small gray, numbers right-aligned and
+   digits of equal width so that a column reads top to bottom. The row under the cursor
+   lightens slightly. When narrow, the table scrolls sideways inside its frame and does not
+   break the page. */
+.ac-scroll { overflow-x:auto; }
+.ac-table { width:100%; border-collapse:collapse; font-size:13px; }
+.ac-table th { padding:11px 16px; text-align:left; white-space:nowrap;
+               font-size:12px; font-weight:500; color:var(--dim);
+               border-bottom:1px solid var(--line); }
+.ac-table td { padding:12px 16px; vertical-align:middle; border-top:1px solid var(--line); }
+.ac-table tbody tr:first-child td { border-top:0; }
+.ac-table tbody tr { transition:background .12s; }
+.ac-table tbody tr:hover { background:rgba(255,255,255,.025); }
+/* Not `.num`: in the design system that one has its own monospace font for the dashboard
+   digits, and in the table the prices with words ("$0.60 / hour") would look alien
+   next to it. */
+.ac-table .r { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+/* The top row of the header is a caption above a group of columns, without a line under it. */
+.ac-table tr.grp th { padding-bottom:0; border-bottom:0; font-size:11.5px; color:var(--meta); }
+.ac-table th.grp { text-align:right; }
+.ac-table .nowrap { white-space:nowrap; }
+.ac-table .dim { color:var(--dim); }
+.ac-table td small { display:block; margin-top:2px; font-size:11.5px; color:var(--meta); }
+.ac-table tfoot td { font-weight:600; background:rgba(255,255,255,.02); border-top:1px solid var(--line); }
+
+/* A service with an icon: the icon is a line drawing in the same gray as the captions. It
+   helps the eye find the row and does not compete with its name. */
+.ac-svc { display:inline-flex; align-items:center; gap:11px; }
+.ac-svc small { margin-top:1px; }
+.ac-svc .ico { flex:none; display:grid; place-items:center; width:28px; height:28px;
+               border-radius:8px; border:1px solid var(--line); color:var(--dim); }
+.ac-svc .ico svg { width:15px; height:15px; }
+
+
+/* The line about terms is under the "Create account" button, smaller and
+   quieter than the rest: it is not one more field but the thing that pressing the button
+   answers with consent. The links are underlined, like `.linklike`, not colored: color in
+   this app is taken. */
+.ac-legal { margin:0; text-align:center; font-size:11.5px; line-height:1.5; color:var(--meta); }
+.ac-legal a { color:var(--dim); text-decoration:underline;
+               text-underline-offset:2px; }
+.ac-legal a:hover { color:var(--text); }
+
+/* Terms and policy are a window above everything, including the slid-out account panel
+   (`.sheet-panel`, z-index 61). Inside is the document page (`legal/`), as a solid sheet: you
+   cannot read a long text with the dashboard showing through. We do not set our own
+   background: the document page paints it itself, so that the color does not diverge. */
+/* From the top by the height of the window strip (`--winbar`, set by `winbar.js` through the
+   class `html.desk`): the strip (z-index 1000) is above the document window, and without the
+   offset its "Close" lay under the strip's maximize/close buttons, and a click on
+   it minimized or closed the app itself. Without the strip (a browser tab) the variable is
+   absent, and the offset is zero. */
+.legal-view { position:fixed; inset:var(--winbar, 0px) 0 0 0; z-index:100; display:flex; flex-direction:column;
+              background:var(--bg, #0a0b0d); }
+.legal-bar { flex:none; display:flex; align-items:center; justify-content:space-between;
+             gap:12px; padding:10px 16px; background:var(--slab);
+             border-bottom:1px solid var(--slab-edge); font-size:14px; }
+.legal-frame { flex:1; width:100%; border:0; background:#0a0b0d; }
+
+/* The plate of a section of the "Account" tab ("Password"; the "Data"
+   block was removed, 2026-10-08). There are no links to the terms and policy here
+   (requirement: stop stuffing them everywhere; they should appear only at registration and
+   on the landing page): they remain only at the registration form (`.ac-legal`) and on the
+   landing page. */
+.ac-databox { padding:16px 18px; display:flex; flex-direction:column; gap:12px; }
+.ac-databox .ac-sub { margin:0; }
+.ac-row { display:flex; flex-wrap:wrap; gap:10px; }
+.ac-form { display:flex; flex-direction:column; gap:10px; padding-top:12px;
+                       border-top:1px solid var(--slab-edge, var(--line)); }
+.ac-form[hidden] { display:none; }
+/* A column, not a flow of blocks, for the sake of `margin:auto` on the sign-in form
+   (`.ac-auth` above): in an ordinary flow it would have nothing to push against, and in a
+   flex column it honestly divides the free space around the only child. A signed-in user has
+   several children, and they just follow one another. */
+.sheet-body.account { display:flex; flex-direction:column; }
+
+/* Plates and icons of the account in a window have no edge (the "flat look", at the start of
+   the file): the plate is slightly lighter than the window, and the icon is a soft plate.
+   The dividers inside a plate (lines between figures and table rows) stay: that is a grid,
+   not an outline. The selectors with `.win` have a specificity (0,2,0) above the rules
+   themselves (0,1,0), so the order does not matter. */
+.win .ac-box, .win .tile { background:rgba(255,255,255,.035); border-color:transparent; }
+.win .note { background:rgba(255,255,255,.035); border-top-color:transparent;
+             border-right-color:transparent; border-bottom-color:transparent; }
+.win .ac-ava, .win .ac-svc .ico { background:rgba(255,255,255,.06); border-color:transparent; }
+/* The "no connection" bar under the plate with the email: there was a zero gap
+   between them, and the corners stuck together. */
+.ac-top + .note { margin-top:12px; }
+.win .ac-badge { background:rgba(255,255,255,.07); border-color:transparent; }
+.win .ac-badge.warn { background:rgba(224,178,62,.14); border-color:transparent; }
+.win .ac-badge.bad  { background:rgba(240,113,107,.14); border-color:transparent; }
+/* The chart tooltip floats above it: it is separated by a shadow and needs no edge. */
+.win .ac-tip { background:#1a1e25; border-color:transparent; box-shadow:0 8px 22px rgba(0,0,0,.5); }
+
+/* ---------- select: its own arrow and its own open list ----------
+   Shared by both pages (moved here from admin.css when the microphone device list was needed
+   on the dashboard too): the page sets its own on top of this, namely the background color,
+   the field size, and the paddings. Here is only the shape of the arrow and what removes the
+   native one, plus the open list itself. */
+
+/* Our own arrow instead of the native browser one: arrow glyphs differ in size between
+   browsers and sit differently in the field, and in Chromium/Edge it is also drawn almost
+   against the right edge, without an outline of the field around it. On a dark page that
+   reads as a detail that slipped, not as an arrow in its place. `appearance:none` removes
+   the native one together with its padding, and then the arrow is an ordinary background
+   positioned manually on the padding.
+
+   A page that needs its own background under the select (`admin.css`, for example) cannot
+   set it through the `background` shorthand: it would reset this arrow to `none`. It needs
+   `background-color` separately. */
+select {
+  cursor:pointer; appearance:none; -webkit-appearance:none; padding-right:32px;
+  background-repeat:no-repeat; background-position:right 10px center; background-size:14px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa1ad' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 9l7 7 7-7'/%3E%3C/svg%3E");
+  /* A closed select lacked this: a long device name was cut off exactly at the edge of the
+     field, without any "…", which looks like a breakage rather than truncated text. It is
+     always read from the start of the string, not from the middle (`text-align:left`, in case
+     something above inherits another value). */
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left;
+}
+
+/* The open list of a select is drawn not by CSS but by JS (below, "our own list instead of
+   the native popup"): the native popup in WebView2 (Chromium) takes no styling at all
+   (checked live, not from the documentation), and shows a white background and a blue
+   highlight over a dark app. The colors here are theme variables, so the list does not look
+   like an insert from another app. */
+.combo-menu {
+  position:fixed; z-index:80; max-height:340px; overflow:auto;
+  background:var(--win);
+  border:1px solid var(--win-edge); border-radius:9px;
+  box-shadow:0 14px 30px -12px #000;
+  padding:5px; display:flex; flex-direction:column; gap:2px;
+}
+/* A list row is the same shell as `.iconbtn`: the border is transparent at rest (and on
+   hover too: since 2026-10-07 the items have no border at all, and on hover and selection
+   only the fill shows up; the transparent 1px stays for the sake of size). A list of devices
+   is also buttons, just with a name instead of an icon. A gap between the rows (`gap` on the
+   container, above): otherwise the highlight of neighboring items merged into one solid
+   strip and did not read as separate rows.
+
+   `white-space:nowrap`: the list stands on glass over anything, and the width is measured by
+   JS to fit the text (see `openCombo`), so after that there should almost never be a reason
+   to wrap a line inside an item. "Almost": when even the whole window width cannot hold the
+   longest option (a long device name in a narrow control-panel window), `openCombo` puts the
+   class `.combo-wrap` on the list, below, and then wrapping is the lesser evil compared to
+   text that is visibly cut off with no hint that it is cut. The name is deliberately
+   compound, not just `.wrap`: on the settings page that name is already taken for the grid of
+   the whole page (`.wrap{display:grid;...}` in admin.css), and a popup with two classes
+   inherited someone else's two-column layout instead of its own list, which looked exactly
+   broken. */
+/* The left padding is smaller than the right not for symmetry but so that the item text
+   stands level with the text of the closed select, not to the right of it. In a select the
+   text starts after the border (1px) and its own padding-left (11px in admin.css/index.html),
+   12px from the edge of the field. In the list the same text also passes the border and
+   padding of `.combo-menu` itself (1px + 5px) on top of the border and padding of the item:
+   without a correction it would be 18px, and the list would open with the text shifted 6px
+   to the right of the same text in the closed state. 5px here is 11 minus that very
+   difference. */
+.combo-menu .opt { padding:7px 11px 7px 5px; border:1px solid transparent; border-radius:6px;
+                   font-size:13px; cursor:pointer; position:relative; white-space:nowrap;
+                   text-align:left; transition:background .12s, border-color .12s; }
+.combo-menu.combo-wrap .opt { white-space:normal; }
+/* The item under the cursor lightens, like a window tab and a row of the session list.
+   Before, it darkened to the app background (`--bg`) and kept a thin border so that the dark
+   strip did not merge with the window edge; the window became darker, `--bg` is barely
+   visible on it, and the items have no border at all any more. */
+.combo-menu .opt:hover { background:var(--btn-hover); border-color:transparent; }
+/* The selection is not the same technique as hover, otherwise a selected item under the
+   cursor would be no different from a neighbor that is merely hovered. Hover is a light
+   strip for a while; selection is bold text and a fill permanently, with no cursor on them.
+   Under the cursor the selected one lightens more but stays bold. No check mark on the left:
+   bold text on its own fill is not confused with an ordinary item, and with a check mark the
+   list read as more motley than a list of three to five items deserves. */
+.combo-menu .opt.sel { background:rgba(255,255,255,.06); border-color:transparent;
+                       color:var(--text); font-weight:600; }
+.combo-menu .opt.sel:hover { background:var(--btn-hover); }

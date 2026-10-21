@@ -1,0 +1,432 @@
+# macOS: check and build of Argus.app.
+#
+# This is the only place where the macOS code runs for real (development happens on
+# Windows, where there are no real CoreAudio, ScreenCaptureKit and AppKit). What is
+# checked and what is not is described in docs/macos.md. Started manually: Actions ->
+# macOS -> Run workflow.
+#
+# Secrets for signing and notarization (optional; without them the build is a trial one):
+#   MACOS_CERTIFICATE            "Developer ID Application" certificate (.p12), base64
+#   MACOS_CERTIFICATE_PASSWORD   its password
+#   MACOS_IDENTITY               "Developer ID Application: Name (TEAMID)"
+#   APPLE_ID, APPLE_TEAM_ID, APPLE_APP_PASSWORD   notarization (app password)
+
+name: macOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      build:
+        description: "Build Argus.app and the .dmg"
+        type: boolean
+        default: true
+
+# A new run does not cancel the old one: a build with notarization that has already been
+# running for half an hour must not be cancelled.
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests and the audio helper
+    runs-on: macos-latest        # Apple Silicon
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6.8.0
+        with:
+          enable-cache: true
+
+      - name: Environment
+        run: |
+          sw_vers
+          uname -m
+          swift --version
+          uv sync --locked --group dev
+
+      - name: The audio helper builds
+        run: swift build -c release --package-path macos/helper
+
+      - name: The helper answers according to the contract
+        # The CI environment has no screen recording permission: we expect exit code 2 (no
+        # permission) or 0, but not a crash and not silence. This checks that the program starts
+        # and writes JSON to stderr. The system may wait for an answer to a permission prompt that
+        # nobody can click, so we do not wait forever.
+        timeout-minutes: 3
+        run: |
+          set +e
+          bin="$(swift build -c release --package-path macos/helper --show-bin-path)/argus-syscap"
+          "$bin" --probe 2>probe.err
+          code=$?
+          echo "exit code: $code"; cat probe.err
+          case "$code" in 0|2|4) ;; *) echo "unexpected code $code"; exit 1;; esac
+          grep -q '"event"' probe.err || [ "$code" -eq 0 ] || { echo "no event in stderr"; exit 1; }
+
+      - name: macOS tests (required)
+        run: uv run pytest tests/test_portability.py tests/test_mac_*.py tests/test_hotkeys.py tests/test_update.py tests/test_update_trust.py tests/test_update_service.py tests/test_ed25519.py -q -p no:cacheprovider
+
+      - name: All tests (not blocking yet)
+        # Some of the tests were written for Windows and have not been sorted out one by one yet.
+        # When this step turns green, remove `continue-on-error` and it becomes mandatory.
+        continue-on-error: true
+        env:
+          # Some tests expect a key to be present in the environment (a developer always has one);
+          # there is no real key on CI and there should not be: a placeholder is substituted.
+          OPENAI_API_KEY: ci-placeholder-not-a-real-key
+        run: uv run pytest tests -q -p no:cacheprovider
+
+  app:
+    name: Build Argus.app
+    runs-on: macos-latest
+    needs: test
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.build) ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/macos-port')
+    timeout-minutes: 90
+    env:
+      # `secrets` are not available in step conditions, so we set a flag at the top, at job level.
+      HAS_CERT: ${{ secrets.MACOS_CERTIFICATE != '' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0        # the build number is counted from the number of commits; on a shallow clone it is always 1
+
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6.8.0
+        with:
+          enable-cache: true
+
+      - name: Dependencies
+        # A separate step and without secrets: `uv sync` may run build scripts of dependencies,
+        # while the "Build" step keeps the Apple password in the environment with the
+        # signing keychain already open. `--locked` means do not silently recompute if uv.lock
+        # lags behind pyproject.toml (the build must come from the same pinned versions as the
+        # tests).
+        run: uv sync --locked --group dev
+
+      - name: Signing certificate
+        if: env.HAS_CERT == 'true'
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_IDENTITY: ${{ secrets.MACOS_IDENTITY }}
+        run: |
+          keychain="$RUNNER_TEMP/argus.keychain-db"
+          password="$(uuidgen)"
+          echo "$MACOS_CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/certificate.p12"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          security import "$RUNNER_TEMP/certificate.p12" -k "$keychain" -P "$MACOS_CERTIFICATE_PASSWORD" \
+            -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$password" "$keychain"
+          security list-keychains -d user -s "$keychain" login.keychain-db
+          rm -f "$RUNNER_TEMP/certificate.p12"
+          # A custom (self-signed) certificate is considered valid by the system only after it is
+          # explicitly trusted, and without that `codesign` does not find its "identity". A real
+          # Developer ID needs no such trust.
+          case "$MACOS_IDENTITY" in
+            "Developer ID"*) ;;
+            *)
+              security find-certificate -c "$MACOS_IDENTITY" -p "$keychain" > "$RUNNER_TEMP/signing.pem"
+              sudo security add-trusted-cert -d -r trustRoot -p codeSign -k /Library/Keychains/System.keychain "$RUNNER_TEMP/signing.pem"
+              ;;
+          esac
+          security find-identity -v -p codesigning "$keychain"      # the log shows whether the certificate was picked up
+          # Trial signing of a foreign file: it fails here, within two minutes, rather than after
+          # ten minutes of building.
+          cp /bin/echo "$RUNNER_TEMP/probe"
+          codesign --force --sign "$MACOS_IDENTITY" "$RUNNER_TEMP/probe"
+          codesign -d -r- "$RUNNER_TEMP/probe" 2>&1 | grep -i "designated"
+          rm -f "$RUNNER_TEMP/probe" "$RUNNER_TEMP/signing.pem"
+
+      - name: Speech detector weights (public, two megabytes)
+        # They are not in the repository (the models/ folder is not tracked): without them the
+        # program downloads the file from the network on first launch, and without a network it
+        # does not start.
+        run: |
+          mkdir -p models
+          # The address is pinned to a commit (the same as `VAD_MODEL_URL` in `perception/vad.py`),
+          # not to a moving branch of someone else's repository. The weights go into the signed app:
+          # the checksum from `packaging/silero_vad.sha256` (`<hash>  models/silero_vad.onnx`) is
+          # mandatory, and a substituted file stops the build.
+          curl -fsSL -o models/silero_vad.onnx \
+            https://github.com/snakers4/silero-vad/raw/bfdc0193023f121ea5b3cc7b176dbed570a68a59/src/silero_vad/data/silero_vad.onnx
+          test "$(stat -f %z models/silero_vad.onnx)" -gt 1000000
+          if [ ! -f packaging/silero_vad.sha256 ]; then
+            echo "::error::packaging/silero_vad.sha256 is missing: there is nothing to check the speech detector weights against"
+            exit 1
+          fi
+          shasum -a 256 -c packaging/silero_vad.sha256
+
+      - name: Build
+        # Apple secrets are here only, and only for the step that builds and signs; the
+        # dependencies are already installed (the "Dependencies" step).
+        env:
+          ARGUS_CODESIGN_IDENTITY: ${{ secrets.MACOS_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: |
+          bash packaging/build_macos.sh      # through bash: a file arriving from Windows has no execute bit
+
+      - name: Permanent signature
+        # The system ties microphone and screen recording permissions to the "code requirement".
+        # With a trial signature that requirement is the build hash (`cdhash`): after every update
+        # the permissions would be asked for again. With a permanent certificate it is "the bundle
+        # and this certificate", and it is the same for all builds.
+        if: env.HAS_CERT == 'true'
+        run: |
+          requirement="$(codesign -d -r- dist-mac/Argus.app 2>&1 | grep -i 'designated' || true)"
+          echo "$requirement"
+          if echo "$requirement" | grep -q 'cdhash'; then
+            echo "The signature is a trial one although a certificate is present: updates would reset the permissions" >&2
+            exit 1
+          fi
+          echo "$requirement" | grep -q 'certificate leaf'
+
+      - name: No keys in the build
+        # A distributed file must carry nobody's secrets. There is no `.env` file on CI at all,
+        # and this check guards against the day when somebody puts one there.
+        run: |
+          check="$RUNNER_TEMP/check"
+          rm -rf "$check" && mkdir -p "$check"
+          ditto -x -k dist-mac/Argus-mac.zip "$check"
+          echo "seeds in the package:"; ls -la "$check/Argus.app/Contents/Resources/seed" || true
+          if grep -rIlE '(sk-[A-Za-z0-9_-]{20,}|sk-ant-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|xi-api-key)' "$check"; then
+            echo "Something that looks like a key was found in the build: it must not be distributed" >&2
+            exit 1
+          fi
+          if [ -s "$check/Argus.app/Contents/Resources/seed/.env" ]; then
+            echo "A non-empty .env is in the seeds: it must not be distributed" >&2
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: Argus-macOS
+          path: |
+            dist-mac/Argus-mac.dmg
+            dist-mac/Argus-mac.zip
+            dist-mac/latest-mac.json
+          if-no-files-found: error
+
+      - name: The package starts
+        id: smoke
+        # Smoke test: the window is created, the server answers, the process does not crash. There
+        # are no permissions: the app must open with the microphone alone and say so in its
+        # warnings. It runs after the artifact upload and does not block it: even if it fails
+        # here, the built file is needed to investigate on a real computer. But distribution
+        # (`deploy/mac/publish_mac.py`) takes only a run that has the `Argus-macOS-verified`
+        # marker, and the step below uploads that marker only if this check succeeds.
+        # We run the executable itself, not `open`: that way its output is visible, and on a hang
+        # (the server did not answer within a minute) the process gets SIGABRT and `faulthandler`
+        # prints the stacks of all threads.
+        continue-on-error: true
+        run: |
+          set +e
+          out="$RUNNER_TEMP/argus.out"
+          # The Argus window is marked "do not show in screen recording", and `screencapture` cannot
+          # see it (verified: the screenshot shows an empty desktop). For the screenshot we turn
+          # this off with our own setting in the data folder.
+          mkdir -p "$HOME/Library/Application Support/Argus"
+          # Updates are off: with a permanent certificate the built app finds the published release
+          # itself, downloads it and installs it (that is what happened on 2026-10-13: the check
+          # replaced itself in the middle of a test). That works, but what needs checking here is
+          # the window.
+          echo '{"ui": {"exclude_from_capture": false}, "update": {"server": ""}}' > "$HOME/Library/Application Support/Argus/argus.local.json"
+          # Until it is "logged in", the app opens on the login screen (`/admin#account`), which has
+          # no header with the traffic lights. The login here is a stub on disk (the "logged in"
+          # check is local, with no network): the page opens on the main page (`/`) with the header,
+          # while the account server will not accept this login and will show that it is time to log
+          # in again, which does not matter for a screenshot. The gate stays on, as for a real user:
+          # with an empty server address (`account.server=""`) the window in the build closed a
+          # second after being shown (2026-10-13, two runs; the cause is in the log as
+          # "pipeline finished with an error").
+          echo '{"refresh": "ci-placeholder", "email": "ci@example.invalid"}' > "$HOME/Library/Application Support/Argus/argus.account.json"
+          dist-mac/Argus.app/Contents/MacOS/Argus > "$out" 2>&1 &
+          pid=$!
+          ok=1
+          for _ in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:8420/state -o state.json; then ok=0; break; fi
+            kill -0 "$pid" 2>/dev/null || { echo "the process exited on its own"; break; }
+            sleep 1
+          done
+          if [ $ok -ne 0 ] && kill -0 "$pid" 2>/dev/null; then
+            echo "--- the server did not answer, the process is alive: taking thread stacks"
+            kill -ABRT "$pid"; sleep 3
+          fi
+          if [ $ok -eq 0 ]; then
+            # The window has time to render the page; the screenshot is needed to see it with human
+            # eyes (WebKit, how the window looks).
+            sleep 8
+            screencapture -x "$RUNNER_TEMP/argus-window.png" || echo "the screenshot failed"
+            curl -s http://127.0.0.1:8420/ -o "$RUNNER_TEMP/index.html" && echo "the page is served: $(wc -c < "$RUNNER_TEMP/index.html") bytes"
+            osascript -e 'tell application "System Events" to get name of every window of (every process whose name is "Argus")' 2>&1 | head -3
+            cp "$RUNNER_TEMP/argus-window.png" argus-window.png 2>/dev/null || true
+            # The "all at once" window (the detached panel): transparent background and a
+            # look without the system frame. We request it with the same request as the header button;
+            # the screenshot comes after a few seconds, when the page has rendered.
+            # A real mouse: hover over the traffic lights (a screenshot with the icons) and click the
+            # yellow circle: the window must minimize. This checks that clicks pass through the hidden
+            # system strip to the page. If CI has no input permission, the system silently does not
+            # deliver the event: then the log says "did not minimize", and that is not
+            # a code failure.
+            echo "--- mouse: hover and click on the yellow circle of the traffic lights"
+            uv run python - <<'PY'
+          import json, subprocess, time, urllib.request
+          import Quartz
+
+          def call(action):
+              req = urllib.request.Request("http://127.0.0.1:8420/window/main", data=json.dumps({"action": action}).encode(),
+                                           headers={"content-type": "application/json"})
+              return json.load(urllib.request.urlopen(req, timeout=10))
+
+          before = call("state")
+          x, y = before["rect"][0] + 40, before["rect"][1] + 19      # center of the yellow circle: 14 + 20 + 6 from the edge, the middle of the 38-pixel strip
+
+          def mouse(kind, px=None, py=None):
+              point = (x if px is None else px, y if py is None else py)
+              Quartz.CGEventPost(Quartz.kCGHIDEventTap, Quartz.CGEventCreateMouseEvent(None, kind, point, Quartz.kCGMouseButtonLeft))
+
+          mouse(Quartz.kCGEventMouseMoved)
+          time.sleep(1.0)
+          subprocess.run(["screencapture", "-x", "argus-hover.png"], check=False)
+          mouse(Quartz.kCGEventLeftMouseDown)
+          time.sleep(0.1)
+          mouse(Quartz.kCGEventLeftMouseUp)
+          time.sleep(3.0)
+          after = call("state")
+          print("point", (x, y), "before:", before["minimized"], "after:", after["minimized"],
+                "-> MINIMIZED" if after["minimized"] else "-> did not minimize (CI has no input permission or the click did not reach the page)")
+          call("restore")
+          time.sleep(2.0)
+
+          # Dragging by a free spot of the strip: the mouse button is pressed down on the strip and
+          # moved by (+100, +60). The page sends `drag_start`/`drag_move`, and AppKit moves the
+          # window by the mouse position.
+          start = call("state")["rect"]
+          gx, gy = start[0] + 600, start[1] + 19
+          mouse(Quartz.kCGEventMouseMoved, gx, gy)
+          time.sleep(0.5)
+          mouse(Quartz.kCGEventLeftMouseDown, gx, gy)
+          time.sleep(0.3)
+          for step in range(1, 11):
+              mouse(Quartz.kCGEventLeftMouseDragged, gx + 10 * step, gy + 6 * step)
+              time.sleep(0.15)
+          time.sleep(0.5)
+          mouse(Quartz.kCGEventLeftMouseUp, gx + 100, gy + 60)
+          time.sleep(1.0)
+          end = call("state")["rect"]
+          moved = (end[0] - start[0], end[1] - start[1])
+          print("the window moved by", moved, "expected (100, 60)", "-> DRAGS" if moved != (0, 0) else "-> did not move (CI has no input permission or dragging does not work)")
+
+          # Full screen of the main window: the page action "fullscreen" (the green circle), then
+          # back.
+          call("fullscreen")
+          time.sleep(4.0)
+          inside = call("state")
+          subprocess.run(["screencapture", "-x", "argus-fullscreen.png"], check=False)
+          print("full screen:", inside.get("fullscreen"), "-> ON" if inside.get("fullscreen") else "-> DID NOT TURN ON")
+          call("fullscreen")
+          time.sleep(4.0)
+          print("left full screen:", not call("state").get("fullscreen"))
+          PY
+            echo "--- main window: state, drag step (the mouse was not moved, so the window must stay in place)"
+            curl -s -X POST -H 'content-type: application/json' -d '{"action":"state"}' http://127.0.0.1:8420/window/main; echo
+            curl -s -X POST -H 'content-type: application/json' -d '{"action":"drag_start"}' http://127.0.0.1:8420/window/main; echo
+            curl -s -X POST -H 'content-type: application/json' -d '{"action":"drag_move"}' http://127.0.0.1:8420/window/main; echo
+            curl -s -X POST -H 'content-type: application/json' -d '{"action":"state"}' http://127.0.0.1:8420/window/main; echo
+            echo "--- the 'all at once' panel"
+            curl -s -X POST -H 'content-type: application/json' -d '{"panel":"live"}' http://127.0.0.1:8420/window/open; echo
+            sleep 6
+            screencapture -x "$RUNNER_TEMP/argus-panel.png" || echo "the panel screenshot failed"
+            cp "$RUNNER_TEMP/argus-panel.png" argus-panel.png 2>/dev/null || true
+            # The work screen (chat) is in Safari: the same WebKit as the app window, while in the
+            # window itself the login screen covers the main page. The strip is drawn by the `desk=1`
+            # marker and the browser platform (Mac), so the whole header is visible: back, "Record",
+            # sources. We do not touch the app window.
+            chat="$(curl -s -X POST -H 'content-type: application/json' -d '{"name":"Check"}' http://127.0.0.1:8420/chats | python3 -c 'import sys, json; print(json.load(sys.stdin)["chat"]["id"])')"
+            echo "--- chat work screen $chat in Safari"
+            open -a Safari "http://127.0.0.1:8420/chat/$chat?desk=1"
+            sleep 12
+            screencapture -x "$RUNNER_TEMP/argus-chat.png" || echo "the chat screenshot failed"
+            cp "$RUNNER_TEMP/argus-chat.png" argus-chat.png 2>/dev/null || true
+            # The "all at once" panel is already open above. Safari in full screen is a
+            # "foreign" full-screen window (a call): the panel must stand on top of it. Without the
+            # "agent" mode (it turns on while the panel is open) it would not be visible.
+            echo "--- panel on top of someone else's full-screen window"
+            uv run python - <<'PY'
+          import time
+          import Quartz
+
+          source = Quartz.CGEventSourceCreate(Quartz.kCGEventSourceStateHIDSystemState)
+          for down in (True, False):
+              event = Quartz.CGEventCreateKeyboardEvent(source, 3, down)          # the F key
+              Quartz.CGEventSetFlags(event, Quartz.kCGEventFlagMaskCommand | Quartz.kCGEventFlagMaskControl)
+              Quartz.CGEventPost(Quartz.kCGHIDEventTap, event)
+              time.sleep(0.12)
+          PY
+            sleep 6
+            screencapture -x "$RUNNER_TEMP/argus-over-fullscreen.png" || echo "the screenshot failed"
+            cp "$RUNNER_TEMP/argus-over-fullscreen.png" argus-over-fullscreen.png 2>/dev/null || true
+            osascript -e 'quit app "Safari"' 2>&1 | head -2 || true
+          fi
+          # The audio helper: the app survives a failure in the helper's real path (filter,
+          # configuration, converting Float32 to Int16): it writes `syscap: …` to the log and lives
+          # on, and the check used to stay green. CI has no screen recording permission, and a "no
+          # permission" refusal is expected; any other cause is a check failure. (That the helper
+          # works as a process is not required here: recognition is off at startup, and the system
+          # audio may not be open yet.)
+          if [ $ok -eq 0 ]; then
+            syscap_lines="$(grep -E 'syscap:|system audio did not start' "$HOME/Library/Logs/Argus/argus.log" 2>/dev/null | grep -v 'No permission to record the screen')"  # the first pattern is the app's log line, the second is its permission message ("no permission to record the screen")
+            if [ -n "$syscap_lines" ]; then
+              echo "--- the audio helper failed for a reason other than permission:"; echo "$syscap_lines"
+              ok=1
+            fi
+          fi
+          echo "--- process output ---"; tail -150 "$out"
+          echo "--- log ---"; tail -80 "$HOME/Library/Logs/Argus/argus.log" 2>/dev/null
+          echo "--- state ---"; head -c 600 state.json 2>/dev/null; echo
+          cp "$RUNNER_TEMP/argus-window.png" argus-window.png 2>/dev/null || true
+          pkill -x Argus
+          exit $ok
+
+      - name: Verified marker
+        # Only if the check above passed for real (`outcome`, not `conclusion`: the step has
+        # continue-on-error, so its `conclusion` is always "success"). Without the marker,
+        # publishing this run is impossible, and what is signed with the release key goes to all
+        # Macs: a build that is broken when started through LaunchServices must not be
+        # distributed.
+        if: steps.smoke.outcome == 'success'
+        run: echo "${{ github.sha }}" > verified.txt
+
+      - name: Upload the marker
+        if: steps.smoke.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: Argus-macOS-verified
+          path: verified.txt
+          if-no-files-found: error
+
+      - name: Remove the signing keychain
+        if: always() && env.HAS_CERT == 'true'
+        run: security delete-keychain "$RUNNER_TEMP/argus.keychain-db" || true
+
+      - name: Window screenshot
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: Argus-macOS-screenshot
+          path: |
+            argus-window.png
+            argus-hover.png
+            argus-fullscreen.png
+            argus-panel.png
+            argus-chat.png
+            argus-over-fullscreen.png
+          if-no-files-found: ignore

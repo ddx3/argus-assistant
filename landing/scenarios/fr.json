@@ -1,0 +1,102 @@
+{
+ "_doc": "Exemple de conversation pour la démo de la landing. Français.",
+ "speech": [
+  "Rappelle-moi, c’est quoi la différence entre un processus et un thread ?",
+  "Voilà : un processus, c’est un programme à part avec sa propre mémoire, et les threads vivent à l’intérieur et se la partagent.",
+  "D’accord. Regarde, s’il te plaît, pourquoi mon test plante ?",
+  "Je vois : la boucle interne compare un élément avec lui-même.",
+  "Et dernière chose : combien deviennent 10 000 placés à 8 % par an au bout de trois ans ?"
+ ],
+ "answers": [
+  "Un **processus** est un programme isolé avec sa propre mémoire. Un **thread** est une ligne d’exécution à l’intérieur d’un processus : les threads d’un même processus partagent sa mémoire.\n\n- les processus sont plus coûteux à créer et à commuter\n- les threads échangent des données plus vite, mais ont besoin de synchronisation\n- un thread qui plante peut faire tomber tout le processus",
+  "**Bug :** la boucle interne commence à zéro, donc quand `i == j` un élément est comparé avec lui-même, et la fonction renvoie toujours `True`.\n\n```python\ndef has_duplicates(items):\n    return len(set(items)) != len(items)\n```\n\nOu bien garder les boucles et faire démarrer la boucle interne à `i + 1`. La version avec un ensemble s’exécute en O(n).",
+  "C’est un calcul d’intérêts composés :\n\n$$S = 10\\,000 \\cdot (1 + 0{,}08)^3$$\n\n$$S \\approx 12\\,597$$\n\nRéponse : environ **12 597**, soit un gain de **2 597**."
+ ],
+ "code": {
+  "title": "review — pull request #214",
+  "heading": "Filtre de doublons",
+  "l1": "La fonction has_duplicates(items) doit",
+  "l2": "renvoyer True si la liste contient",
+  "l3": "des éléments répétés, et False sinon.",
+  "input": "entrée",
+  "expected": "attendu  False",
+  "tests": "CI · TESTS"
+ },
+ "math": {
+  "title": "sheets — Prévision de placement",
+  "slide": "DIAPO 7",
+  "heading": "Prévision de placement",
+  "rows": [
+   [
+    "Montant",
+    "10 000"
+   ],
+   [
+    "Taux",
+    "8 % par an"
+   ],
+   [
+    "Durée",
+    "3 ans"
+   ],
+   [
+    "Résultat",
+    "?"
+   ]
+  ]
+ },
+ "idle": {
+  "title": "notes — Point d’équipe",
+  "heading": "Point d’équipe",
+  "items": [
+   "· architecture du service",
+   "· revue de la pull request #214",
+   "· prévision de placement"
+  ]
+ },
+ "call": {
+  "names": [
+   "Camille D.",
+   "Hugo",
+   "Léa M.",
+   "Toi"
+  ],
+  "initials": [
+   "CD",
+   "HB",
+   "LM",
+   "Toi"
+  ],
+  "sharing": "Tu partages ton écran"
+ },
+ "windows": [
+  {
+   "title": "Réunion d'équipe hebdomadaire",
+   "label": "Réunion d'équipe hebdomadaire",
+   "kind": "call",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Cours de statistiques",
+   "label": "Cours de statistiques",
+   "kind": "lecture",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Lecteur de musique",
+   "label": "Lecteur de musique",
+   "kind": "music",
+   "w": 1280,
+   "h": 720
+  },
+  {
+   "title": "Notes",
+   "label": "Notes",
+   "kind": "notes",
+   "w": 1100,
+   "h": 800
+  }
+ ]
+}

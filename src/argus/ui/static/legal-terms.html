@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181a20'/%3E%3Cg transform='translate(5 4.5) scale(.0787)' fill='%23fff'%3E%3Cpath d='M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z'/%3E%3Ccircle cx='345.5' cy='525' r='60'/%3E%3C/g%3E%3C/svg%3E">
+<title>Terms of Use — Argus</title>
+<style>
+  :root{
+    --bg:#0a0b0d; --panel:#131519; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
+    --text:#f2f4f7; --dim:#9aa1ad; --faint:#5b6270;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    color-scheme:dark;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;margin:0;padding:24px 0 56px;}
+  /* Width and margins are as on the description page (`landing/template.html`, `.wrap`): the
+     document is read in the same column as the main page, not in a narrow strip in the middle. */
+  .page{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);}
+  .top{margin-bottom:28px;}
+  .brand{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:20px;color:var(--text);text-decoration:none;}
+  .brand svg{width:22px;height:22px;flex:none;}
+  .brand .wm{display:inline-flex;align-items:baseline;}
+  .brand .wm svg{width:auto;height:.7em;aspect-ratio:691/699;margin-right:.01em;}
+  a{color:var(--dim);text-underline-offset:2px;} a:hover{color:var(--text);}
+  h1{font-size:clamp(26px,5vw,32px);line-height:1.2;margin:0 0 6px;}
+  h2{font-size:18px;margin:34px 0 8px;line-height:1.3;}
+  h3{font-size:15px;margin:22px 0 6px;color:var(--text);}
+  p{margin:0 0 12px;} ul{margin:0 0 14px;padding-left:22px;} li{margin:0 0 6px;}
+  li::marker{color:var(--faint);}
+  .meta{color:var(--faint);font-size:14px;margin-bottom:18px;}
+  .lead{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--dim);}
+  b{font-weight:600;}
+  mark.todo{background:rgba(224,164,88,.18);color:#f0d19f;border-radius:4px;padding:0 4px;}
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:13px;display:flex;gap:6px 20px;flex-wrap:wrap;}
+  /* Inside the app the document lies in a window over the page: neither the header with
+     "Argus" nor the download link is needed there — they would lead from the app window to the
+     download page. */
+  html.embed .top, html.embed footer, html.embed .langbar{display:none;}
+  /* Language switcher: flat text without borders, the current language is lighter (requirement:
+     no outlines anywhere). */
+  .langbar{display:flex;flex-wrap:wrap;gap:4px 16px;margin:-8px 0 22px;}
+  .langbar button{background:none;border:0;padding:2px 0;font:inherit;font-size:14px;color:var(--faint);cursor:pointer;}
+  .langbar button:hover{color:var(--dim);}
+  .langbar button[aria-current="true"]{color:var(--text);}
+  article[hidden]{display:none;}
+  html.embed body{padding-top:clamp(28px,4vw,48px);}
+  @media print{
+    :root{--bg:#fff;--panel:#f3f4f6;--text:#111;--dim:#333;--faint:#555;--line:#ddd;--line2:#bbb;color-scheme:light;}
+    .top .brand > svg{display:none;}
+  }
+</style>
+<script>
+  // Inside the app the page is opened with `?embed=1`. The flag itself in the address is carried
+  // over to the neighboring document as well, otherwise a link from the terms to the policy
+  // inside the app window would bring up the site header.
+  if (/[?&]embed=1\b/.test(location.search)) document.documentElement.className = "embed";
+</script>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <a class="brand" href="./">
+      <span class="wm" role="img" aria-label="Argus"><svg viewBox="0 0 691 699" aria-hidden="true"><path d="M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z" fill="currentColor"/><circle cx="345.5" cy="525" r="60" fill="currentColor"/></svg><span aria-hidden="true">rgus</span></span>
+    </a>
+  </div>
+
+  <nav class="langbar" aria-label="Language"><button type="button" data-lang="ru">Русский</button><button type="button" data-lang="uk">Українська</button><button type="button" data-lang="en">English</button><button type="button" data-lang="es">Español</button><button type="button" data-lang="pt">Português</button><button type="button" data-lang="de">Deutsch</button><button type="button" data-lang="fr">Français</button><button type="button" data-lang="tr">Türkçe</button><button type="button" data-lang="pl">Polski</button></nav>
+
+<article lang="ru" data-doc-lang="ru" hidden>
+<h1>Условия использования</h1>
+<p class="meta">Версия от 14 октября 2026 г. Argus предоставляет команда Argus («мы»). Это перевод для удобства; если он отличается от английского оригинала, приоритет имеет английская версия.</p>
+
+<p class="lead">Argus — это помощник, который слушает разговор, смотрит на ваш экран и подсказывает ответ. Создавая аккаунт или пользуясь программой, вы принимаете эти условия и <a href="privacy.html">Политику конфиденциальности</a>. Главное: вы сами отвечаете за то, где и как используете Argus; ответы ИИ могут быть неверными; а с вашего баланса списывается только то, чем вы пользуетесь.</p>
+
+<h2>1. О сервисе</h2>
+<p>Argus — это программа для Windows и macOS и онлайн-сервис, с которым она работает. Она распознаёт речь, читает ваш экран и готовит подсказки с помощью искусственного интеллекта. Сервис активно развивается: функции могут меняться, а некоторые — работать нестабильно.</p>
+
+<h2>2. Ваш аккаунт</h2>
+<ul>
+  <li>Чтобы пользоваться Argus, вам должно быть не меньше 18 лет.</li>
+  <li>Указывайте свой собственный адрес электронной почты и храните пароль в тайне. Вы отвечаете за всё, что происходит под вашим аккаунтом.</li>
+  <li>Подарок на баланс при регистрации выдаётся один на человека. Не создавайте аккаунты, чтобы получить его повторно.</li>
+  <li>Вы можете в любой момент попросить нас удалить ваш аккаунт, написав на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>; такие запросы мы обрабатываем так, как описано в Политике конфиденциальности.</li>
+</ul>
+
+<h2>3. Баланс и оплата</h2>
+<ul>
+  <li>Подписки нет. Вы пополняете баланс (от $5) и платите за то, чем пользуетесь: распознавание речи, ответы и озвучку ответов. Цены показаны в приложении и могут меняться; новые цены действуют для будущего использования.</li>
+  <li>Деньги на балансе не сгорают.</li>
+  <li>Подарочные средства не имеют денежной стоимости и возврату не подлежат.</li>
+  <li>Неизрасходованную часть пополнения можно вернуть по запросу на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> в течение 14 дней после пополнения; комиссия платёжной системы удерживается. Уже потраченные деньги не возвращаются. Это не ограничивает права, которые даёт вам закон о защите прав потребителей.</li>
+  <li>При удалении аккаунта остаток на балансе пропадает: если он вам нужен, попросите вернуть деньги до удаления.</li>
+  <li>Платежи обрабатывает платёжный провайдер. Если вы оспариваете платёж, не обратившись сначала к нам, мы можем закрыть ваш аккаунт, пока спор не будет разрешён.</li>
+</ul>
+
+<h2>4. Что нельзя делать</h2>
+<ul>
+  <li>нарушать закон или права других людей;</li>
+  <li>обходить учёт использования или оплату, подделывать отчёты программы или получать доступ к нашим сервисам иначе, чем через программу;</li>
+  <li>вскрывать устройство программы или сервиса (реверс-инжиниринг), копировать или перепродавать их, а также делиться доступом к своему аккаунту;</li>
+  <li>отправлять автоматические запросы в обход программы или перегружать сервис;</li>
+  <li>использовать Argus, чтобы преследовать людей, обманывать их или шпионить за ними.</li>
+</ul>
+
+<h2>5. Запись разговоров и другие люди</h2>
+<p>Argus слушает ваш микрофон и звук системы. Те, с кем вы разговариваете, не получают никакого сигнала о том, что разговор слышит помощник. Вы должны сами выяснить, требуют ли закон вашей страны и правила вашей организации согласия участников на запись и обработку разговора, и получить его там, где это нужно. Мы не отвечаем за записи, сделанные без необходимого согласия.</p>
+
+<h2>6. Экзамены, собеседования и чужие правила</h2>
+<p>Argus — помощник общего назначения. Не используйте его там, где помощь людей или программ запрещена: на экзаменах, в тестах и конкурсах, там, где это запрещают правила работы или учёбы, и на собеседованиях, где работодатель или организатор это запретил. Последствия нарушения таких правил — отчисление, отказ, увольнение, наказания — ваши, а не наши.</p>
+
+<h2>7. ИИ может ошибаться</h2>
+<p>Ответы готовит искусственный интеллект. Они могут быть неточными, неполными или неверными, а распознавание речи и чтение экрана могут ошибаться. Всё важное проверяйте сами. Ответы Argus не заменяют юриста, врача, финансового консультанта или другого специалиста и не гарантируют результата — ни на экзамене, ни на собеседовании, ни на работе.</p>
+
+<h2>8. Нет гарантии незаметности</h2>
+<p>В программе есть настройки, которые делают её окно менее заметным при записи экрана и демонстрации. Это набор конкретных технических мер: они не гарантируют, что программа останется незамеченной в каждой версии Windows или macOS (в macOS 15 и новее некоторые программы для демонстрации экрана всё же её показывают) или при любом способе записи и проверки.</p>
+
+<h2>9. Ваш контент и права</h2>
+<p>Ваши файлы, вопросы и записи остаются вашими. Вы даёте нам право обрабатывать их лишь в той мере, в какой это нужно для работы сервиса (см. Политику конфиденциальности), и подтверждаете, что вправе их использовать. Программа и сервис принадлежат нам; мы даём вам неисключительное личное право пользоваться программой, пока вы соблюдаете эти условия.</p>
+
+<h2>10. Сторонние сервисы и доступность</h2>
+<p>Argus работает через сторонних провайдеров: сервисы ИИ, распознавание речи, озвучку ответов, платежи и хостинг. Их сбои, а также изменения их условий или цен влияют на сервис, и мы не отвечаем за их работу. Мы стараемся, чтобы сервис работал, но не обещаем, что он будет доступен без перебоев и ошибок.</p>
+
+<h2>11. Ответственность</h2>
+<p>Сервис предоставляется «как есть», без гарантий, насколько это допускает закон. Мы не отвечаем за косвенные убытки и упущенную выгоду, а наша общая ответственность перед вами ограничена суммой, которую вы заплатили нам за последние 12 месяцев. Это не снимает ответственность, которую по закону нельзя исключить или ограничить, и не затрагивает ваши права потребителя.</p>
+
+<h2>12. Приостановка и прекращение</h2>
+<p>Если вы нарушите эти условия, мы можем ограничить или закрыть ваш аккаунт, а при серьёзных нарушениях — без возврата баланса. Вы можете в любой момент перестать пользоваться сервисом и попросить нас удалить ваш аккаунт, написав на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>. Мы можем изменить сервис или прекратить его работу; если прекратим, предупредим заранее и вернём неизрасходованные деньги.</p>
+
+<h2>13. Изменение условий</h2>
+<p>Мы можем менять условия. Версия и дата указаны вверху страницы, а действующий текст всегда доступен на нашем сайте по тому же адресу. О существенных изменениях мы сообщим вам по электронной почте; если после этого вы продолжите пользоваться Argus, мы будем считать изменения принятыми. Если вы не согласны, перестаньте пользоваться Argus и попросите удалить ваш аккаунт (напишите на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>).</p>
+
+<h2>14. Право и контакты</h2>
+<p>Эти условия регулируются применимым правом. Мы стараемся решать споры переговорами; это не ограничивает обязательные права потребителя, которые вам дают законы вашей страны. Контакты: команда Argus, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Политика конфиденциальности</a>
+    <a href="./">Скачать Argus</a>
+  </footer>
+</article>
+<article lang="uk" data-doc-lang="uk" hidden>
+<h1>Умови використання</h1>
+<p class="meta">Версія від 14 жовтня 2026 р. Argus надає команда Argus («ми»). Це переклад, наданий для зручності; якщо він відрізняється від англійського оригіналу, перевагу має англійська версія.</p>
+
+<p class="lead">Argus — це помічник, який слухає розмову, дивиться на ваш екран і підказує відповідь. Створюючи акаунт або користуючись програмою, ви приймаєте ці умови та <a href="privacy.html">Політику конфіденційності</a>. Найважливіше: ви самі відповідаєте за те, де і як використовуєте Argus; відповіді штучного інтелекту можуть бути помилковими; а з вашого балансу гроші списуються лише за те, чим ви користуєтеся.</p>
+
+<h2>1. Про сервіс</h2>
+<p>Argus — це програма для Windows і macOS та онлайн-сервіс, з яким вона працює. Вона розпізнає мовлення, читає ваш екран і готує підказки за допомогою штучного інтелекту. Сервіс активно розвивається: функції можуть змінюватися, а деякі — працювати нестабільно.</p>
+
+<h2>2. Ваш акаунт</h2>
+<ul>
+  <li>Користуватися Argus можна лише з 18 років.</li>
+  <li>Вкажіть власну адресу електронної пошти й зберігайте пароль у таємниці. Ви відповідаєте за все, що відбувається під вашим акаунтом.</li>
+  <li>Стартовий баланс, який дається під час реєстрації, — один на людину. Не створюйте акаунти, щоб отримати його знову.</li>
+  <li>Ви можете будь-коли попросити нас видалити ваш акаунт, написавши на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>; такі запити ми опрацьовуємо так, як описано в Політиці конфіденційності.</li>
+</ul>
+
+<h2>3. Баланс і оплата</h2>
+<ul>
+  <li>Підписки немає. Ви поповнюєте баланс (від $5) і платите за те, чим користуєтеся: розпізнавання мовлення, відповіді та озвучення відповідей. Ціни показано в застосунку, вони можуть змінюватися; нові ціни діють для подальшого користування.</li>
+  <li>Гроші на балансі не згорають.</li>
+  <li>Подарункові кошти не мають грошової вартості й не повертаються.</li>
+  <li>Невитрачену частину поповнення можна повернути за запитом на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> протягом 14 днів після поповнення; комісія платіжної системи при цьому утримується. Гроші, які вже витрачено, не повертаються. Це не обмежує прав, які надає вам законодавство про захист прав споживачів.</li>
+  <li>Після видалення акаунта залишок на балансі втрачається: якщо він вам потрібен, попросіть повернути кошти до видалення.</li>
+  <li>Платежі обробляє платіжний провайдер. Якщо ви оскаржуєте платіж, не звернувшись спершу до нас, ми можемо закрити ваш акаунт, доки питання не буде вирішено.</li>
+</ul>
+
+<h2>4. Чого не можна робити</h2>
+<ul>
+  <li>порушувати закон або права інших людей;</li>
+  <li>обходити облік використання чи оплату, підробляти звіти програми або отримувати доступ до наших сервісів інакше, ніж через програму;</li>
+  <li>здійснювати зворотний інжиніринг програми чи сервісу, копіювати або перепродавати їх, передавати доступ до свого акаунта іншим;</li>
+  <li>надсилати автоматизовані запити в обхід програми або перевантажувати сервіс;</li>
+  <li>використовувати Argus, щоб переслідувати, обманювати чи шпигувати за людьми.</li>
+</ul>
+
+<h2>5. Запис розмов та інші люди</h2>
+<p>Argus слухає ваш мікрофон і звук системи. Співрозмовники не отримують жодного сигналу про те, що розмову чує помічник. Ви самі маєте з'ясувати, чи вимагають законодавство вашої країни та правила вашої організації згоди учасників на запис і обробку розмови, і отримати її там, де це потрібно. Ми не відповідаємо за записи, зроблені без необхідної згоди.</p>
+
+<h2>6. Іспити, співбесіди та чужі правила</h2>
+<p>Argus — помічник загального призначення. Не користуйтеся ним там, де допомогу людей або програм заборонено: на іспитах, тестах і конкурсах, за правилами місця роботи чи навчання, а також на співбесідах, де це заборонив роботодавець або організатор. Наслідки порушення таких правил — відрахування, відмова, звільнення, штрафи — ви несете самі, а не ми.</p>
+
+<h2>7. Штучний інтелект може помилятися</h2>
+<p>Відповіді формує штучний інтелект. Вони можуть бути неточними, неповними чи помилковими, а розпізнавання мовлення й читання екрана можуть помилятися. Усе важливе перевіряйте самі. Відповіді Argus не замінюють юриста, лікаря, фінансового консультанта чи іншого фахівця і не гарантують результату — ні на іспиті, ні на співбесіді, ні на роботі.</p>
+
+<h2>8. Жодної гарантії непомітності</h2>
+<p>У програмі є налаштування, які роблять її вікно менш помітним під час запису та демонстрації екрана. Це набір конкретних технічних заходів: вони не гарантують, що програму не буде помічено в кожній версії Windows чи macOS (у macOS 15 і новіших деякі програми для демонстрації екрана все одно її показують) або за будь-якого способу запису чи перевірки.</p>
+
+<h2>9. Ваш вміст і права</h2>
+<p>Ваші файли, запитання й записи залишаються вашими. Ви надаєте нам право обробляти їх лише в тій мірі, якої потребує робота сервісу (див. Політику конфіденційності), і підтверджуєте, що маєте право їх використовувати. Програма та сервіс належать нам; ми надаємо вам невиключне особисте право користуватися програмою, доки ви дотримуєтеся цих умов.</p>
+
+<h2>10. Сторонні сервіси та доступність</h2>
+<p>Argus працює через сторонніх постачальників: сервіси штучного інтелекту, розпізнавання мовлення, озвучення відповідей, платежів і хостингу. Їхні збої та зміни умов чи цін впливають на сервіс, і ми не відповідаємо за те, як вони працюють. Ми намагаємося підтримувати роботу сервісу, але не обіцяємо, що він буде доступний без перерв і помилок.</p>
+
+<h2>11. Відповідальність</h2>
+<p>Сервіс надається «як є», без гарантій, наскільки це дозволяє закон. Ми не несемо відповідальності за непрямі збитки чи втрачений прибуток, а наша загальна відповідальність перед вами обмежується сумою, яку ви сплатили нам за останні 12 місяців. Це не скасовує відповідальності, яку за законом не можна виключити чи обмежити, і не зачіпає ваших прав споживача.</p>
+
+<h2>12. Призупинення та припинення</h2>
+<p>Якщо ви порушите ці умови, ми можемо обмежити або закрити ваш акаунт, а в разі серйозних порушень — без повернення залишку на балансі. Ви можете будь-коли припинити користуватися сервісом і попросити нас видалити ваш акаунт, написавши на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>. Ми можемо змінити сервіс або припинити його роботу; якщо припинимо, повідомимо заздалегідь і повернемо невитрачені гроші.</p>
+
+<h2>13. Зміни умов</h2>
+<p>Ми можемо змінювати умови. Версію та дату вказано вгорі сторінки, а чинний текст завжди розміщено на нашому сайті за тією самою адресою. Про істотні зміни ми повідомимо вас листом на електронну пошту; якщо після цього ви продовжите користуватися Argus, ми вважатимемо зміни прийнятими. Якщо ви не згодні, припиніть користуватися Argus і попросіть нас видалити ваш акаунт (напишіть на <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>).</p>
+
+<h2>14. Право та контакти</h2>
+<p>Ці умови регулюються застосовним правом. Ми намагаємося вирішувати спори шляхом перемовин; це не обмежує обов'язкових прав споживача, які ви маєте за законодавством своєї країни. Контакти: команда Argus, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Політика конфіденційності</a>
+    <a href="./">Завантажити Argus</a>
+  </footer>
+</article>
+<article lang="en" data-doc-lang="en">
+<h1>Terms of Use</h1>
+<p class="meta">Version of October 14, 2026. Argus is operated by the Argus team (“we”).</p>
+
+<p class="lead">Argus is an assistant that listens to a conversation, looks at your screen, and suggests an answer. By creating an account or using the program, you accept these terms and the <a href="privacy.html">Privacy Policy</a>. The most important points: you are responsible for where and how you use Argus; AI answers can be wrong; and your balance is charged only for what you use.</p>
+
+<h2>1. About the service</h2>
+<p>Argus is a program for Windows and macOS and the online service it works with. It recognizes speech, reads your screen, and prepares suggestions using artificial intelligence. The service is in active development: features may change, and some may be unstable.</p>
+
+<h2>2. Your account</h2>
+<ul>
+  <li>You must be at least 18 to use Argus.</li>
+  <li>Give your own email address and keep your password secret. You are responsible for what happens under your account.</li>
+  <li>The welcome balance given at sign-up is one per person. Don't create accounts to get it again.</li>
+  <li>You can ask us to delete your account at any time by writing to <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>; we handle such requests as the Privacy Policy describes.</li>
+</ul>
+
+<h2>3. Balance and payment</h2>
+<ul>
+  <li>There is no subscription. You top up your balance (from $5) and pay for what you use: speech recognition, answers, and voice replies. Prices are shown in the app and may change; new prices apply to future use.</li>
+  <li>Money on your balance does not expire.</li>
+  <li>Gift funds have no cash value and are not refundable.</li>
+  <li>An unspent part of a top-up can be refunded on request at <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> within 14 days of the top-up; the payment system's fee is deducted. Money already spent is not refunded. This does not limit the rights consumer law gives you.</li>
+  <li>When you delete your account, any remaining balance is lost: if you need it, ask for a refund before deleting.</li>
+  <li>Payments are handled by a payment provider. If you dispute a payment without contacting us first, we may close your account while it is resolved.</li>
+</ul>
+
+<h2>4. What you must not do</h2>
+<ul>
+  <li>break the law or the rights of other people;</li>
+  <li>bypass usage tracking or payment, falsify the program's reports, or get access to our services in any way other than through the program;</li>
+  <li>reverse-engineer, copy, or resell the program or the service, or share your account access;</li>
+  <li>send automated requests that bypass the program, or overload the service;</li>
+  <li>use Argus to harass, deceive, or spy on people.</li>
+</ul>
+
+<h2>5. Recording conversations and other people</h2>
+<p>Argus listens to your microphone and system audio. The people you talk to get no signal that an assistant is hearing the conversation. You must find out for yourself whether the law of your country and the rules of your organization require the participants' consent to recording and processing a conversation, and obtain it where it is needed. We are not responsible for recordings made without the necessary consent.</p>
+
+<h2>6. Exams, interviews, and other people's rules</h2>
+<p>Argus is a general-purpose assistant. Don't use it where help from people or programs is prohibited: in exams, tests, and contests, under workplace or school rules, and in interviews where the employer or organizer has banned it. The consequences of breaking such rules — expulsion, rejection, dismissal, penalties — are yours, not ours.</p>
+
+<h2>7. AI can be wrong</h2>
+<p>Answers are produced by artificial intelligence. They can be inaccurate, incomplete, or wrong, and speech recognition and screen reading can make mistakes. Check anything important yourself. Argus answers are not a substitute for a lawyer, doctor, financial adviser, or other professional, and they don't guarantee a result — not in an exam, not in an interview, not at work.</p>
+
+<h2>8. No guarantee of being unnoticed</h2>
+<p>The program has settings that make its window less visible during screen recording and sharing. They are a set of specific technical measures: they do not guarantee the program goes unnoticed on every version of Windows or macOS (on macOS 15 and newer some screen-sharing programs still show it) or by every method of recording or inspection.</p>
+
+<h2>9. Your content and rights</h2>
+<p>Your files, questions, and recordings remain yours. You give us the right to process them only as far as the service needs to work (see the Privacy Policy), and you confirm that you have the right to use them. The program and the service belong to us; we give you a non-exclusive personal right to use the program as long as you follow these terms.</p>
+
+<h2>10. Third-party services and availability</h2>
+<p>Argus works through third-party providers: AI services, speech recognition, voice replies, payments, and hosting. Their outages and changes of terms or prices affect the service, and we are not responsible for how they work. We try to keep the service running but don't promise it will be available without interruptions or errors.</p>
+
+<h2>11. Liability</h2>
+<p>The service is provided “as is”, without warranties, as far as the law allows. We are not liable for indirect losses or lost profit, and our total liability to you is limited to the amount you paid us in the last 12 months. This does not remove liability that cannot lawfully be excluded or limited, or your consumer rights.</p>
+
+<h2>12. Suspension and ending</h2>
+<p>If you break these terms, we may restrict or close your account, and for serious breaches without refunding the balance. You may stop using the service at any time and ask us to delete your account by writing to <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>. We may change the service or end it; if we end it, we will give notice in advance and refund unspent money.</p>
+
+<h2>13. Changes to the terms</h2>
+<p>We may change the terms. The version and date are at the top of the page, and the current text is always on our website at the same address. We will email you about material changes; if you keep using Argus after that, we treat the changes as accepted. If you disagree, stop using Argus and ask us to delete your account (write to <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>).</p>
+
+<h2>14. Law and contact</h2>
+<p>These terms are governed by applicable law. We try to settle disputes by talking; this does not limit the mandatory consumer rights you have under the law of your country. Contact: the Argus team, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="./">Download Argus</a>
+  </footer>
+</article>
+<article lang="es" data-doc-lang="es" hidden>
+<h1>Términos de uso</h1>
+<p class="meta">Versión del 14 de octubre de 2026. Argus lo opera el equipo de Argus («nosotros»). Esta es una traducción facilitada por comodidad; si difiere del original en inglés, prevalece la versión en inglés.</p>
+
+<p class="lead">Argus es un asistente que escucha una conversación, mira su pantalla y sugiere una respuesta. Al crear una cuenta o usar el programa, usted acepta estos términos y la <a href="privacy.html">Política de privacidad</a>. Lo más importante: usted es responsable de dónde y cómo usa Argus; las respuestas de la IA pueden ser erróneas; y de su saldo se descuenta únicamente lo que usa.</p>
+
+<h2>1. Sobre el servicio</h2>
+<p>Argus es un programa para Windows y macOS y el servicio en línea con el que funciona. Reconoce la voz, lee su pantalla y prepara sugerencias mediante inteligencia artificial. El servicio está en desarrollo activo: las funciones pueden cambiar y algunas pueden ser inestables.</p>
+
+<h2>2. Su cuenta</h2>
+<ul>
+  <li>Debe tener al menos 18 años para usar Argus.</li>
+  <li>Indique su propio correo electrónico y mantenga en secreto su contraseña. Usted es responsable de lo que ocurra con su cuenta.</li>
+  <li>El saldo de bienvenida que se entrega al registrarse es uno por persona. No cree cuentas para obtenerlo de nuevo.</li>
+  <li>Puede pedirnos que eliminemos su cuenta en cualquier momento escribiendo a <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>; tramitamos esas solicitudes como describe la Política de privacidad.</li>
+</ul>
+
+<h2>3. Saldo y pago</h2>
+<ul>
+  <li>No hay suscripción. Usted recarga su saldo (desde $5) y paga por lo que usa: reconocimiento de voz, respuestas y respuestas por voz. Los precios se muestran en la aplicación y pueden cambiar; los precios nuevos se aplican al uso futuro.</li>
+  <li>El dinero de su saldo no caduca.</li>
+  <li>Los fondos de regalo no tienen valor en efectivo y no son reembolsables.</li>
+  <li>La parte no gastada de una recarga puede reembolsarse si lo solicita en <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> dentro de los 14 días siguientes a la recarga; se descuenta la comisión del sistema de pago. El dinero ya gastado no se reembolsa. Esto no limita los derechos que le otorga la legislación de consumo.</li>
+  <li>Al eliminar su cuenta, el saldo restante se pierde: si lo necesita, pida el reembolso antes de eliminarla.</li>
+  <li>Los pagos los gestiona un proveedor de pagos. Si disputa un pago sin ponerse antes en contacto con nosotros, podemos cerrar su cuenta mientras se resuelve.</li>
+</ul>
+
+<h2>4. Lo que no debe hacer</h2>
+<ul>
+  <li>infringir la ley o los derechos de otras personas;</li>
+  <li>eludir el control de uso o el pago, falsificar los informes del programa u obtener acceso a nuestros servicios de cualquier otra forma que no sea a través del programa;</li>
+  <li>aplicar ingeniería inversa al programa o al servicio, copiarlos, revenderlos o compartir el acceso a su cuenta;</li>
+  <li>enviar solicitudes automatizadas que eludan el programa, o sobrecargar el servicio;</li>
+  <li>usar Argus para acosar, engañar o espiar a otras personas.</li>
+</ul>
+
+<h2>5. Grabación de conversaciones y otras personas</h2>
+<p>Argus escucha su micrófono y el audio del sistema. Las personas con las que habla no reciben ninguna señal de que un asistente está oyendo la conversación. Debe averiguar por su cuenta si la ley de su país y las normas de su organización exigen el consentimiento de los participantes para grabar y procesar una conversación, y obtenerlo donde haga falta. No somos responsables de las grabaciones hechas sin el consentimiento necesario.</p>
+
+<h2>6. Exámenes, entrevistas y normas de otros</h2>
+<p>Argus es un asistente de uso general. No lo use donde esté prohibida la ayuda de personas o de programas: en exámenes, pruebas y concursos, bajo las normas del lugar de trabajo o del centro educativo, y en entrevistas en las que el empleador o el organizador lo haya prohibido. Las consecuencias de incumplir esas normas (expulsión, rechazo, despido, sanciones) son suyas, no nuestras.</p>
+
+<h2>7. La IA puede equivocarse</h2>
+<p>Las respuestas las genera la inteligencia artificial. Pueden ser inexactas, incompletas o erróneas, y el reconocimiento de voz y la lectura de pantalla pueden cometer errores. Compruebe por su cuenta todo lo importante. Las respuestas de Argus no sustituyen a un abogado, un médico, un asesor financiero ni otro profesional, y no garantizan un resultado: ni en un examen, ni en una entrevista, ni en el trabajo.</p>
+
+<h2>8. Sin garantía de pasar inadvertido</h2>
+<p>El programa tiene ajustes que hacen su ventana menos visible al grabar o compartir la pantalla. Son un conjunto de medidas técnicas concretas: no garantizan que el programa pase inadvertido en todas las versiones de Windows o macOS (en macOS 15 y posteriores algunos programas para compartir pantalla todavía lo muestran) ni ante cualquier método de grabación o inspección.</p>
+
+<h2>9. Su contenido y sus derechos</h2>
+<p>Sus archivos, preguntas y grabaciones siguen siendo suyos. Usted nos concede el derecho a procesarlos solo en la medida en que el servicio lo necesite para funcionar (consulte la Política de privacidad), y confirma que tiene derecho a usarlos. El programa y el servicio nos pertenecen; le concedemos un derecho personal no exclusivo a usar el programa mientras cumpla estos términos.</p>
+
+<h2>10. Servicios de terceros y disponibilidad</h2>
+<p>Argus funciona a través de proveedores externos: servicios de IA, reconocimiento de voz, respuestas por voz, pagos y alojamiento. Sus caídas y los cambios en sus condiciones o precios afectan al servicio, y no somos responsables de cómo funcionan. Intentamos mantener el servicio en marcha, pero no prometemos que esté disponible sin interrupciones ni errores.</p>
+
+<h2>11. Responsabilidad</h2>
+<p>El servicio se ofrece «tal cual», sin garantías, en la medida en que la ley lo permita. No respondemos por pérdidas indirectas ni por lucro cesante, y nuestra responsabilidad total hacia usted se limita al importe que nos haya pagado en los últimos 12 meses. Esto no elimina la responsabilidad que no pueda excluirse o limitarse legalmente, ni sus derechos como consumidor.</p>
+
+<h2>12. Suspensión y terminación</h2>
+<p>Si incumple estos términos, podemos restringir o cerrar su cuenta y, si el incumplimiento es grave, hacerlo sin reembolsar el saldo. Puede dejar de usar el servicio en cualquier momento y pedirnos que eliminemos su cuenta escribiendo a <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>. Podemos modificar el servicio o darlo por terminado; si lo terminamos, avisaremos con antelación y reembolsaremos el dinero no gastado.</p>
+
+<h2>13. Cambios en los términos</h2>
+<p>Podemos cambiar los términos. La versión y la fecha figuran en la parte superior de la página, y el texto vigente siempre está en nuestro sitio web, en la misma dirección. Le avisaremos por correo electrónico de los cambios importantes; si sigue usando Argus después, consideraremos que los acepta. Si no está de acuerdo, deje de usar Argus y pídanos que eliminemos su cuenta (escriba a <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>).</p>
+
+<h2>14. Legislación y contacto</h2>
+<p>Estos términos se rigen por la legislación aplicable. Intentamos resolver las disputas dialogando; esto no limita los derechos obligatorios de consumidor que tenga según la ley de su país. Contacto: el equipo de Argus, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Política de privacidad</a>
+    <a href="./">Descargar Argus</a>
+  </footer>
+</article>
+<article lang="pt" data-doc-lang="pt" hidden>
+<h1>Termos de uso</h1>
+<p class="meta">Versão de 14 de outubro de 2026. O Argus é operado pela equipe do Argus (“nós”). Esta é uma tradução fornecida para sua conveniência; se houver diferença em relação ao original em inglês, prevalece a versão em inglês.</p>
+
+<p class="lead">O Argus é um assistente que escuta uma conversa, olha a sua tela e sugere uma resposta. Ao criar uma conta ou usar o programa, você aceita estes termos e a <a href="privacy.html">Política de privacidade</a>. Os pontos mais importantes: você é responsável por onde e como usa o Argus; as respostas da IA podem estar erradas; e o seu saldo só é debitado pelo que você usa.</p>
+
+<h2>1. Sobre o serviço</h2>
+<p>O Argus é um programa para Windows e macOS e o serviço online com o qual ele funciona. Ele reconhece a fala, lê a sua tela e prepara sugestões usando inteligência artificial. O serviço está em desenvolvimento ativo: os recursos podem mudar, e alguns podem ser instáveis.</p>
+
+<h2>2. Sua conta</h2>
+<ul>
+  <li>Você precisa ter pelo menos 18 anos para usar o Argus.</li>
+  <li>Informe o seu próprio endereço de e-mail e mantenha a sua senha em segredo. Você é responsável pelo que acontece na sua conta.</li>
+  <li>O saldo de boas-vindas dado no cadastro é um por pessoa. Não crie contas para recebê-lo de novo.</li>
+  <li>Você pode pedir a exclusão da sua conta a qualquer momento escrevendo para <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>; tratamos esses pedidos conforme descrito na Política de privacidade.</li>
+</ul>
+
+<h2>3. Saldo e pagamento</h2>
+<ul>
+  <li>Não há assinatura. Você recarrega o seu saldo (a partir de US$ 5) e paga pelo que usa: reconhecimento de fala, respostas e respostas por voz. Os preços aparecem no aplicativo e podem mudar; os novos preços valem para o uso futuro.</li>
+  <li>O dinheiro no seu saldo não expira.</li>
+  <li>Valores recebidos de presente não têm valor em dinheiro e não são reembolsáveis.</li>
+  <li>A parte não gasta de uma recarga pode ser reembolsada, mediante pedido em <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>, em até 14 dias após a recarga; a taxa do serviço de pagamento é descontada. O dinheiro já gasto não é reembolsado. Isso não limita os direitos que a legislação de defesa do consumidor garante a você.</li>
+  <li>Ao excluir a sua conta, qualquer saldo restante é perdido: se você precisar dele, peça o reembolso antes de excluir.</li>
+  <li>Os pagamentos são processados por um provedor de pagamento. Se você contestar um pagamento sem antes falar conosco, podemos encerrar a sua conta enquanto o caso é resolvido.</li>
+</ul>
+
+<h2>4. O que você não pode fazer</h2>
+<ul>
+  <li>violar a lei ou os direitos de outras pessoas;</li>
+  <li>burlar o controle de uso ou o pagamento, falsificar os relatórios do programa ou acessar os nossos serviços de qualquer outra forma que não seja pelo programa;</li>
+  <li>fazer engenharia reversa, copiar ou revender o programa ou o serviço, ou compartilhar o acesso à sua conta;</li>
+  <li>enviar solicitações automatizadas que contornem o programa ou sobrecarregar o serviço;</li>
+  <li>usar o Argus para assediar, enganar ou espionar pessoas.</li>
+</ul>
+
+<h2>5. Gravação de conversas e de outras pessoas</h2>
+<p>O Argus escuta o seu microfone e o áudio do sistema. As pessoas com quem você conversa não recebem nenhum sinal de que um assistente está ouvindo a conversa. Você deve verificar por conta própria se a lei do seu país e as regras da sua organização exigem o consentimento dos participantes para gravar e processar uma conversa e, quando exigirem, obtê-lo. Não somos responsáveis por gravações feitas sem o consentimento necessário.</p>
+
+<h2>6. Provas, entrevistas e regras de terceiros</h2>
+<p>O Argus é um assistente de uso geral. Não o use onde a ajuda de pessoas ou de programas é proibida: em provas, testes e competições, sob regras do local de trabalho ou da escola, e em entrevistas em que o empregador ou o organizador o tenha proibido. As consequências de violar essas regras — expulsão, rejeição, demissão, penalidades — são suas, não nossas.</p>
+
+<h2>7. A IA pode errar</h2>
+<p>As respostas são produzidas por inteligência artificial. Elas podem ser imprecisas, incompletas ou erradas, e o reconhecimento de fala e a leitura da tela podem cometer erros. Verifique você mesmo tudo o que for importante. As respostas do Argus não substituem um advogado, médico, consultor financeiro ou outro profissional, e não garantem um resultado — nem em uma prova, nem em uma entrevista, nem no trabalho.</p>
+
+<h2>8. Sem garantia de passar despercebido</h2>
+<p>O programa tem configurações que tornam a sua janela menos visível durante a gravação e o compartilhamento de tela. Elas são um conjunto de medidas técnicas específicas: não garantem que o programa passe despercebido em todas as versões do Windows ou do macOS (no macOS 15 e posteriores, alguns programas de compartilhamento de tela ainda o mostram) nem diante de todos os métodos de gravação ou de inspeção.</p>
+
+<h2>9. Seu conteúdo e seus direitos</h2>
+<p>Seus arquivos, perguntas e gravações continuam sendo seus. Você nos dá o direito de processá-los somente na medida em que o serviço precisar para funcionar (veja a Política de privacidade) e confirma que tem o direito de usá-los. O programa e o serviço nos pertencem; concedemos a você um direito pessoal e não exclusivo de usar o programa enquanto você cumprir estes termos.</p>
+
+<h2>10. Serviços de terceiros e disponibilidade</h2>
+<p>O Argus funciona por meio de provedores terceiros: serviços de IA, reconhecimento de fala, respostas por voz, pagamentos e hospedagem. As quedas deles e as mudanças em seus termos ou preços afetam o serviço, e não somos responsáveis pelo funcionamento deles. Procuramos manter o serviço em funcionamento, mas não prometemos que ele ficará disponível sem interrupções nem erros.</p>
+
+<h2>11. Responsabilidade</h2>
+<p>O serviço é fornecido “como está”, sem garantias, na medida em que a lei permitir. Não respondemos por perdas indiretas nem por lucros cessantes, e a nossa responsabilidade total perante você se limita ao valor que você nos pagou nos últimos 12 meses. Isso não elimina a responsabilidade que não possa ser legalmente excluída ou limitada, nem os seus direitos de consumidor.</p>
+
+<h2>12. Suspensão e encerramento</h2>
+<p>Se você violar estes termos, podemos restringir ou encerrar a sua conta e, em caso de violações graves, sem reembolsar o saldo. Você pode parar de usar o serviço a qualquer momento e pedir que excluamos a sua conta escrevendo para <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>. Podemos alterar o serviço ou encerrá-lo; se o encerrarmos, avisaremos com antecedência e reembolsaremos o dinheiro não gasto.</p>
+
+<h2>13. Alterações nos termos</h2>
+<p>Podemos alterar os termos. A versão e a data ficam no topo da página, e o texto atual está sempre no nosso site, no mesmo endereço. Avisaremos por e-mail sobre as mudanças relevantes; se você continuar usando o Argus depois disso, consideraremos as mudanças como aceitas. Se você não concordar, pare de usar o Argus e peça que excluamos a sua conta (escreva para <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>).</p>
+
+<h2>14. Lei e contato</h2>
+<p>Estes termos são regidos pela legislação aplicável. Procuramos resolver as disputas conversando; isso não limita os direitos obrigatórios de consumidor que você tem segundo a lei do seu país. Contato: a equipe do Argus, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Política de privacidade</a>
+    <a href="./">Baixar o Argus</a>
+  </footer>
+</article>
+<article lang="de" data-doc-lang="de" hidden>
+<h1>Nutzungsbedingungen</h1>
+<p class="meta">Stand: 14. Oktober 2026. Argus wird vom Argus-Team betrieben („wir“). Diese Übersetzung dient nur dem besseren Verständnis; weicht sie vom englischen Original ab, gilt die englische Fassung.</p>
+
+<p class="lead">Argus ist ein Assistent, der ein Gespräch mithört, Ihren Bildschirm ansieht und eine Antwort vorschlägt. Indem Sie ein Konto erstellen oder das Programm nutzen, akzeptieren Sie diese Bedingungen und die <a href="privacy.html">Datenschutzerklärung</a>. Die wichtigsten Punkte: Sie sind selbst dafür verantwortlich, wo und wie Sie Argus einsetzen; KI-Antworten können falsch sein; und von Ihrem Guthaben wird nur abgezogen, was Sie nutzen.</p>
+
+<h2>1. Über den Dienst</h2>
+<p>Argus ist ein Programm für Windows und macOS sowie der Online-Dienst, mit dem es arbeitet. Es erkennt Sprache, liest Ihren Bildschirm und erstellt mithilfe künstlicher Intelligenz Vorschläge. Der Dienst befindet sich in aktiver Entwicklung: Funktionen können sich ändern, und manche sind möglicherweise nicht stabil.</p>
+
+<h2>2. Ihr Konto</h2>
+<ul>
+  <li>Sie müssen mindestens 18 Jahre alt sein, um Argus zu nutzen.</li>
+  <li>Geben Sie Ihre eigene E-Mail-Adresse an und halten Sie Ihr Passwort geheim. Sie sind für alles verantwortlich, was unter Ihrem Konto geschieht.</li>
+  <li>Das Willkommensguthaben bei der Registrierung gibt es nur einmal pro Person. Legen Sie keine weiteren Konten an, um es noch einmal zu bekommen.</li>
+  <li>Sie können uns jederzeit bitten, Ihr Konto zu löschen, indem Sie an <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> schreiben; solche Anfragen bearbeiten wir so, wie es die Datenschutzerklärung beschreibt.</li>
+</ul>
+
+<h2>3. Guthaben und Zahlung</h2>
+<ul>
+  <li>Es gibt kein Abonnement. Sie laden Ihr Guthaben auf (ab $5) und zahlen für das, was Sie nutzen: Spracherkennung, Antworten und Sprachausgabe. Die Preise werden in der App angezeigt und können sich ändern; neue Preise gelten für die künftige Nutzung.</li>
+  <li>Geld auf Ihrem Guthaben verfällt nicht.</li>
+  <li>Geschenkte Beträge haben keinen Barwert und werden nicht erstattet.</li>
+  <li>Der nicht verbrauchte Teil einer Aufladung kann auf Anfrage an <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> innerhalb von 14 Tagen nach der Aufladung erstattet werden; die Gebühr des Zahlungssystems wird abgezogen. Bereits ausgegebenes Geld wird nicht erstattet. Die Rechte, die Ihnen das Verbraucherrecht gibt, werden dadurch nicht eingeschränkt.</li>
+  <li>Wenn Sie Ihr Konto löschen, geht ein noch vorhandenes Guthaben verloren: Wenn Sie es brauchen, bitten Sie vor dem Löschen um eine Erstattung.</li>
+  <li>Zahlungen werden von einem Zahlungsdienstleister abgewickelt. Wenn Sie eine Zahlung beanstanden, ohne sich zuvor an uns zu wenden, dürfen wir Ihr Konto sperren, solange der Fall geklärt wird.</li>
+</ul>
+
+<h2>4. Was Sie nicht tun dürfen</h2>
+<ul>
+  <li>gegen das Gesetz oder die Rechte anderer Personen verstoßen;</li>
+  <li>die Erfassung der Nutzung oder die Bezahlung umgehen, die Berichte des Programms fälschen oder auf anderem Weg als über das Programm auf unsere Dienste zugreifen;</li>
+  <li>das Programm oder den Dienst zurückentwickeln (Reverse Engineering), kopieren oder weiterverkaufen oder den Zugang zu Ihrem Konto weitergeben;</li>
+  <li>automatisierte Anfragen senden, die das Programm umgehen, oder den Dienst überlasten;</li>
+  <li>Argus nutzen, um Menschen zu belästigen, zu täuschen oder auszuspionieren.</li>
+</ul>
+
+<h2>5. Gespräche aufzeichnen und andere Personen</h2>
+<p>Argus hört Ihr Mikrofon und den Systemton ab. Die Personen, mit denen Sie sprechen, erhalten kein Signal, dass ein Assistent das Gespräch mithört. Sie müssen selbst herausfinden, ob das Recht Ihres Landes und die Regeln Ihrer Organisation die Einwilligung der Teilnehmenden zur Aufzeichnung und Verarbeitung eines Gesprächs verlangen, und diese Einwilligung dort einholen, wo sie nötig ist. Wir sind nicht verantwortlich für Aufzeichnungen, die ohne die erforderliche Einwilligung gemacht wurden.</p>
+
+<h2>6. Prüfungen, Vorstellungsgespräche und die Regeln anderer</h2>
+<p>Argus ist ein Assistent für allgemeine Zwecke. Nutzen Sie ihn nicht dort, wo Hilfe von Menschen oder Programmen verboten ist: bei Prüfungen, Tests und Wettbewerben, nach den Regeln am Arbeitsplatz oder in der Schule sowie bei Vorstellungsgesprächen, in denen der Arbeitgeber oder Veranstalter dies untersagt hat. Die Folgen eines Verstoßes gegen solche Regeln – Ausschluss, Absage, Entlassung, Sanktionen – tragen Sie, nicht wir.</p>
+
+<h2>7. KI kann sich irren</h2>
+<p>Die Antworten werden von künstlicher Intelligenz erzeugt. Sie können ungenau, unvollständig oder falsch sein, und auch Spracherkennung und das Lesen des Bildschirms können Fehler machen. Überprüfen Sie alles Wichtige selbst. Antworten von Argus ersetzen keine Rechtsberatung, keine ärztliche Beratung, keine Finanzberatung und keine andere Beratung durch Fachleute, und sie garantieren kein Ergebnis – weder in einer Prüfung noch in einem Vorstellungsgespräch noch bei der Arbeit.</p>
+
+<h2>8. Keine Garantie, unbemerkt zu bleiben</h2>
+<p>Das Programm hat Einstellungen, die sein Fenster bei Bildschirmaufnahmen und Bildschirmfreigaben weniger sichtbar machen. Sie sind eine Reihe konkreter technischer Maßnahmen: Sie garantieren nicht, dass das Programm auf jeder Version von Windows oder macOS unbemerkt bleibt (unter macOS 15 und neuer zeigen es manche Programme zur Bildschirmfreigabe weiterhin an), und auch nicht, dass es bei jeder Art der Aufzeichnung oder Kontrolle unbemerkt bleibt.</p>
+
+<h2>9. Ihre Inhalte und Rechte</h2>
+<p>Ihre Dateien, Fragen und Aufnahmen gehören weiterhin Ihnen. Sie räumen uns das Recht ein, sie nur so weit zu verarbeiten, wie der Dienst es zum Funktionieren braucht (siehe Datenschutzerklärung), und Sie bestätigen, dass Sie sie verwenden dürfen. Das Programm und der Dienst gehören uns; wir räumen Ihnen ein nicht ausschließliches, persönliches Recht ein, das Programm zu nutzen, solange Sie diese Bedingungen einhalten.</p>
+
+<h2>10. Dienste Dritter und Verfügbarkeit</h2>
+<p>Argus arbeitet über Drittanbieter: KI-Dienste, Spracherkennung, Sprachausgabe, Zahlungen und Hosting. Deren Ausfälle sowie Änderungen ihrer Bedingungen oder Preise wirken sich auf den Dienst aus, und wir sind nicht dafür verantwortlich, wie sie arbeiten. Wir bemühen uns, den Dienst am Laufen zu halten, versprechen aber nicht, dass er ohne Unterbrechungen oder Fehler verfügbar ist.</p>
+
+<h2>11. Haftung</h2>
+<p>Der Dienst wird, soweit das Gesetz es zulässt, „wie besehen“ und ohne Gewährleistung bereitgestellt. Wir haften nicht für mittelbare Schäden oder entgangenen Gewinn, und unsere Gesamthaftung Ihnen gegenüber ist auf den Betrag begrenzt, den Sie in den letzten 12 Monaten an uns gezahlt haben. Dies hebt keine Haftung auf, die sich rechtlich nicht ausschließen oder begrenzen lässt, und lässt Ihre Verbraucherrechte unberührt.</p>
+
+<h2>12. Sperrung und Beendigung</h2>
+<p>Wenn Sie gegen diese Bedingungen verstoßen, dürfen wir Ihr Konto einschränken oder schließen, bei schweren Verstößen ohne Erstattung des Guthabens. Sie können die Nutzung des Dienstes jederzeit beenden und uns bitten, Ihr Konto zu löschen, indem Sie an <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> schreiben. Wir dürfen den Dienst ändern oder einstellen; stellen wir ihn ein, kündigen wir das vorher an und erstatten nicht ausgegebenes Geld.</p>
+
+<h2>13. Änderungen der Bedingungen</h2>
+<p>Wir dürfen die Bedingungen ändern. Version und Datum stehen oben auf der Seite, und der aktuelle Text ist immer unter derselben Adresse auf unserer Website zu finden. Über wesentliche Änderungen informieren wir Sie per E-Mail; wenn Sie Argus danach weiter nutzen, gelten die Änderungen als akzeptiert. Wenn Sie nicht einverstanden sind, hören Sie auf, Argus zu nutzen, und bitten Sie uns, Ihr Konto zu löschen (schreiben Sie an <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>).</p>
+
+<h2>14. Recht und Kontakt</h2>
+<p>Für diese Bedingungen gilt das anwendbare Recht. Wir versuchen, Streitigkeiten im Gespräch beizulegen; zwingende Verbraucherrechte, die Ihnen nach dem Recht Ihres Landes zustehen, werden dadurch nicht eingeschränkt. Kontakt: Argus-Team, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Datenschutzerklärung</a>
+    <a href="./">Argus herunterladen</a>
+  </footer>
+</article>
+<article lang="fr" data-doc-lang="fr" hidden>
+<h1>Conditions d’utilisation</h1>
+<p class="meta">Version du 14 octobre 2026. Argus est exploité par l’équipe Argus («&nbsp;nous&nbsp;»). Cette traduction est fournie à titre indicatif&nbsp;; en cas de différence avec l’original anglais, la version anglaise prévaut.</p>
+
+<p class="lead">Argus est un assistant qui écoute une conversation, regarde votre écran et vous propose une réponse. En créant un compte ou en utilisant le programme, vous acceptez ces conditions et la <a href="privacy.html">Politique de confidentialité</a>. Les points les plus importants&nbsp;: vous êtes responsable de l’endroit et de la manière dont vous utilisez Argus&nbsp;; les réponses de l’IA peuvent être fausses&nbsp;; et votre solde n’est débité que pour ce que vous utilisez.</p>
+
+<h2>1. À propos du service</h2>
+<p>Argus est un programme pour Windows et macOS, ainsi que le service en ligne avec lequel il fonctionne. Il reconnaît la parole, lit votre écran et prépare des suggestions grâce à l’intelligence artificielle. Le service est en plein développement&nbsp;: les fonctionnalités peuvent changer et certaines peuvent être instables.</p>
+
+<h2>2. Votre compte</h2>
+<ul>
+  <li>Vous devez avoir au moins 18 ans pour utiliser Argus.</li>
+  <li>Indiquez votre propre adresse e-mail et gardez votre mot de passe secret. Vous êtes responsable de tout ce qui se passe depuis votre compte.</li>
+  <li>Le solde de bienvenue offert à l’inscription est limité à un par personne. Ne créez pas de comptes pour l’obtenir de nouveau.</li>
+  <li>Vous pouvez nous demander de supprimer votre compte à tout moment en écrivant à <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>&nbsp;; nous traitons ces demandes comme le décrit la Politique de confidentialité.</li>
+</ul>
+
+<h2>3. Solde et paiement</h2>
+<ul>
+  <li>Il n’y a pas d’abonnement. Vous rechargez votre solde (à partir de 5&nbsp;$) et vous payez ce que vous utilisez&nbsp;: la reconnaissance vocale, les réponses et les réponses vocales. Les prix sont affichés dans l’application et peuvent changer&nbsp;; les nouveaux prix s’appliquent à l’utilisation future.</li>
+  <li>L’argent présent sur votre solde n’expire pas.</li>
+  <li>Les fonds offerts n’ont aucune valeur en espèces et ne sont pas remboursables.</li>
+  <li>La part non dépensée d’une recharge peut être remboursée sur demande à <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>, dans les 14 jours suivant la recharge&nbsp;; les frais du système de paiement sont déduits. L’argent déjà dépensé n’est pas remboursé. Cela ne limite pas les droits que vous confère le droit de la consommation.</li>
+  <li>Quand vous supprimez votre compte, le solde restant est perdu&nbsp;: si vous en avez besoin, demandez un remboursement avant de supprimer le compte.</li>
+  <li>Les paiements sont gérés par un prestataire de paiement. Si vous contestez un paiement sans nous contacter d’abord, nous pouvons fermer votre compte le temps que le litige soit réglé.</li>
+</ul>
+
+<h2>4. Ce que vous ne devez pas faire</h2>
+<ul>
+  <li>enfreindre la loi ou les droits d’autrui&nbsp;;</li>
+  <li>contourner le suivi de l’utilisation ou le paiement, falsifier les rapports du programme, ou accéder à nos services autrement que par le programme&nbsp;;</li>
+  <li>faire de la rétro-ingénierie du programme ou du service, les copier ou les revendre, ou partager l’accès à votre compte&nbsp;;</li>
+  <li>envoyer des requêtes automatisées qui contournent le programme, ou surcharger le service&nbsp;;</li>
+  <li>utiliser Argus pour harceler, tromper ou espionner des personnes.</li>
+</ul>
+
+<h2>5. Enregistrement des conversations et autres personnes</h2>
+<p>Argus écoute votre micro et le son du système. Les personnes avec qui vous parlez ne reçoivent aucun signal indiquant qu’un assistant entend la conversation. C’est à vous de vérifier si la loi de votre pays et les règles de votre organisation exigent le consentement des participants pour enregistrer et traiter une conversation, et de l’obtenir lorsque c’est nécessaire. Nous ne sommes pas responsables des enregistrements réalisés sans le consentement requis.</p>
+
+<h2>6. Examens, entretiens et règles des autres</h2>
+<p>Argus est un assistant généraliste. Ne l’utilisez pas là où l’aide de personnes ou de programmes est interdite&nbsp;: lors d’examens, de tests et de concours, selon le règlement du lieu de travail ou de l’école, et lors d’entretiens où l’employeur ou l’organisateur l’a interdit. Les conséquences d’une violation de ces règles — exclusion, refus, licenciement, sanctions — sont pour vous, pas pour nous.</p>
+
+<h2>7. L’IA peut se tromper</h2>
+<p>Les réponses sont produites par une intelligence artificielle. Elles peuvent être inexactes, incomplètes ou fausses, et la reconnaissance vocale comme la lecture de l’écran peuvent faire des erreurs. Vérifiez vous-même tout ce qui est important. Les réponses d’Argus ne remplacent pas un avocat, un médecin, un conseiller financier ou un autre professionnel, et elles ne garantissent aucun résultat — ni à un examen, ni à un entretien, ni au travail.</p>
+
+<h2>8. Aucune garantie de passer inaperçu</h2>
+<p>Le programme dispose de réglages qui rendent sa fenêtre moins visible pendant l’enregistrement et le partage de l’écran. Ce sont des mesures techniques précises&nbsp;: elles ne garantissent pas que le programme passe inaperçu sur toutes les versions de Windows ou de macOS (sur macOS 15 et les versions plus récentes, certains programmes de partage d’écran l’affichent quand même), ni face à toutes les méthodes d’enregistrement ou d’inspection.</p>
+
+<h2>9. Votre contenu et vos droits</h2>
+<p>Vos fichiers, vos questions et vos enregistrements restent les vôtres. Vous nous donnez le droit de les traiter uniquement dans la mesure où le service en a besoin pour fonctionner (voir la Politique de confidentialité), et vous confirmez que vous avez le droit de les utiliser. Le programme et le service nous appartiennent&nbsp;; nous vous accordons un droit personnel et non exclusif d’utiliser le programme, tant que vous respectez ces conditions.</p>
+
+<h2>10. Services tiers et disponibilité</h2>
+<p>Argus fonctionne grâce à des prestataires tiers&nbsp;: services d’intelligence artificielle, reconnaissance vocale, réponses vocales, paiements et hébergement. Leurs pannes, ainsi que les changements de leurs conditions ou de leurs prix, affectent le service, et nous ne sommes pas responsables de leur fonctionnement. Nous faisons de notre mieux pour que le service reste en marche, mais nous ne promettons pas qu’il sera disponible sans interruption ni erreur.</p>
+
+<h2>11. Responsabilité</h2>
+<p>Le service est fourni «&nbsp;en l’état&nbsp;», sans garantie, dans la mesure permise par la loi. Nous ne sommes pas responsables des dommages indirects ni du manque à gagner, et notre responsabilité totale envers vous est limitée au montant que vous nous avez payé au cours des 12 derniers mois. Cela n’écarte pas la responsabilité qui ne peut légalement être exclue ou limitée, ni vos droits de consommateur.</p>
+
+<h2>12. Suspension et fin</h2>
+<p>Si vous enfreignez ces conditions, nous pouvons restreindre ou fermer votre compte et, en cas de manquement grave, le faire sans rembourser le solde. Vous pouvez cesser d’utiliser le service à tout moment et nous demander de supprimer votre compte en écrivant à <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>. Nous pouvons modifier le service ou y mettre fin&nbsp;; si nous y mettons fin, nous vous préviendrons à l’avance et nous rembourserons l’argent non dépensé.</p>
+
+<h2>13. Modification des conditions</h2>
+<p>Nous pouvons modifier ces conditions. La version et la date figurent en haut de la page, et le texte en vigueur se trouve toujours sur notre site web, à la même adresse. Nous vous écrirons par e-mail en cas de changements importants&nbsp;; si vous continuez à utiliser Argus ensuite, nous considérons que vous avez accepté les changements. Si vous n’êtes pas d’accord, cessez d’utiliser Argus et demandez-nous de supprimer votre compte (écrivez à <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>).</p>
+
+<h2>14. Droit applicable et contact</h2>
+<p>Ces conditions sont régies par le droit applicable. Nous essayons de régler les litiges par le dialogue&nbsp;; cela ne limite pas les droits impératifs dont vous bénéficiez en tant que consommateur en vertu du droit de votre pays. Contact&nbsp;: l’équipe Argus, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Politique de confidentialité</a>
+    <a href="./">Télécharger Argus</a>
+  </footer>
+</article>
+<article lang="tr" data-doc-lang="tr" hidden>
+<h1>Kullanım Koşulları</h1>
+<p class="meta">Sürüm tarihi: 14 Ekim 2026. Argus, Argus ekibi (“biz”) tarafından işletilir. Bu, kolaylık sağlamak amacıyla sunulan bir çeviridir; İngilizce asıl metinle arasında fark olursa İngilizce sürüm geçerlidir.</p>
+
+<p class="lead">Argus, bir konuşmayı dinleyen, ekranınıza bakan ve yanıt öneren bir asistandır. Hesap oluşturarak ya da programı kullanarak bu koşulları ve <a href="privacy.html">Gizlilik Politikası</a>’nı kabul etmiş olursunuz. En önemli noktalar: Argus’u nerede ve nasıl kullandığınızdan siz sorumlusunuz; yapay zekâ yanıtları yanlış olabilir; bakiyenizden yalnızca kullandığınız kadar düşülür.</p>
+
+<h2>1. Hizmet hakkında</h2>
+<p>Argus, Windows ve macOS için geliştirilmiş bir program ile bu programın birlikte çalıştığı çevrimiçi hizmettir. Konuşmayı tanır, ekranınızı okur ve yapay zekâ kullanarak öneriler hazırlar. Hizmet aktif geliştirme aşamasındadır: özellikler değişebilir, bazıları kararsız çalışabilir.</p>
+
+<h2>2. Hesabınız</h2>
+<ul>
+  <li>Argus’u kullanmak için en az 18 yaşında olmalısınız.</li>
+  <li>Kendi e-posta adresinizi verin ve şifrenizi gizli tutun. Hesabınız altında gerçekleşen her şeyden siz sorumlusunuz.</li>
+  <li>Kayıt olurken verilen hoş geldin bakiyesi kişi başına yalnızca bir defa verilir. Bunu yeniden almak için hesap oluşturmayın.</li>
+  <li>Bize <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> adresinden yazarak istediğiniz zaman hesabınızın silinmesini talep edebilirsiniz; bu tür talepleri Gizlilik Politikası’nda açıklandığı şekilde işleme alırız.</li>
+</ul>
+
+<h2>3. Bakiye ve ödeme</h2>
+<ul>
+  <li>Abonelik yoktur. Bakiyenizi yüklersiniz (en az $5) ve kullandığınız şeyler için ödeme yaparsınız: konuşma tanıma, yanıtlar ve sesli yanıtlar. Fiyatlar uygulamada gösterilir ve değişebilir; yeni fiyatlar sonraki kullanımlar için geçerlidir.</li>
+  <li>Bakiyenizdeki paranın geçerlilik süresi dolmaz.</li>
+  <li>Hediye tutarlarının nakit değeri yoktur ve iade edilmez.</li>
+  <li>Bir yüklemenin harcanmamış kısmı, yüklemeden itibaren 14 gün içinde <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> adresine yapacağınız talep üzerine iade edilebilir; ödeme sisteminin komisyonu düşülür. Harcanmış para iade edilmez. Bu, tüketici hukukunun size tanıdığı hakları sınırlamaz.</li>
+  <li>Hesabınızı sildiğinizde kalan bakiye kaybolur: ihtiyacınız varsa silmeden önce iade isteyin.</li>
+  <li>Ödemeleri bir ödeme hizmeti sağlayıcısı gerçekleştirir. Önce bizimle iletişime geçmeden bir ödemeye itiraz ederseniz, konu çözülene kadar hesabınızı kapatabiliriz.</li>
+</ul>
+
+<h2>4. Yapmamanız gerekenler</h2>
+<ul>
+  <li>yasaları ya da başkalarının haklarını çiğnemek;</li>
+  <li>kullanım takibini veya ödemeyi atlatmak, programın raporlarını tahrif etmek ya da hizmetlerimize program dışında başka herhangi bir yolla erişim sağlamak;</li>
+  <li>programı veya hizmeti tersine mühendislikle çözmek, kopyalamak ya da yeniden satmak; hesap erişimini başkalarıyla paylaşmak;</li>
+  <li>programı atlayan otomatik istekler göndermek ya da hizmeti aşırı yüklemek;</li>
+  <li>Argus’u insanları taciz etmek, aldatmak veya gizlice gözetlemek için kullanmak.</li>
+</ul>
+
+<h2>5. Konuşmaların kaydedilmesi ve diğer kişiler</h2>
+<p>Argus, mikrofonunuzu ve sistem sesinizi dinler. Konuştuğunuz kişiler, konuşmayı bir asistanın duyduğuna dair hiçbir işaret almaz. Ülkenizin hukukunun ve kurumunuzun kurallarının, bir konuşmanın kaydedilmesi ve işlenmesi için katılımcıların rızasını gerektirip gerektirmediğini kendiniz öğrenmeli ve gerekli olduğu yerde bu rızayı almalısınız. Gerekli rıza olmadan yapılan kayıtlardan sorumlu değiliz.</p>
+
+<h2>6. Sınavlar, mülakatlar ve başkalarının kuralları</h2>
+<p>Argus genel amaçlı bir asistandır. İnsanlardan ya da programlardan yardım almanın yasak olduğu yerlerde kullanmayın: sınavlarda, testlerde ve yarışmalarda, iş yeri veya okul kurallarının yasakladığı durumlarda ve işverenin ya da organizatörün yasakladığı mülakatlarda. Bu tür kuralları çiğnemenin sonuçları — okuldan ihraç, başvurunun reddedilmesi, işten çıkarılma, cezalar — bizim değil, sizin sorumluluğunuzdadır.</p>
+
+<h2>7. Yapay zekâ yanılabilir</h2>
+<p>Yanıtlar yapay zekâ tarafından üretilir. Hatalı, eksik ya da yanlış olabilirler; konuşma tanıma ve ekran okuma da hata yapabilir. Önemli olan her şeyi kendiniz kontrol edin. Argus yanıtları bir avukatın, doktorun, finans danışmanının ya da başka bir uzmanın yerini tutmaz ve sonuç garantisi vermez — ne sınavda, ne mülakatta, ne de işte.</p>
+
+<h2>8. Fark edilmeme garantisi yoktur</h2>
+<p>Programın, penceresini ekran kaydı ve paylaşımı sırasında daha az görünür kılan ayarları vardır. Bunlar belirli teknik önlemlerden oluşan bir bütündür: programın Windows veya macOS’un her sürümünde (macOS 15 ve üzerinde bazı ekran paylaşımı programları onu yine de gösterir) fark edilmeden kalacağını ya da her kayıt veya denetim yöntemi karşısında görünmez olacağını garanti etmezler.</p>
+
+<h2>9. İçeriğiniz ve haklar</h2>
+<p>Dosyalarınız, sorularınız ve kayıtlarınız size ait olmaya devam eder. Bunları yalnızca hizmetin çalışması için gerektiği ölçüde işleme hakkını bize verirsiniz (bkz. Gizlilik Politikası) ve bunları kullanma hakkına sahip olduğunuzu onaylarsınız. Program ve hizmet bize aittir; bu koşullara uyduğunuz sürece size programı kullanmanız için münhasır olmayan, kişisel bir hak veririz.</p>
+
+<h2>10. Üçüncü taraf hizmetler ve kullanılabilirlik</h2>
+<p>Argus üçüncü taraf sağlayıcılar üzerinden çalışır: yapay zekâ hizmetleri, konuşma tanıma, sesli yanıtlar, ödemeler ve barındırma. Bunların kesintileri ile koşullarındaki ya da fiyatlarındaki değişiklikler hizmeti etkiler; nasıl çalıştıklarından sorumlu değiliz. Hizmeti çalışır durumda tutmaya çalışırız, ancak kesintisiz ve hatasız kullanılabileceğini vaat etmeyiz.</p>
+
+<h2>11. Sorumluluk</h2>
+<p>Hizmet, hukukun izin verdiği ölçüde, hiçbir garanti verilmeksizin “olduğu gibi” sunulur. Dolaylı zararlardan veya kâr kaybından sorumlu değiliz; size karşı toplam sorumluluğumuz, son 12 ayda bize ödediğiniz tutarla sınırlıdır. Bu, hukuken hariç tutulamayan ya da sınırlandırılamayan sorumluluğu ve tüketici haklarını ortadan kaldırmaz.</p>
+
+<h2>12. Askıya alma ve sona erdirme</h2>
+<p>Bu koşulları ihlal ederseniz hesabınızı kısıtlayabilir ya da kapatabiliriz; ciddi ihlallerde bakiyeyi iade etmeden kapatabiliriz. Hizmeti kullanmayı istediğiniz zaman bırakabilir ve <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> adresine yazarak hesabınızın silinmesini isteyebilirsiniz. Hizmeti değiştirebilir veya sona erdirebiliriz; sona erdirirsek önceden bildirim yapar ve harcanmamış parayı iade ederiz.</p>
+
+<h2>13. Koşullarda yapılan değişiklikler</h2>
+<p>Koşulları değiştirebiliriz. Sürüm ve tarih sayfanın en üstünde yer alır, güncel metin ise her zaman web sitemizde aynı adrestedir. Önemli değişiklikleri size e-postayla bildiririz; bundan sonra Argus’u kullanmaya devam ederseniz değişiklikleri kabul etmiş sayarız. Katılmıyorsanız Argus’u kullanmayı bırakın ve hesabınızın silinmesini isteyin (<a href="mailto:support@arguspilot.com">support@arguspilot.com</a> adresine yazın).</p>
+
+<h2>14. Hukuk ve iletişim</h2>
+<p>Bu koşullar yürürlükteki hukuka tabidir. Anlaşmazlıkları görüşerek çözmeye çalışırız; bu, ülkenizin hukuku uyarınca sahip olduğunuz emredici tüketici haklarını sınırlamaz. İletişim: Argus ekibi, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Gizlilik Politikası</a>
+    <a href="./">Argus'u indir</a>
+  </footer>
+</article>
+<article lang="pl" data-doc-lang="pl" hidden>
+<h1>Warunki korzystania</h1>
+<p class="meta">Wersja z dnia 14 października 2026 r. Argus jest prowadzony przez zespół Argus („my”). To tłumaczenie zostało udostępnione dla wygody; jeśli różni się od angielskiego oryginału, rozstrzygająca jest wersja angielska.</p>
+
+<p class="lead">Argus to asystent, który słucha rozmowy, patrzy na ekran osoby korzystającej z programu (dalej: Użytkownik) i podpowiada odpowiedź. Tworząc konto lub korzystając z programu, Użytkownik akceptuje te warunki oraz <a href="privacy.html">Politykę prywatności</a>. Najważniejsze punkty: to Użytkownik odpowiada za to, gdzie i jak używa Argus; odpowiedzi AI mogą być błędne; a z salda Użytkownika pobieramy opłaty tylko za to, z czego korzysta.</p>
+
+<h2>1. O usłudze</h2>
+<p>Argus to program na Windows i macOS oraz usługa internetowa, z którą współpracuje. Rozpoznaje mowę, odczytuje ekran Użytkownika i przygotowuje podpowiedzi za pomocą sztucznej inteligencji. Usługa jest intensywnie rozwijana: funkcje mogą się zmieniać, a niektóre mogą działać niestabilnie.</p>
+
+<h2>2. Konto Użytkownika</h2>
+<ul>
+  <li>Aby korzystać z Argus, Użytkownik musi mieć co najmniej 18 lat.</li>
+  <li>Należy podać własny adres e-mail i zachować hasło w tajemnicy. Użytkownik odpowiada za wszystko, co dzieje się na jego koncie.</li>
+  <li>Saldo powitalne przyznawane przy rejestracji przysługuje raz na osobę. Nie należy zakładać kolejnych kont, żeby otrzymać je ponownie.</li>
+  <li>Użytkownik może w każdej chwili poprosić nas o usunięcie konta, pisząc na <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>; takie prośby realizujemy w sposób opisany w Polityce prywatności.</li>
+</ul>
+
+<h2>3. Saldo i płatności</h2>
+<ul>
+  <li>Nie ma subskrypcji. Użytkownik doładowuje saldo (od $5) i płaci za to, z czego korzysta: rozpoznawanie mowy, odpowiedzi i odpowiedzi głosowe. Ceny są pokazane w aplikacji i mogą się zmieniać; nowe ceny dotyczą korzystania w przyszłości.</li>
+  <li>Środki na saldzie nie wygasają.</li>
+  <li>Środki otrzymane w prezencie nie mają wartości pieniężnej i nie podlegają zwrotowi.</li>
+  <li>Niewykorzystaną część doładowania można zwrócić na prośbę zgłoszoną pod adresem <a href="mailto:support@arguspilot.com">support@arguspilot.com</a> w ciągu 14 dni od doładowania; od zwracanej kwoty potrącamy prowizję systemu płatności. Pieniądze już wydane nie są zwracane. Nie ogranicza to praw, które daje Użytkownikowi prawo konsumenckie.</li>
+  <li>Po usunięciu konta pozostałe saldo przepada: jeśli Użytkownik go potrzebuje, powinien poprosić o zwrot przed usunięciem.</li>
+  <li>Płatności obsługuje operator płatności. Jeśli Użytkownik zakwestionuje płatność bez wcześniejszego skontaktowania się z nami, możemy zamknąć jego konto na czas wyjaśniania sprawy.</li>
+</ul>
+
+<h2>4. Zakazane działania</h2>
+<ul>
+  <li>łamanie prawa lub naruszanie praw innych osób;</li>
+  <li>obchodzenie liczenia zużycia lub płatności, fałszowanie raportów programu albo uzyskiwanie dostępu do naszych usług w inny sposób niż przez program;</li>
+  <li>inżynieria wsteczna, kopiowanie lub odsprzedaż programu albo usługi, a także udostępnianie komuś dostępu do swojego konta;</li>
+  <li>wysyłanie zautomatyzowanych żądań z pominięciem programu lub przeciążanie usługi;</li>
+  <li>wykorzystywanie Argus do nękania, oszukiwania lub szpiegowania ludzi.</li>
+</ul>
+
+<h2>5. Nagrywanie rozmów i inne osoby</h2>
+<p>Argus słucha mikrofonu Użytkownika i dźwięku systemu. Osoby, z którymi Użytkownik rozmawia, nie dostają żadnego sygnału, że rozmowę słyszy asystent. Użytkownik musi we własnym zakresie ustalić, czy prawo jego kraju i zasady jego organizacji wymagają zgody uczestników na nagrywanie i przetwarzanie rozmowy, i uzyskać ją tam, gdzie jest potrzebna. Nie odpowiadamy za nagrania wykonane bez wymaganej zgody.</p>
+
+<h2>6. Egzaminy, rozmowy kwalifikacyjne i cudze zasady</h2>
+<p>Argus to asystent ogólnego przeznaczenia. Nie należy go używać tam, gdzie pomoc ludzi lub programów jest zabroniona: na egzaminach, w testach i konkursach, tam gdzie zakazują tego zasady w pracy lub w szkole, a także na rozmowach kwalifikacyjnych, jeśli pracodawca lub organizator tego zakazał. Konsekwencje złamania takich zasad — wydalenie, odrzucenie kandydatury, zwolnienie, kary — ponosi Użytkownik, nie my.</p>
+
+<h2>7. AI może się mylić</h2>
+<p>Odpowiedzi tworzy sztuczna inteligencja. Mogą być nieścisłe, niepełne lub błędne, a rozpoznawanie mowy i odczyt ekranu też mogą popełniać błędy. Wszystko, co ważne, należy sprawdzać samodzielnie. Odpowiedzi Argus nie zastępują prawnika, lekarza, doradcy finansowego ani innego specjalisty i nie gwarantują wyniku — ani na egzaminie, ani na rozmowie kwalifikacyjnej, ani w pracy.</p>
+
+<h2>8. Brak gwarancji, że nikt nie zauważy</h2>
+<p>Program ma ustawienia, które sprawiają, że jego okno jest mniej widoczne podczas nagrywania i udostępniania ekranu. To zestaw konkretnych środków technicznych: nie gwarantują one, że program pozostanie niezauważony w każdej wersji Windows lub macOS (w macOS 15 i nowszych niektóre programy do udostępniania ekranu nadal go pokazują) ani przy każdej metodzie nagrywania czy sprawdzania.</p>
+
+<h2>9. Treści i prawa Użytkownika</h2>
+<p>Pliki, pytania i nagrania Użytkownika pozostają jego własnością. Użytkownik daje nam prawo do ich przetwarzania tylko w takim zakresie, w jakim jest to potrzebne do działania usługi (zob. Polityka prywatności), i potwierdza, że ma prawo z nich korzystać. Program i usługa należą do nas; udzielamy Użytkownikowi niewyłącznego, osobistego prawa do korzystania z programu, dopóki przestrzega on tych warunków.</p>
+
+<h2>10. Usługi zewnętrzne i dostępność</h2>
+<p>Argus działa za pośrednictwem zewnętrznych dostawców: usług AI, rozpoznawania mowy, odpowiedzi głosowych, płatności i hostingu. Ich awarie oraz zmiany warunków lub cen wpływają na usługę, a my nie odpowiadamy za to, jak działają. Staramy się utrzymywać usługę w działaniu, ale nie obiecujemy, że będzie dostępna bez przerw i błędów.</p>
+
+<h2>11. Odpowiedzialność</h2>
+<p>Usługa jest świadczona „tak, jak jest”, bez gwarancji, w zakresie dozwolonym przez prawo. Nie odpowiadamy za szkody pośrednie ani utracone zyski, a nasza łączna odpowiedzialność wobec Użytkownika jest ograniczona do kwoty płatności Użytkownika na naszą rzecz w ciągu ostatnich 12 miesięcy. Nie wyłącza to odpowiedzialności, której zgodnie z prawem nie można wyłączyć ani ograniczyć, ani praw konsumenta przysługujących Użytkownikowi.</p>
+
+<h2>12. Zawieszenie i zakończenie</h2>
+<p>Jeśli Użytkownik naruszy te warunki, możemy ograniczyć lub zamknąć jego konto, a w przypadku poważnych naruszeń — bez zwrotu salda. Użytkownik może w każdej chwili przestać korzystać z usługi i poprosić nas o usunięcie konta, pisząc na <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>. Możemy zmienić usługę lub ją zakończyć; jeśli ją zakończymy, powiadomimy Użytkownika z wyprzedzeniem i zwrócimy niewykorzystane środki.</p>
+
+<h2>13. Zmiany warunków</h2>
+<p>Możemy zmieniać te warunki. Wersja i data są na górze strony, a aktualny tekst jest zawsze na naszej stronie internetowej pod tym samym adresem. O istotnych zmianach powiadomimy Użytkownika e-mailem; jeśli po tym nadal korzysta on z Argus, uznajemy zmiany za przyjęte. Jeśli Użytkownik się nie zgadza, powinien przestać korzystać z Argus i poprosić nas o usunięcie konta (pisząc na <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>).</p>
+
+<h2>14. Prawo i kontakt</h2>
+<p>Te warunki podlegają właściwemu prawu. Staramy się rozstrzygać spory w drodze rozmowy; nie ogranicza to obowiązkowych praw konsumenckich, które przysługują Użytkownikowi na mocy prawa jego kraju. Kontakt: zespół Argus, <a href="mailto:support@arguspilot.com">support@arguspilot.com</a>.</p>
+<footer>
+    <a href="privacy.html">Polityka prywatności</a>
+    <a href="./">Pobierz Argus</a>
+  </footer>
+</article>
+</div>
+
+<script>
+  // The document language. The page carries all the languages at once (one `<article>` per
+  // language, `legal/legal_render.py`), one is visible:
+  //   1. `?lang=xx` in the address;
+  //   2. inside the app (`/p/legal-…`) — the interface language (`window.ARGUS_LANG`, the app
+  //      puts it first in `<head>`);
+  //   3. on the site — the one chosen earlier (`argus.legal.lang`), then the browser language;
+  //   4. English (which is also visible without scripts).
+  (function () {
+    var LANGS = ["ru", "uk", "en", "es", "pt", "de", "fr", "tr", "pl"];
+    var UI = {"en": {"name": "English", "terms": "Terms of Use", "privacy": "Privacy Policy", "download": "Download Argus"}, "ru": {"name": "Русский", "terms": "Условия использования", "privacy": "Политика конфиденциальности", "download": "Скачать Argus"}, "uk": {"name": "Українська", "terms": "Умови використання", "privacy": "Політика конфіденційності", "download": "Завантажити Argus"}, "es": {"name": "Español", "terms": "Términos de uso", "privacy": "Política de privacidad", "download": "Descargar Argus"}, "pt": {"name": "Português", "terms": "Termos de uso", "privacy": "Política de privacidade", "download": "Baixar o Argus"}, "de": {"name": "Deutsch", "terms": "Nutzungsbedingungen", "privacy": "Datenschutzerklärung", "download": "Argus herunterladen"}, "fr": {"name": "Français", "terms": "Conditions d'utilisation", "privacy": "Politique de confidentialité", "download": "Télécharger Argus"}, "tr": {"name": "Türkçe", "terms": "Kullanım Koşulları", "privacy": "Gizlilik Politikası", "download": "Argus'u indir"}, "pl": {"name": "Polski", "terms": "Warunki korzystania", "privacy": "Polityka prywatności", "download": "Pobierz Argus"} };
+    var DOC = "terms";
+    var STORE = "argus.legal.lang";
+    var inApp = /^\/p\//.test(location.pathname);
+
+    function pick() {
+      var q = /[?&]lang=([a-z]{2})\b/.exec(location.search);
+      if (q && LANGS.indexOf(q[1]) >= 0) return q[1];
+      var app = typeof window !== "undefined" ? window.ARGUS_LANG : undefined;
+      if (inApp) return LANGS.indexOf(app) >= 0 ? app : "en";
+      try { var s = localStorage.getItem(STORE); if (s && LANGS.indexOf(s) >= 0) return s; } catch (e) { /* no storage — no big deal */ }
+      var n = String(typeof navigator !== "undefined" ? navigator.language || "en" : "en").slice(0, 2).toLowerCase();
+      return LANGS.indexOf(n) >= 0 ? n : "en";
+    }
+
+    function show(lang, remember) {
+      document.querySelectorAll("article[data-doc-lang]").forEach(function (a) {
+        a.hidden = a.getAttribute("data-doc-lang") !== lang;
+      });
+      document.querySelectorAll(".langbar button").forEach(function (b) {
+        if (b.getAttribute("data-lang") === lang) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+      });
+      document.documentElement.lang = lang;
+      document.title = UI[lang][DOC] + " — Argus";
+      if (remember && !inApp) { try { localStorage.setItem(STORE, lang); } catch (e) { /* no big deal */ } }
+    }
+
+    document.querySelectorAll(".langbar button").forEach(function (b) {
+      b.addEventListener("click", function () { show(b.getAttribute("data-lang"), true); });
+    });
+    show(pick(), false);
+  })();
+</script>
+
+<script>
+  // In the app the page lives under `/p/legal-<name>`: both in a window over the page
+  // (`?embed=1`) and in an ordinary tab (the link in the account is a real one: people open it
+  // with Ctrl or the middle button, or copy the address). The neighboring document there has a
+  // different name (`/p/legal-privacy`; `/p/privacy.html` is a 404), and `./` would lead to
+  // `/p/` — a 404 too. So the links are rewritten by address, not only in the window.
+  if (/^\/p\//.test(location.pathname)) {
+    var tail = document.documentElement.className === "embed" ? "?embed=1" : "";
+    document.querySelectorAll("a[href$='.html']").forEach(function (a) {
+      a.setAttribute("href", "legal-" + a.getAttribute("href").replace(/\.html.*$/, "") + tail);
+    });
+    document.querySelectorAll("a[href='./']").forEach(function (a) { a.setAttribute("href", "/"); });
+  }
+</script>
+</body>
+</html>

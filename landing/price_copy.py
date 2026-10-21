@@ -1,0 +1,75 @@
+# Texts of the pricing and "Help" pages: (key, English). English is the source (`subpages.py` bakes it
+# into the pages, `build_landing.py` writes it to copy/en.json); the other languages, Russian included,
+# are translations kept in copy/<lang>.json. The wording is taken from the app's own "Account" window
+# (`account.js`): "Top-up amount", "Pricing", "What each amount covers", and the names of
+# services and units; `subpages.py` calculates the numbers from `src/argus/server/pricing.py`.
+ROWS = [
+    ("nav.price", "Pricing"),
+    ("price.tag", "Pricing"),
+    ("price.title", "Pricing — Argus"),
+    ("price.h1", "Pay only for what you use"),
+    ("price.lede", "There is no subscription. Top up your balance from $5 and spend it on speech recognition, answers, and voice replies. Money on your balance does not expire."),
+    # how it works in the app
+    ("price.s1.h", "A gift when you sign up"),
+    ("price.s1.p", "Create an account right in the app. $0.30 lands on your balance right away: about 30 minutes of speech recognition or around 150 answers."),
+    ("price.s2.h", "Top-up"),
+    ("price.s2.p", "Open “Account” in the app, pick an amount, and press “Pay”. The payment page opens in your browser and your balance tops up by itself."),
+    ("price.s3.h", "You pay for use"),
+    ("price.s3.p", "“Account” shows your balance, your spending for the last 30 days by day and by service, and your top-up history. When less than $0.50 is left, the app warns you."),
+    # top-up amount
+    ("price.amt.h", "Top-up amount"),
+    ("price.amt.p", "Buttons for $5, $10, $20, and $50, or your own amount: whole dollars, from $5 to $500."),
+    ("price.amt.t", "≈ {n} of speech"),
+    # prices
+    ("price.t.h", "Prices"),
+    ("price.t.sub", "You pay only for what you use. On the right, how far each top-up amount goes."),
+    ("price.t.svc", "Service"),
+    ("price.t.cost", "Price"),
+    ("price.t.fits", "What each amount covers"),
+    ("price.r1", "Speech recognition"),
+    ("price.r2", "Smart speech recognition"),
+    ("price.r3", "Regular answer"),
+    ("price.r4", "“Think longer”"),
+    ("price.r5", "Voice replies"),
+    ("price.k.speech", "hours of speech"),
+    ("price.k.chars", "characters"),
+    ("price.k.answers", "number of answers"),
+    ("price.u.hour", "per hour of speech"),
+    ("price.u.min", "per minute"),
+    ("price.u.answer", "per answer"),
+    ("price.u.chars", "per 1,000 characters"),
+    ("price.n.h", "h"),
+    ("price.n.min", "min"),
+    ("price.n.k", "k"),
+    ("price.t.note", "An answer with a long context or a screen costs more than a typical one."),
+    ("price.n1", "Prices are in US dollars and are also shown in the app next to the top-up buttons. They may change; a new price applies only to what you use after that."),
+    ("price.n2", "Refunds of the unspent part of a top-up are described in the <a href=\"terms.html\">Terms of Use</a>."),
+    ("price.cta", "Install Argus: $0.30 is on your balance right after you sign up."),
+    # the "Help" page and the header tabs (the header has three pages: about the product, pricing, help)
+    ("faq.tag", "Questions"),   # heading of the questions block on the "Help" page (the key left the main template with its tab)
+    ("nav.about", "About"),
+    ("nav.help", "Help"),
+    ("help.tag", "Help"),
+    ("help.title", "Help — Argus"),
+    ("help.h1", "Help"),
+    ("help.lede", "Answers to common questions, how to reach us, and how to get a refund."),
+    ("help.contact.h", "Contact us"),
+    ("help.contact.p", "Write to us about anything: how the program works, payment, or your data."),
+    ("help.refund.h", "Refunds"),
+    ("help.refund.p", "You can get a refund for the unspent part of a top-up: write to us. The timing and process are described in the <a href=\"terms.html\">Terms of Use</a>. The sign-up gift is not refundable."),
+    # seller details (the page seller.html exists, but only while ~/.argus/seller.json is on the
+    # build machine) and prices in the local currency
+    ("foot.seller", "Seller information"),
+    ("seller.title", "Seller information — Argus"),
+    ("seller.h1", "Seller information"),
+    ("seller.lede", "Who provides the Argus service and how to reach us."),
+    ("seller.l.name", "Seller"),
+    ("seller.l.tin", "Taxpayer registration number"),
+    ("seller.l.address", "Address"),
+    ("seller.l.email", "Email"),
+    ("price.pay.h", "Payment and delivery"),
+    ("price.pay.p", "You pay by bank card on a secure payment page; your card details never reach us. Prices are in US dollars. The service is digital: your balance is topped up right after the payment, and the program is downloaded from this site."),
+    ("price.ref.h", "Exchange and refunds"),
+    ("price.ref.p", "Argus is a digital service: nothing is shipped, and your balance is available right after the payment, so there is nothing to exchange. The unspent part of a top-up can be refunded within 14 days of the payment: write to {email}. The payment system’s fee is deducted. Money already spent and the welcome gift are not refunded. This does not limit your rights under consumer law. Details are in the <a href=\"terms.html\">Terms of Use</a>."),
+]
+EN = dict(ROWS)

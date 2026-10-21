@@ -1,0 +1,626 @@
+/* ============================================================
+   /design/argus.css - ONE language for four surfaces:
+     /              instrument dashboard      data-density="instrument"
+     /p/desk        exam console              mixed density
+     /p/live        twitch panel              data-density="glance"
+     /p/panel       voice panel               data-density="glance"
+     exam overlay   stealth surface           data-density="glance" + data-theme="dark"
+
+   EDITED ONLY IN master (package argus/design/).
+   A branch MUST NOT edit this file. If a class is missing,
+   the class is added here and reaches the three branches by merge.
+   A branch owns only <channel>.css, and the one thing allowed in it
+   is overriding variables in :root.
+   ============================================================ */
+
+:root {
+  color-scheme: dark light;
+
+  /* ---- surfaces. This is the second pass, not the first: the first painted the glass with a
+     tint of the panel itself (color-mix of panel + transparency), and on a gentle dark
+     background that is indistinguishable from a flat fill, so the glass is not visible.
+     Real glass is lighter than what is under it, not darker: a white tint over the canvas,
+     not a gray tint of itself. ---- */
+  --bg:#0a0b0d;
+  --panel:#131519;     /* a dull inner surface: fields, thumbnails, where glass does not belong */
+  --sunk:#08090b;
+  --raised:rgba(255,255,255,.07);
+  /* Buttons and the window over the feed use the same values and the same names as in
+     `ui/static/chrome.css`: the `--btn` fill and the `--btn-edge` edge at rest are `--slab`
+     and `--slab-edge`, lighter on hover; the focus ring is light, not colored; `--win` is
+     the picker window (`.sheet`): the button's colors throughout, solid; `--pick-hover` is
+     what the card darkens to under the cursor. */
+  --btn:var(--slab);
+  --btn-hover:rgba(255,255,255,.09);
+  --btn-edge:var(--slab-edge);
+  --focus:rgba(242,244,247,.7);
+  --win:#101318;       /* darker than before (#181b21), 2026-10-07, as in ui/static/chrome.css */
+  --pick-hover:var(--bg);
+  --line:rgba(255,255,255,.08);
+  --line2:rgba(255,255,255,.14);
+  --text:#f2f4f7;
+  --dim:#9aa1ad;
+  --faint:#5b6270;
+  --fg:var(--text);    /* the WebView2/WinForms question (the same analysis as for `body[data-solo]`
+   .cmp-head b refers to --fg, which is declared nowhere */
+
+  /* ---- glass. The window itself is opaque and will stay so until the WebView2/WinForms
+     question is settled (the same analysis as for `body[data-solo]` in index.html). There
+     used to be a highlight under the canvas, which gave the blur something to show: two
+     attempts with color (blue, matching the accent) did not work out, being either too
+     bright or only near the header; the third was white, with no color at all, a slight
+     brightness variation under a flat background, just for the blur. Then the highlight was
+     removed completely, and the flat canvas turned out worse; a colored one ("northern
+     lights") turned out too colorful, three neutral spots turned out dirty in a narrow
+     window, and a diagonal sweep was worse than before; then a cold light in the corner
+     came back, `--bloom`, together with one more like it at the bottom, and that was judged
+     much worse. Now the whole gradient is turned off everywhere (2026-10-06), see `--bloom`
+     below. */
+  --glass-blur:32px;
+  --glass-sat:1.6;
+  --glass:rgba(255,255,255,.07);
+  --glass-strong:rgba(255,255,255,.08);
+  --glass-edge:rgba(255,255,255,.13);
+  --glass-edge-top:rgba(255,255,255,.20);
+
+  /* ---- transparency in the color itself. The same values and the same names as in
+     `ui/static/chrome.css` (there it is the instrument and the settings): one language, not
+     two. A field, a track and an inset are painted with the dark glass `--field`, not with
+     the dull, almost black `--sunk`, otherwise they stick out of the glass as black holes.
+     ---- */
+  --field:rgba(0,0,0,.30);
+  /* The backing of a large block (`.band`): almost the canvas, with the edge holding the
+     shape. Glass stays for the strips and popup windows, not for everything. */
+  --slab:rgba(255,255,255,.03);
+  --slab-edge:rgba(255,255,255,.09);
+  /* The light in the corner of the canvas is turned off (2026-10-06), the same as in
+     `ui/static/chrome.css`: `none`, the canvas is flat. The previous value was a cold light
+     in the top left corner, a layer over the flat background and not a gradient in place of
+     it (the glass window paints the page with a transparent veil):
+       radial-gradient(120% 90% at 30% 0%, rgba(196,226,255,.07) 0%,
+                       rgba(196,226,255,.017) 55%, transparent 100%)
+     In the daytime (the light theme below) there was no light before either. */
+  --bloom:none;
+
+  /* ---- the SOURCE color. Allowed exactly on .tag and on .lamp__eye.
+     It never means a state. ---- */
+  --me:#4fb8d8;        /* my voice */
+  --them:#c77fd8;      /* the other party's voice */
+  --screen:#d8b54f;    /* vision */
+  --in:#7c8bf0;        /* model input */
+
+  /* ---- the STATE color. Five values; a sixth must not be added. ---- */
+  --ok:#5fd68a;
+  --warn:#e0b23e;
+  --bad:#f0716b;
+  --off:#5a6472;
+
+  --st-live:var(--ok);   /* on air · listening · healthy · ready to start */
+  --st-work:var(--in);   /* thinking · recognizing · speaking */
+  --st-hold:var(--warn); /* silent on purpose · gagged · paused · reserve running out */
+  --st-dead:var(--bad);  /* deaf · stream stopped · window gone · profile empty */
+  --st-idle:var(--off);  /* turned off by a person: this is not a breakage */
+
+  /* The fill and the edge are now a chip, not a backing: color only on the outline and a thin
+     background, and the meaning is carried by the shape (the badge), not by the brightness
+     of the fill. */
+  --st-live-bg:rgba(95,214,138,.12);   --st-live-edge:rgba(95,214,138,.34);
+  --st-work-bg:rgba(124,139,240,.12);  --st-work-edge:rgba(124,139,240,.36);
+  --st-hold-bg:rgba(224,178,62,.12);   --st-hold-edge:rgba(224,178,62,.34);
+  --st-dead-bg:rgba(240,113,107,.13);  --st-dead-edge:rgba(240,113,107,.38);
+  --st-idle-bg:rgba(154,161,173,.10);  --st-idle-edge:rgba(154,161,173,.26);
+
+  /* ---- freshness of a line. The thresholds are the only thing the channels really change.
+     ---- */
+  --age-stale-s:20;    /* exam 20 · twitch 15 · voice 4  */
+  --age-trap-s:40;     /* exam 40 · twitch 30 · voice 12 */
+
+  /* ---- the channel accent: overridden in <channel>.css ---- */
+  --accent:var(--me);
+
+  /* ---- font ---- */
+  --face:"Segoe UI",system-ui,sans-serif;
+  --mono:Consolas,"Cascadia Mono",ui-monospace,monospace;
+  --ls-cap:.13em;
+  --lh:1.5;
+  --lh-tight:1.15;
+
+  /* ---- type-size ladder: INSTRUMENT, reading from 60 cm ----
+     --t-base is 14px not by chance: it is the type size of index.html, and the dashboard,
+     moving to the shared stylesheet, must not shift by a single pixel. */
+  --t-micro:11px;      /* block headings, caps (index.html: .panel > h2) */
+  --t-small:12.5px;    /* captions, .t, .cap (index.html) */
+  --t-dense:12px;      /* only the analysis feed and .screenline */
+  --t-base:14px;
+  --t-num:14px;
+  --t-lead:17px;       /* the main line of a block */
+  --t-say:26px;        /* the latest line */
+  --t-state:34px;      /* the state strip: exactly once per page */
+
+  /* ---- rhythm, radii, targets ---- */
+  --u:4px;
+  --gap:calc(var(--u) * 3);   /* 12 between blocks */
+  --pad:calc(var(--u) * 3);   /* 12 inside a block */
+  --pad-lg:calc(var(--u) * 5);/* 20 inside the state and the line */
+  --r1:7px; --r2:9px; --r3:12px;
+  --hit:34px;          /* minimum target */
+  --key-h:38px;        /* height of a large button */
+  --col-min:300px;     /* three dashboard columns */
+  --wrap:1180px;
+  --measure:62ch;      /* line limit; beyond it nothing can be read in a second */
+  --dur:.12s;
+  --shadow:0 1px 0 rgba(0,0,0,.35);
+  --lift:0 20px 40px -26px rgba(0,0,0,.65); /* a shadow that lifts a glass surface off the canvas */
+}
+
+/* ---- "GLANCE" DENSITY: 1-3 seconds from a second monitor or from a phone.
+   The components are the same, the markup is the same: a larger type size, a wider
+   rhythm, a bigger target. This is the only knob of difference between surfaces. ---- */
+[data-density="glance"] {
+  --t-micro:12.5px;
+  --t-small:14px;
+  --t-dense:14px;
+  --t-base:17px;
+  --t-num:17px;
+  --t-lead:22px;
+  --t-say:40px;
+  --t-state:64px;
+  --u:5px;
+  --pad:calc(var(--u) * 4);
+  --pad-lg:calc(var(--u) * 6);
+  --hit:48px;
+  --key-h:64px;
+  --col-min:520px;
+}
+
+/* ---- THE DAYTIME VARIANT OF THE SAME INSTRUMENT.
+   It is really needed: exam and twitch are set up an hour before, in daylight.
+   Live surfaces nail data-theme="dark" and do not get here. ---- */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:#eceef2; --panel:#f7f8fa; --sunk:#e3e6ec; --raised:#e8ebf0;
+    --btn:#e8ebf0; --btn-hover:#dce0e7;
+    /* In the daytime the buttons are as before (a solid light fill, a dark edge), and the
+       window over the feed is dense: it lies on a dark veil (`.overlay`). */
+    --btn-edge:var(--line2); --focus:rgba(20,25,35,.65); --win:var(--glass-strong);
+    --pick-hover:var(--sunk);
+    --line:#ced3db; --line2:#b4bcc7;
+    --text:#1b1f26; --dim:#5c6673; --faint:#8890a0;
+    --me:#1c6f8c; --them:#8a3fa0; --screen:#7d5f10; --in:#3f49a8;
+    --ok:#1f7a3d; --warn:#8a6100; --bad:#a8342f; --off:#828a95;
+    --st-live-bg:rgba(31,122,61,.12);   --st-live-edge:rgba(31,122,61,.42);
+    --st-work-bg:rgba(63,73,168,.12);   --st-work-edge:rgba(63,73,168,.45);
+    --st-hold-bg:rgba(138,97,0,.13);    --st-hold-edge:rgba(138,97,0,.44);
+    --st-dead-bg:rgba(168,52,47,.11);   --st-dead-edge:rgba(168,52,47,.48);
+    --st-idle-bg:rgba(130,138,149,.13); --st-idle-edge:rgba(130,138,149,.40);
+    /* Glass on daytime glass is darker, not lighter: a white edge on a white background is not
+       visible at all, while a dark one reads as an edge, exactly like paper held at an angle
+       to the light. */
+    --glass:color-mix(in srgb, var(--panel) 82%, transparent);
+    --glass-strong:color-mix(in srgb, var(--panel) 92%, transparent);
+    --glass-edge:rgba(20,25,35,.10); --glass-edge-top:rgba(20,25,35,.16);
+    --shadow:0 1px 2px rgba(20,25,35,.10);
+    /* In the daytime "dark glass" is a light shadow on a light surface, and white light under
+       a light canvas is not visible and not needed. */
+    --field:rgba(20,25,35,.06);
+    --slab:color-mix(in srgb, var(--panel) 60%, transparent);
+    --slab-edge:rgba(20,25,35,.10);
+    --bloom:none;
+  }
+}
+:root[data-theme="light"] {
+  --bg:#eceef2; --panel:#f7f8fa; --sunk:#e3e6ec; --raised:#e8ebf0;
+  --btn:#e8ebf0; --btn-hover:#dce0e7;
+  --btn-edge:var(--line2); --focus:rgba(20,25,35,.65); --win:var(--glass-strong);
+  --pick-hover:var(--sunk);
+  --line:#ced3db; --line2:#b4bcc7;
+  --text:#1b1f26; --dim:#5c6673; --faint:#8890a0;
+  --me:#1c6f8c; --them:#8a3fa0; --screen:#7d5f10; --in:#3f49a8;
+  --ok:#1f7a3d; --warn:#8a6100; --bad:#a8342f; --off:#828a95;
+  --st-live-bg:rgba(31,122,61,.12);   --st-live-edge:rgba(31,122,61,.42);
+  --st-work-bg:rgba(63,73,168,.12);   --st-work-edge:rgba(63,73,168,.45);
+  --st-hold-bg:rgba(138,97,0,.13);    --st-hold-edge:rgba(138,97,0,.44);
+  --st-dead-bg:rgba(168,52,47,.11);   --st-dead-edge:rgba(168,52,47,.48);
+  --st-idle-bg:rgba(130,138,149,.13); --st-idle-edge:rgba(130,138,149,.40);
+  --glass:color-mix(in srgb, var(--panel) 82%, transparent);
+  --glass-strong:color-mix(in srgb, var(--panel) 92%, transparent);
+  --glass-edge:rgba(20,25,35,.10); --glass-edge-top:rgba(20,25,35,.16);
+  --shadow:0 1px 2px rgba(20,25,35,.10);
+  --field:rgba(20,25,35,.06);
+  --slab:color-mix(in srgb, var(--panel) 60%, transparent);
+  --slab-edge:rgba(20,25,35,.10);
+  --bloom:none;
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+
+/* ============================================================
+   THE MAIN MECHANISM: no component names a color itself.
+   It is painted from --st / --st-bg / --st-edge, and those are set by one
+   data-state attribute on its root. So "SILENT: waiting for a pause"
+   and "DEAF: audio stopped" are the same markup with a different attribute,
+   and a branch physically cannot add a sixth color.
+   ============================================================ */
+[data-state]         { --st:var(--st-idle); --st-bg:var(--st-idle-bg); --st-edge:var(--st-idle-edge); }
+[data-state="live"]  { --st:var(--st-live); --st-bg:var(--st-live-bg); --st-edge:var(--st-live-edge); }
+[data-state="work"]  { --st:var(--st-work); --st-bg:var(--st-work-bg); --st-edge:var(--st-work-edge); }
+[data-state="hold"]  { --st:var(--st-hold); --st-bg:var(--st-hold-bg); --st-edge:var(--st-hold-edge); }
+[data-state="dead"]  { --st:var(--st-dead); --st-bg:var(--st-dead-bg); --st-edge:var(--st-dead-edge); }
+[data-state="idle"]  { --st:var(--st-idle); --st-bg:var(--st-idle-bg); --st-edge:var(--st-idle-edge); }
+[data-state] { transition:color var(--dur), background-color var(--dur),
+                          border-color var(--dur); }
+
+/* Line age uses the same trick. The step is set by panel.js from --age-*-s,
+   and CSS computes nothing. */
+[data-stale]         { --age-c:var(--dim); }
+[data-stale="fresh"] { --age-c:var(--text); }
+[data-stale="aging"] { --age-c:var(--warn); }
+[data-stale="trap"]  { --age-c:var(--bad); }
+
+/* ---- foundation ---- */
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text);
+       font:var(--t-base)/var(--lh) var(--face); position:relative; }
+/* Under the canvas is a layer for the light from `--bloom` (above; currently `none`, the
+   canvas is flat), a layer on top of the flat `--bg`, not a gradient in place of it. There
+   used to be two blue spots here (they painted the whole canvas teal); after them a flat
+   canvas, a colored "glow", three neutral spots and a diagonal sweep were tried, and none
+   of them was better. */
+body::before {
+  content:""; position:fixed; z-index:-1; inset:0; pointer-events:none;
+  background:var(--bloom);
+}
+.dim { color:var(--dim); }
+.ok  { color:var(--ok); }
+.bad { color:var(--bad); }
+[hidden] { display:none !important; }
+
+/* Every number is monospaced and tabular: almost all of them tick (age, gag countdown,
+   remainder, silence timer), and a proportional digit would jerk the neighboring text on
+   every tick. Jerking text in peripheral vision reads as an event and steals the gaze. */
+.num { font-family:var(--mono); font-variant-numeric:tabular-nums;
+       font-size:var(--t-num); }
+
+.tag { font-size:var(--t-micro); letter-spacing:var(--ls-cap);
+       text-transform:uppercase; color:var(--dim); font-weight:600; }
+.tag--me { color:var(--me); }
+.tag--them { color:var(--them); }
+.tag--screen { color:var(--screen); }
+.tag--in { color:var(--in); }
+
+:where(button,a,input,textarea,select,summary):focus-visible {
+  outline:2px solid var(--focus); outline-offset:2px; border-radius:var(--r1);
+}
+
+/* ---- PHASES. One attribute on <body> instead of tabs: in the thick of it, in the middle
+   of a conversation, nobody walks through tabs. The block is removed FROM THE FLOW, not
+   hidden visually: what cannot be decided now must not take up a single pixel. ---- */
+body[data-phase="before"] [data-phase-only]:not([data-phase-only~="before"]),
+body[data-phase="live"]   [data-phase-only]:not([data-phase-only~="live"]),
+body[data-phase="after"]  [data-phase-only]:not([data-phase-only~="after"]) {
+  display:none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration:0s !important; animation:none !important; }
+}
+
+/* ============================================================
+   SHELL
+   ============================================================ */
+.deck { display:grid; gap:var(--gap); padding:var(--gap);
+        grid-template-columns:repeat(auto-fit, minmax(var(--col-min), 1fr));
+        max-width:var(--wrap); margin:0 auto; }
+/* Glass without blur: the block stands in the flow of the feed, not on top of the lower
+   layer, so behind it in the paint stack there is never anything but the flat `--bg`, and
+   there is nothing to blur in principle, whatever the canvas under it. (For the popup
+   glass below, `.sheet`, the difference is exactly this: that one hangs fixed above the
+   feed, while here there is truly nothing to blur.) The light tint, the edge and the
+   shadow remain; they are enough for the feel of a material. */
+.band { background:var(--slab);
+        border:1px solid var(--slab-edge);
+        border-radius:var(--r2); padding:var(--pad); min-width:0;
+        box-shadow:var(--lift); }
+.band--wide { grid-column:1 / -1; }
+.band--flat { background:none; border:0; padding:0; }
+.band > .tag:first-child { display:block; margin:0 0 var(--gap); }
+.band p, .band li { max-width:var(--measure); }
+
+/* The state badge on a block, only when the state requires action. */
+.band[data-state="hold"], .band[data-state="dead"] {
+  background:var(--st-bg); border-color:var(--st-edge);
+}
+
+/* ============================================================
+   1. verdict - the verdict in one line
+   ============================================================ */
+.verdict { display:flex; align-items:baseline; flex-wrap:wrap;
+           gap:0 calc(var(--u) * 3); margin:0; max-width:none;
+           font-size:var(--t-state); line-height:var(--lh-tight);
+           font-weight:700; letter-spacing:.01em; color:var(--st); }
+.verdict__dot { width:.42em; height:.42em; border-radius:50%;
+                background:var(--st); flex:0 0 auto;
+                align-self:center; box-shadow:0 0 0 .18em var(--st-bg), 0 0 .5em var(--st-bg); }
+.verdict__word { color:var(--st); }
+.verdict__why  { font-size:var(--t-lead); font-weight:400; color:var(--text); }
+.verdict__count { font-size:var(--t-lead); color:var(--st); font-weight:700; }
+.verdict__fix { margin:calc(var(--u) * 2) 0 0; font-size:var(--t-small);
+                color:var(--dim); max-width:var(--measure); }
+[data-state="live"] > .verdict__fix,
+[data-state="work"] > .verdict__fix,
+[data-state="idle"] > .verdict__fix { display:none; }
+
+/* ============================================================
+   2. utterance - the last thing said, with its age
+   ============================================================ */
+.utterance { display:block; min-width:0; }
+.utterance__cause { display:flex; gap:calc(var(--u) * 2); align-items:baseline;
+                    margin:0 0 calc(var(--u) * 2); }
+.utterance__cause-text { color:var(--dim); font-size:var(--t-small);
+                         overflow:hidden; text-overflow:ellipsis;
+                         white-space:nowrap; max-width:var(--measure); }
+.utterance__text { margin:0; font-size:var(--t-say); line-height:1.28;
+                   max-width:var(--measure);
+                   display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical;
+                   overflow:hidden; }
+.utterance__text .speaking { background:var(--st-work-bg); color:var(--text);
+                             border-radius:var(--r1); padding:0 .12em; }
+.utterance__meta { display:flex; align-items:center; gap:calc(var(--u) * 2);
+                   margin:calc(var(--u) * 3) 0 0; font-size:var(--t-small); }
+.utterance__age { color:var(--age-c); font-weight:700; }
+[data-stale="trap"] .utterance__text { color:var(--dim); }
+.utterance__meta .key { margin-left:auto; }
+
+/* ============================================================
+   3. lamps - the signal path as lamps, with a silence timer
+   ============================================================ */
+.lamps { list-style:none; margin:0; padding:0; display:flex;
+         flex-direction:column; gap:calc(var(--u) * 2); }
+.lamp { display:flex; align-items:center; gap:calc(var(--u) * 2);
+        flex-wrap:wrap; min-height:var(--hit); }
+.lamp__eye { width:11px; height:11px; border-radius:50%; flex:0 0 auto;
+             background:var(--st); box-shadow:0 0 0 4px var(--st-bg), 0 0 10px var(--st-bg); }
+.lamp__name { color:var(--text); }
+.lamp[data-state="idle"] .lamp__name,
+.lamp[data-state="dead"] .lamp__name { color:var(--st); }
+.lamp__silence { color:var(--st); margin-left:auto; font-size:var(--t-small); }
+.lamp__warn { flex:1 0 100%; color:var(--bad); font-size:var(--t-small);
+              max-width:var(--measure); }
+.lamp .key { margin-left:auto; }
+.lamp[data-ch="me"]  .lamp__eye[data-state="live"] { }
+/* the source color on a lamp is allowed only as a thin outline of the name */
+.lamp[data-ch="me"]   .lamp__name::before { content:""; }
+.lamp[data-ch="them"] .lamp__name::before { content:""; }
+
+/* ============================================================
+   4. checks - the check before the start / the top failure during work
+   ============================================================ */
+.checks { display:block; }
+.checks__verdict { display:flex; align-items:center; gap:calc(var(--u) * 2);
+                   margin:0 0 var(--gap); font-size:var(--t-lead);
+                   font-weight:600; color:var(--st); max-width:var(--measure); }
+.checks__verdict::before { content:""; width:11px; height:11px; border-radius:50%;
+                           background:var(--st); box-shadow:0 0 0 4px var(--st-bg), 0 0 10px var(--st-bg);
+                           flex:0 0 auto; }
+.checks__list { list-style:none; margin:0; padding:0;
+                display:flex; flex-direction:column; gap:calc(var(--u) * 2); }
+.check { display:flex; align-items:center; gap:calc(var(--u) * 2);
+         flex-wrap:wrap; min-height:var(--hit); }
+.check__mark { width:16px; height:16px; border-radius:4px; flex:0 0 auto;
+               border:1.5px solid var(--st); background:var(--st-bg);
+               display:grid; place-items:center; font-size:11px; line-height:1;
+               color:var(--st); }
+.check[data-state="live"] .check__mark::after { content:"✓"; font-weight:800; }
+.check[data-state="dead"] .check__mark::after { content:"✕"; font-weight:800; }
+.check[data-state="hold"] .check__mark::after { content:"!"; font-weight:800; }
+.check__name { color:var(--text); }
+.check__note { color:var(--dim); font-size:var(--t-small); }
+.check .key { margin-left:auto; }
+/* In glance only the top failure remains: the list is read before the start, not on the
+   run. */
+[data-density="glance"] .checks__list { display:none; }
+body[data-phase="before"] [data-density="glance"] .checks__list,
+body[data-phase="before"] .checks__list { display:flex; }
+
+/* ============================================================
+   5. budget - the remainder in the channel's units
+   ============================================================ */
+.budget { display:flex; align-items:baseline; gap:calc(var(--u) * 2);
+          flex-wrap:wrap; color:var(--st); }
+.budget__left { font-size:var(--t-lead); font-weight:700; }
+.budget__unit { color:var(--dim); font-size:var(--t-small); }
+.budget__bar { flex:1 0 100%; height:6px; background:var(--field);
+               border-radius:3px; overflow:hidden; margin-top:var(--u); }
+.budget__bar > i { display:block; height:100%; width:var(--fill,100%);
+                   background:var(--st); }
+/* A person at work does not need the full counter. */
+[data-density="glance"] .budget[data-level="ample"] { display:none; }
+
+/* ============================================================
+   6. keys - large actions with a hotkey and a countdown
+   ============================================================ */
+.keys { display:flex; gap:var(--gap); flex-wrap:wrap; }
+.keys--sticky { position:sticky; bottom:0; z-index:5;
+                background:var(--bg); padding:var(--gap) 0 0;
+                border-top:1px solid var(--line); }
+.key { display:inline-flex; align-items:center; justify-content:center;
+       gap:calc(var(--u) * 2); min-height:var(--hit);
+       background:var(--btn); color:var(--text);
+       border:1px solid var(--btn-edge); border-radius:var(--r1);
+       padding:0 calc(var(--u) * 4); cursor:pointer;
+       font:inherit; font-size:var(--t-base); }
+/* On hover the edge lightens to white and is not painted in the accent: a tidy neutral
+   hover response, the same on any button. Color stays a sign of one meaning, the state and
+   "in conversation" (see `.key--go`), and not something that appears from a simple mouse
+   hover. */
+.key:hover:not(:disabled) { background:var(--btn-hover);
+                            border-color:var(--glass-edge-top); }
+.key:disabled { opacity:.5; cursor:default; }
+.key--minor { min-height:var(--hit); font-size:var(--t-small);
+              padding:0 calc(var(--u) * 3); }
+.key--major { flex:1 1 220px; min-height:var(--key-h);
+              font-size:var(--t-lead); font-weight:600; }
+/* The main action is not an outline on gray but the same chip as the states: a fill and an
+   edge in color, and the button itself says what it will do. */
+.key--go   { background:var(--st-live-bg); border-color:var(--st-live-edge); color:var(--ok); }
+.key--stop { background:var(--st-hold-bg); border-color:var(--st-hold-edge); color:var(--warn); }
+.key__name { }
+.key__hot { font:inherit; font-family:var(--mono); font-size:var(--t-small);
+            color:var(--dim); border:1px solid var(--btn-edge);
+            border-radius:4px; padding:1px 6px; }
+.key__count { display:none; color:var(--st-hold); font-weight:700; }
+.key[data-armed] { background:var(--st-hold-bg); border-color:var(--st-hold-edge);
+                   color:var(--st-hold); }
+.key[data-armed] .key__count { display:inline; }
+
+/* ============================================================
+   7. dial - a knob welded to its own measurement
+   ============================================================ */
+.dial { display:flex; flex-direction:column; gap:calc(var(--u) * 2);
+        min-width:0; }
+.dial__name { font-size:var(--t-micro); letter-spacing:var(--ls-cap);
+              text-transform:uppercase; color:var(--dim); font-weight:600; }
+.dial__seg { display:flex; flex-wrap:wrap; gap:2px; padding:2px;
+             border:1px solid var(--line); border-radius:var(--r1);
+             background:var(--field);
+             overflow:hidden; width:fit-content; max-width:100%; }
+.dial__seg > button { background:none; color:var(--dim);
+                      border:0; border-radius:calc(var(--r1) - 2px);
+                      min-height:calc(var(--hit) - 4px); padding:0 calc(var(--u) * 4);
+                      cursor:pointer; font:inherit; font-size:var(--t-base); }
+.dial__seg > button:hover { background:var(--btn-hover); color:var(--text); }
+.dial__seg > button[aria-checked="true"] {
+  background:var(--raised); color:var(--text); font-weight:600;
+}
+.dial__fact { font-family:var(--mono); font-variant-numeric:tabular-nums;
+              font-size:var(--t-small); color:var(--dim); }
+.dial__fact b { color:var(--text); font-size:var(--t-lead); }
+.dial[data-alarm="1"] .dial__fact,
+.dial[data-alarm="1"] .dial__fact b { color:var(--bad); }
+
+/* ============================================================
+   8. target - where it looks: a line in words + a still frame
+   ============================================================ */
+.target { display:block; }
+.target__line { display:flex; align-items:center; gap:calc(var(--u) * 2);
+                flex-wrap:wrap; margin:0 0 var(--u); }
+.target__win { color:var(--st); font-weight:600; overflow:hidden;
+               text-overflow:ellipsis; white-space:nowrap; max-width:22ch; }
+.target__scene { margin:0; color:var(--text); font-size:var(--t-lead);
+                 max-width:var(--measure); }
+.target[data-state="dead"] .target__scene { color:var(--bad); }
+.target__still { display:block; margin-top:calc(var(--u) * 2); padding:0;
+                 position:relative; width:100%; max-width:320px;
+                 background:var(--field); border:1px solid var(--line);
+                 border-radius:var(--r1); overflow:hidden; cursor:pointer; }
+.target__still img { display:block; width:100%; aspect-ratio:16/9;
+                     object-fit:cover; object-position:top left; }
+.target__stamp { position:absolute; right:4px; bottom:4px;
+                 background:rgba(6,7,9,.75); color:#f2f4f7;
+                 border-radius:4px; padding:1px 5px; font-size:var(--t-small); }
+
+/* ============================================================
+   9. log - the analysis afterwards
+   ============================================================ */
+.log { font-size:var(--t-dense); }
+.log__head { cursor:pointer; list-style:none;
+             font-size:var(--t-micro); letter-spacing:var(--ls-cap);
+             text-transform:uppercase; color:var(--dim); font-weight:600; }
+.log__head::-webkit-details-marker { display:none; }
+.log__head::before { content:"▸ "; }
+.log[open] .log__head::before { content:"▾ "; }
+.log__list { list-style:none; margin:var(--gap) 0 0; padding:0;
+             max-height:46vh; overflow-y:auto;
+             display:flex; flex-direction:column; gap:calc(var(--u) * 2); }
+.log__row { display:grid; grid-template-columns:auto 1fr auto;
+            gap:var(--u) calc(var(--u) * 2); align-items:baseline;
+            padding-bottom:calc(var(--u) * 2);
+            border-bottom:1px solid var(--line); max-width:none; }
+.log__at { background:none; border:0; padding:0; cursor:pointer;
+           color:var(--dim); font-size:var(--t-dense); }
+.log__at:hover { color:var(--text); text-decoration:underline; }
+.log__cause { color:var(--dim); grid-column:2; }
+.log__text  { grid-column:2; color:var(--text); max-width:var(--measure); }
+.log__text--silent { color:var(--dim); font-style:italic; }
+.log__late  { grid-column:2; color:var(--warn); font-size:var(--t-small); }
+.log__flags { grid-row:1; grid-column:3; display:flex; gap:var(--u); }
+.log__flags button { background:none; border:1px solid var(--line);
+                     border-radius:var(--r1); color:var(--dim);
+                     min-width:var(--hit); min-height:var(--hit); cursor:pointer;
+                     font:inherit; }
+.log__row[data-mark="good"] .log__flags button[data-act="good"] { color:var(--ok);
+                     border-color:var(--st-live-edge); background:var(--st-live-bg); }
+.log__row[data-mark="bad"]  .log__flags button[data-act="bad"]  { color:var(--bad);
+                     border-color:var(--st-dead-edge); background:var(--st-dead-bg); }
+
+/* ============================================================
+   10. brief - the text the channel is loaded with
+   ============================================================ */
+.brief { display:flex; flex-direction:column; gap:calc(var(--u) * 2); }
+.brief__name { font-size:var(--t-micro); letter-spacing:var(--ls-cap);
+               text-transform:uppercase; color:var(--dim); font-weight:600; }
+.brief__state { margin:0; color:var(--st-dead); font-size:var(--t-small);
+                max-width:var(--measure); }
+.brief[data-state="saved"] .brief__state,
+.brief[data-state="dirty"] .brief__state { display:none; }
+.brief__field { background:var(--field); color:var(--text);
+                border:1px solid var(--line); border-radius:var(--r1);
+                padding:calc(var(--u) * 2) calc(var(--u) * 3);
+                font:inherit; font-size:var(--t-base); width:100%; resize:vertical; }
+.brief[data-state="empty"] .brief__field { border-color:var(--st-dead-edge); }
+.brief__foot { display:flex; align-items:center; gap:calc(var(--u) * 3); }
+.brief__stamp { color:var(--dim); font-size:var(--t-small); }
+
+/* ============================================================
+   11. overlay / sheet - TAKEN FROM index.html VERBATIM.
+       This is an honesty check of the system: if a shared component cannot be
+       taken from the instrument without editing it, the divergence has already begun.
+   ============================================================ */
+.overlay { position:fixed; inset:0; background:rgba(4,5,6,.82); z-index:50;
+           display:grid; place-items:center; padding:30px; }
+.overlay[hidden] { display:none; }
+/* The picker window has the button's colors throughout (`--win`), solid: it stands above
+   the feed and blots it out. There is no blur, because under a solid fill it would show
+   nothing. In the daytime (the light theme above) the window is dense, from
+   `--glass-strong`. */
+.sheet { background:var(--win);
+         border:1px solid var(--btn-edge); border-radius:var(--r3);
+         box-shadow:0 24px 60px -20px #000;
+         max-width:1180px; width:100%; max-height:100%;
+         display:flex; flex-direction:column; overflow:hidden; }
+.sheet-head { display:flex; align-items:center; gap:14px; padding:12px 16px;
+              border-bottom:1px solid var(--slab-edge); }
+.cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
+         gap:12px; padding:16px; overflow-y:auto; }
+.card-win { border:1px solid var(--slab-edge); border-radius:9px; overflow:hidden;
+            cursor:pointer; background:var(--field);
+            transition:border-color .12s, background .12s; }
+.card-win:hover { background:var(--pick-hover); }
+.card-win.active { border-color:var(--focus); box-shadow:0 0 0 1px var(--focus); }
+.card-win .shot { width:100%; aspect-ratio:16/9; object-fit:cover;
+                  object-position:top left; display:block; background:var(--field);
+                  border-bottom:1px solid var(--line); transition:opacity .12s; }
+.card-win:hover .shot { opacity:.72; }
+.card-win .shot.empty { display:grid; place-items:center; color:var(--dim);
+                        font-size:26px; }
+.card-win .cap { padding:8px 10px; font-size:12.5px; overflow:hidden;
+                 text-overflow:ellipsis; white-space:nowrap; }
+.card-win .cap small { color:var(--dim); }
+.chan { margin-bottom:16px; }
+.chan h3 { margin:0 0 4px; font-size:13px; font-weight:600; }
+.chan .who-me { color:var(--me); }
+.chan .who-them { color:var(--them); }
+.chan .meta { color:var(--dim); font-size:12px; margin-bottom:6px; }
+.chan audio { width:100%; }
+.chan.silent .meta { color:var(--bad); }
+
+/* ============================================================
+   NARROW WINDOW. A phone next to the keyboard is the twitch scenario, declared outright.
+   ============================================================ */
+@media (max-width: 640px) {
+  .deck { padding:calc(var(--u) * 2); gap:calc(var(--u) * 2); }
+  .keys .key--major { flex:1 0 100%; }
+  .target__still { display:none; }
+}
+@media (max-width: 560px) {
+  [data-density="glance"] { --t-state:40px; --t-say:28px; }
+}

@@ -1,0 +1,102 @@
+{
+ "_doc": "Beispielgespräch für die Demo auf der Landingpage. Deutsch.",
+ "speech": [
+  "Erinner mich mal: Was ist der Unterschied zwischen einem Prozess und einem Thread?",
+  "Also: Ein Prozess ist ein eigenes Programm mit eigenem Speicher, und die Threads laufen darin und teilen sich diesen Speicher.",
+  "Okay. Schau doch bitte mal, warum mein Test fehlschlägt.",
+  "Ich sehe es: Die innere Schleife vergleicht ein Element mit sich selbst.",
+  "Und noch eins: Auf wie viel wachsen 10.000 bei 8 % Zinsen pro Jahr in drei Jahren?"
+ ],
+ "answers": [
+  "Ein **Prozess** ist ein abgeschottetes Programm mit eigenem Speicher. Ein **Thread** ist ein Ausführungsstrang innerhalb eines Prozesses: Die Threads eines Prozesses teilen sich dessen Speicher.\n\n- Prozesse sind teurer zu erzeugen und umzuschalten\n- Threads tauschen Daten schneller aus, brauchen aber Synchronisation\n- ein abgestürzter Thread kann den ganzen Prozess mitreißen",
+  "**Bug:** Die innere Schleife beginnt bei null, deshalb wird bei `i == j` ein Element mit sich selbst verglichen, und die Funktion gibt immer `True` zurück.\n\n```python\ndef has_duplicates(items):\n    return len(set(items)) != len(items)\n```\n\nOder du behältst die Schleifen und startest die innere bei `i + 1`. Die Variante mit der Menge läuft in O(n).",
+  "Das ist Zinseszins:\n\n$$S = 10\\,000 \\cdot (1 + 0{,}08)^3$$\n\n$$S \\approx 12\\,597$$\n\nAntwort: etwa **12.597**, also ein Zuwachs von **2.597**."
+ ],
+ "code": {
+  "title": "review — pull request #214",
+  "heading": "Duplikatfilter",
+  "l1": "Die Funktion has_duplicates(items) muss",
+  "l2": "True zurückgeben, wenn die Liste",
+  "l3": "wiederholte Elemente enthält, sonst False.",
+  "input": "Eingabe",
+  "expected": "erwartet  False",
+  "tests": "CI · TESTS"
+ },
+ "math": {
+  "title": "sheets — Sparprognose",
+  "slide": "FOLIE 7",
+  "heading": "Sparprognose",
+  "rows": [
+   [
+    "Betrag",
+    "10.000"
+   ],
+   [
+    "Zins",
+    "8 % pro Jahr"
+   ],
+   [
+    "Laufzeit",
+    "3 Jahre"
+   ],
+   [
+    "Ergebnis",
+    "?"
+   ]
+  ]
+ },
+ "idle": {
+  "title": "notes — Team-Call",
+  "heading": "Team-Call",
+  "items": [
+   "· Architektur des Dienstes",
+   "· Review von pull request #214",
+   "· Sparprognose"
+  ]
+ },
+ "call": {
+  "names": [
+   "Anna K.",
+   "Jonas",
+   "Lena S.",
+   "Du"
+  ],
+  "initials": [
+   "AK",
+   "JB",
+   "LS",
+   "Du"
+  ],
+  "sharing": "Du teilst deinen Bildschirm"
+ },
+ "windows": [
+  {
+   "title": "Wöchentliches Team-Meeting",
+   "label": "Wöchentliches Team-Meeting",
+   "kind": "call",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Statistik-Vorlesung",
+   "label": "Statistik-Vorlesung",
+   "kind": "lecture",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Musik-Player",
+   "label": "Musik-Player",
+   "kind": "music",
+   "w": 1280,
+   "h": 720
+  },
+  {
+   "title": "Notizen",
+   "label": "Notizen",
+   "kind": "notes",
+   "w": 1100,
+   "h": 800
+  }
+ ]
+}

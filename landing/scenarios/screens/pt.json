@@ -1,0 +1,171 @@
+{
+ "_doc": "Данные для кадров «Сессии» и «Запись» на лендинге (screens.py). Выдуманные. Время сессий — сегодня/вчера, часы по часам машины.",
+ "sessions": [
+  {
+   "id": "s-sync",
+   "name": "Reunião semanal da equipe",
+   "day": 0,
+   "at": [
+    10,
+    30
+   ]
+  },
+  {
+   "id": "s-review",
+   "name": "Revisão do pull request #214",
+   "day": 0,
+   "at": [
+    9,
+    12
+   ]
+  },
+  {
+   "id": "s-standup",
+   "name": "Daily da manhã",
+   "day": 0,
+   "at": [
+    8,
+    45
+   ]
+  },
+  {
+   "id": "s-sso",
+   "name": "Ligação com o cliente: login único",
+   "day": 1,
+   "at": [
+    16,
+    40
+   ]
+  },
+  {
+   "id": "s-spanish",
+   "name": "Aula de espanhol, lição 12",
+   "day": 1,
+   "at": [
+    14,
+    0
+   ]
+  },
+  {
+   "id": "s-stats",
+   "name": "Aula de estatística, semana 4",
+   "day": 1,
+   "at": [
+    11,
+    5
+   ]
+  },
+  {
+   "id": "s-deposit",
+   "name": "Previsão do depósito",
+   "day": 1,
+   "at": [
+    9,
+    30
+   ]
+  },
+  {
+   "id": "s-budget",
+   "name": "Revisão do orçamento",
+   "day": 1,
+   "at": [
+    9,
+    0
+   ]
+  }
+ ],
+ "record": {
+  "id": "s-sync",
+  "name": "Reunião semanal da equipe",
+  "lines": [
+   [
+    "10:30:31",
+    "them",
+    "Oi, pessoal, vocês estão me ouvindo?"
+   ],
+   [
+    "10:30:34",
+    "me",
+    "Sim, ouvindo bem."
+   ],
+   [
+    "10:30:41",
+    "them",
+    "Ótimo. A Anna entra em um minuto."
+   ],
+   [
+    "10:30:47",
+    "me",
+    "Sem problema, a gente espera por ela."
+   ],
+   [
+    "10:30:52",
+    "them",
+    "Pronto, ela já entrou."
+   ],
+   [
+    "10:30:57",
+    "them",
+    "Oi, Anna. Estamos começando agora."
+   ],
+   [
+    "10:31:04",
+    "them",
+    "Vamos começar pelo lançamento. Estamos no prazo para quinta?"
+   ],
+   [
+    "10:31:12",
+    "me",
+    "Quase. O fluxo de pagamento está pronto. A exportação das faturas ainda precisa de revisão."
+   ],
+   [
+    "10:31:40",
+    "them",
+    "Quem pode revisar isso hoje?"
+   ],
+   [
+    "10:31:47",
+    "me",
+    "O Igor pode. Vou pedir a ele logo depois desta chamada."
+   ],
+   [
+    "10:32:20",
+    "them",
+    "Bom. Agora, a Acme pediu login único. Dá para oferecer neste trimestre?"
+   ],
+   [
+    "10:32:33",
+    "me",
+    "Talvez. A Maria precisa fazer a estimativa antes."
+   ],
+   [
+    "10:32:50",
+    "them",
+    "Maria, você consegue mandar a estimativa até segunda?"
+   ],
+   [
+    "10:32:58",
+    "them",
+    "Sim, mando na segunda."
+   ],
+   [
+    "10:33:30",
+    "them",
+    "Por último: o suporte precisa das notas de lançamento antes de quarta."
+   ],
+   [
+    "10:33:41",
+    "me",
+    "A Anna manda na terça."
+   ]
+  ],
+  "results": [
+   {
+    "id": "r1",
+    "request": "Resumo e tarefas",
+    "text": "## Resumo\nO lançamento está no prazo para quinta. O fluxo de pagamento está pronto, e a exportação das faturas aguarda revisão (10:31).\n\nA Acme pediu login único. Dá para oferecer neste trimestre, se a estimativa permitir (10:32).\n\n## Tarefas\n| Quem | O quê | Quando |\n| --- | --- | --- |\n| Igor | Revisar a exportação das faturas | Hoje |\n| Maria | Enviar a estimativa do login único | Segunda |\n| Anna | Enviar as notas de lançamento ao suporte | Terça |",
+    "pdf": "Reunião semanal da equipe — Resumo e tarefas.pdf"
+   }
+  ]
+ }
+}

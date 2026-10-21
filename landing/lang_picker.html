@@ -1,0 +1,22 @@
+<!-- Language picker in the header. Deferred: it is not on the page yet (rejected on looks,
+     2026-10-06).
+     To bring it back: insert this block into template.html inside <div class="top-end"> before
+     the download button.
+     The styles (.langpick, .lang-btn, .lang-menu) stay in the template, and the script stays in
+     page.js; it does nothing while these elements are absent. -->
+      <div class="langpick" id="langpick">
+        <button type="button" class="btn lang-btn" id="lang-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="lang-menu" aria-label="Language">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 4 5.7 4 9s-1.4 6.3-4 9c-2.6-2.7-4-5.7-4-9s1.4-6.3 4-9Z"/></svg><span class="lang-name" id="lang-name">English</span><span class="lang-code" id="lang-code">EN</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
+        </button>
+        <div class="lang-menu" id="lang-menu" role="listbox" aria-label="Language" tabindex="-1" hidden>
+          <button type="button" role="option" class="opt" id="lang-ru" data-v="ru" data-code="RU" aria-selected="false">русский</button>
+          <button type="button" role="option" class="opt" id="lang-uk" data-v="uk" data-code="UK" aria-selected="false">українська</button>
+          <button type="button" role="option" class="opt" id="lang-en" data-v="en" data-code="EN" aria-selected="false">English</button>
+          <button type="button" role="option" class="opt" id="lang-es" data-v="es" data-code="ES" aria-selected="false">Español</button>
+          <button type="button" role="option" class="opt" id="lang-pt" data-v="pt" data-code="PT" aria-selected="false">Português</button>
+          <button type="button" role="option" class="opt" id="lang-de" data-v="de" data-code="DE" aria-selected="false">Deutsch</button>
+          <button type="button" role="option" class="opt" id="lang-fr" data-v="fr" data-code="FR" aria-selected="false">Français</button>
+          <button type="button" role="option" class="opt" id="lang-tr" data-v="tr" data-code="TR" aria-selected="false">Türkçe</button>
+          <button type="button" role="option" class="opt" id="lang-pl" data-v="pl" data-code="PL" aria-selected="false">Polski</button>
+        </div>
+      </div>

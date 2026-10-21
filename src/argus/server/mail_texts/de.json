@@ -1,0 +1,103 @@
+{
+  "events": {
+    "reset": {
+      "subject": "Argus-Passwort zurücksetzen",
+      "heading": "Neues Passwort",
+      "paragraphs": [
+        "Um ein neues Passwort festzulegen, klicken Sie auf die Schaltfläche. Der Link gilt {minutes} Minuten und nur einmal."
+      ],
+      "button": "Neues Passwort festlegen",
+      "note": "Sie haben das nicht angefordert? Ignorieren Sie diese E-Mail einfach, Ihr Passwort bleibt unverändert."
+    },
+    "welcome": {
+      "subject": "Willkommen bei Argus",
+      "heading": "Konto erstellt",
+      "paragraphs": [
+        "Sie haben sich mit {email} bei Argus registriert.",
+        "{gift}",
+        "Öffnen Sie die App und starten Sie die Erkennung. Das Guthaben wird für Erkennung, Antworten und Sprachausgabe verbraucht; Sie können es in den Einstellungen aufladen."
+      ],
+      "gift": "Ein Willkommensgeschenk von {amount} wurde Ihrem Guthaben gutgeschrieben.",
+      "note": "Sie haben sich nicht registriert? Schreiben Sie uns, dann löschen wir das Konto."
+    },
+    "password_changed": {
+      "subject": "Argus-Passwort geändert",
+      "heading": "Passwort geändert",
+      "paragraphs": [
+        "Das Passwort für {email} wurde am {when} geändert.",
+        "Sie wurden in allen Apps abgemeldet. Melden Sie sich mit dem neuen Passwort wieder an."
+      ],
+      "note": "Das waren nicht Sie? Schreiben Sie uns, wir helfen Ihnen, wieder Zugang zu erhalten."
+    },
+    "top_up": {
+      "subject": "Argus-Guthaben aufgeladen",
+      "heading": "Vielen Dank für Ihre Aufladung",
+      "paragraphs": [
+        "Die Zahlung ist eingegangen und das Geld wurde Ihrem Guthaben gutgeschrieben."
+      ],
+      "rows": [
+        "Betrag",
+        "Datum",
+        "Guthaben jetzt"
+      ],
+      "note": "Sie haben diese Zahlung nicht veranlasst? Schreiben Sie uns."
+    },
+    "low": {
+      "subject": "Ihr Argus-Guthaben geht zur Neige",
+      "heading": "Guthaben geht zur Neige",
+      "paragraphs": [
+        "Auf Ihrem Guthaben sind noch {balance} übrig.",
+        "Damit die Erkennung weiterläuft, laden Sie Ihr Guthaben in den Einstellungen der App auf."
+      ]
+    },
+    "empty": {
+      "subject": "Ihr Argus-Guthaben ist aufgebraucht",
+      "heading": "Guthaben aufgebraucht",
+      "paragraphs": [
+        "Erkennung, Antworten und Sprachausgabe sind pausiert, solange das Guthaben leer ist.",
+        "Sie können es in den Einstellungen der App aufladen."
+      ]
+    },
+    "deleted": {
+      "subject": "Argus-Konto gelöscht",
+      "heading": "Konto gelöscht",
+      "paragraphs": [
+        "Das Konto {email} wurde gelöscht: Adresse, Passwort und Anmeldungen sind entfernt.",
+        "Das restliche Guthaben ist mit dem Konto verfallen. Zahlungsbelege werden ohne Verbindung zu Ihnen aufbewahrt."
+      ],
+      "note": "Das waren nicht Sie? Schreiben Sie uns."
+    }
+  },
+  "footer": "Diese Nachricht wurde automatisch gesendet. Fragen: {support}.",
+  "date": {
+    "months": [
+      "Januar",
+      "Februar",
+      "März",
+      "April",
+      "Mai",
+      "Juni",
+      "Juli",
+      "August",
+      "September",
+      "Oktober",
+      "November",
+      "Dezember"
+    ],
+    "format": "{d}. {m} {y}, {time} UTC"
+  },
+  "reset_page": {
+    "title": "Neues Passwort — Argus",
+    "heading": "Neues Passwort",
+    "placeholder": "Neues Passwort",
+    "button": "Speichern",
+    "bad_link": "Der Link funktioniert nicht — fordern Sie in der App einen neuen an.",
+    "saved": "Passwort gespeichert. Kehren Sie zur App zurück und melden Sie sich erneut an.",
+    "failed": "Etwas ist schiefgelaufen",
+    "offline": "Keine Verbindung",
+    "short": "Das Passwort muss mindestens {min} Zeichen lang sein.",
+    "weak": "Dieses Passwort ist zu leicht zu erraten. Bitte wählen Sie ein anderes.",
+    "busy": "Der Server ist gerade ausgelastet. Bitte versuchen Sie es in einer Minute erneut.",
+    "limit": "Zu viele Versuche. Bitte versuchen Sie es später erneut."
+  }
+}

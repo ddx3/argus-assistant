@@ -1,0 +1,731 @@
+/* Admin styling, shared by the three channels.
+
+   The palette is taken from the dashboard: this is one app, and switching between the
+   gauge and the settings must not look like a move into a foreign program. Only `--accent`
+   differs; the channel page sets it. Here the color works as a label: three copies of
+   Argus run in three tabs on three ports, and the first thing to understand when opening
+   a tab is which one it is.
+
+   Everything is under `.admin-root`, not under bare tags (`body`, `select`, `a`...): this
+   file is loaded in two documents, on the real `/admin` (where `.admin-root` stands on
+   `<body>`) and inside the dashboard, where the settings panel is a container among
+   foreign markup (`index.html`), not the whole document. A bare `select` here would have
+   recolored the microphone choice on the dashboard itself as well. */
+
+.admin-root, .admin-root * { box-sizing:border-box; }
+.admin-root {
+  --bg:#0a0c10; --panel:#171b21; --sunk:#08090b; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.14);
+  --text:#f2f4f7; --dim:#9aa1ad; --faint:#5b6270;
+  --ok:#5fd68a; --bad:#f0716b; --warn:#e0b23e; --in:#7c8bf0;
+  --accent:#4fb8d8;
+  /* `--btn`, `--btn-hover`, `--btn-edge`, `--focus` are in chrome.css, shared by all pages:
+     they are not repeated here, or they would override the shared ones. */
+  /* The microphone channel is told apart by this color throughout the program: the same
+     shade as on the gauge, otherwise it would read here as a different channel. */
+  --me:#4fb8d8;
+
+  /* The page column width. The shared default in chrome.css is sized for the gauge, whose
+     panels are full width; here the column is narrow, and the header must stand on the same
+     vertical as the sections below it. One number for both places: if they drift apart, you
+     get the transitions at the window edge and the content in the middle, the very thing
+     that is visible at once and fixed last. */
+  --column:840px;
+
+  margin:0; background:var(--bg); color:var(--text);
+  font:14px/1.55 "Segoe UI",system-ui,sans-serif;
+}
+.admin-root a { color:var(--accent); }
+.admin-root .dim { color:var(--dim); }
+.admin-root .bad { color:var(--bad); } .admin-root .ok { color:var(--ok); } .admin-root .warn { color:var(--warn); }
+.admin-root code, .admin-root .mono { font-family:Consolas,"Cascadia Mono",ui-monospace,Menlo,monospace; font-size:12.5px; }
+
+/* ---------- header ----------
+
+   The shared part (shell, transitions, buttons) is in `chrome.css`, one for the two pages.
+   Here is only what the gauge does not have: the "restart needed" strip
+   and the alignment of the content to the sections column. */
+
+/* The header goes the full width of the window, not along the sections column.
+
+   Before, its content stood on the same vertical as the sections. Then "save"
+   in a wide window stopped where the column ends, three hundred pixels from the right
+   edge. The button used most often on the page ended up in the middle of empty space, and
+   finding it by eye was harder than finding any setting under it. The corner of the window
+   is where the hand goes by itself.
+
+   With padding, not `max-width`: the background and the "restart needed:" strip must run the full width, otherwise they turn into a patch in the middle of
+   emptiness. */
+/* Inside the dashboard, `<header>` is not the glass header stuck to the top of the page
+   (`header{}` in chrome.css) but the top of an ordinary scrollable panel (`.sheet-body`,
+   chrome.css): the same "restart needed" plate, without glass and
+   without sticking. On the real `/admin` (`.standalone`) the behavior is as before: there
+   it really is the top of the page. */
+.admin-root:not(.standalone) header {
+  position:static; background:none; backdrop-filter:none; -webkit-backdrop-filter:none;
+  border-bottom:0; box-shadow:none;
+}
+.admin-root .top, .admin-root .restart { padding-left:var(--pad); padding-right:var(--pad); }
+
+.admin-root .top { display:flex; align-items:center; gap:12px; padding-top:9px; padding-bottom:9px; }
+
+@media (max-width:900px) { .admin-root .top { gap:10px; } }
+
+/* Not scoped under `.admin-root`: in the dashboard panel (`chrome.js`) this badge is
+   appended right into the "Settings" heading, and that is outside
+   `.admin-root` altogether, being the markup of someone else's document; see `mount()` in
+   admin.js. */
+.version-badge {
+  font-family:Consolas,ui-monospace,Menlo,monospace; font-size:11px; font-weight:400;
+  color:var(--meta); letter-spacing:.02em; white-space:nowrap;
+}
+.admin-root .top .version-badge { margin-left:auto; }
+
+.admin-root .restart { display:flex; align-items:center; gap:10px; padding-top:8px; padding-bottom:8px;
+           background:rgba(111,123,216,.1); border-top:1px solid rgba(111,123,216,.35);
+           font-size:13px; color:#aab3ea; }
+.admin-root .restart[hidden] { display:none; }
+/* "not saved:" (`#unsaved` in admin.js) is the same kind of strip as
+   "restart needed:", but reddish. It is a strip above all the tabs of
+   the window, not a line under the field: a field the server did not accept may sit on a
+   tab that is not visible right now. */
+.admin-root .restart.unsaved { background:rgba(240,113,107,.1); border-top-color:rgba(240,113,107,.35); color:#f3b3af; }
+
+/* ---------- frame ---------- */
+/* The sections column and the table of contents on the left.
+
+   The table of contents was once removed from here, with the wording "there are two
+   sections, and a list of two items is longer than the content". The reason was right and
+   has ended: with the account there are six sections, and the first one, the one people
+   come here for, would end up off screen.
+
+   The list is narrow and without a background on purpose: it is a table of contents, not a
+   second menu. All it does is say where you are and what else there is. */
+.admin-root .wrap { max-width:calc(var(--column) + 210px); margin:0 auto; padding:var(--pad);
+        display:grid; grid-template-columns:170px minmax(0,1fr); gap:40px;
+        align-items:start; }
+
+/* A narrow window. The gauge is often kept in half a screen, and there the table of
+   contents would eat a quarter of the width from what the page was opened for. */
+@media (max-width:900px) {
+  .admin-root .wrap { grid-template-columns:minmax(0,1fr); gap:0; max-width:var(--column); }
+  .admin-root .side { display:none; }
+}
+/* A panel inside the dashboard is always the same "narrow" case, regardless of the width
+   of the dashboard itself: the `@media` above measures the whole browser window, while the
+   panel (`chrome.css`, `.sheet-panel`) has its own fixed width, `min(760px, 100vw - 40px)`,
+   always below the threshold. Without this rule the table of contents ate a column from
+   the cards on any wide dashboard: cramped fields next to a list that is not needed here,
+   since the panel was opened for one section, not to wander among six. */
+.admin-root:not(.standalone) .wrap { grid-template-columns:minmax(0,1fr); gap:0; max-width:none; }
+.admin-root:not(.standalone) .side { display:none; }
+
+.admin-root .side { position:sticky; top:96px; }
+.admin-root .side ol { list-style:none; margin:0; padding:0; display:flex; flex-direction:column;
+           gap:1px; }
+.admin-root .side a { display:block; padding:5px 10px; border-radius:7px; font-size:13px;
+          color:var(--dim); text-decoration:none; border-left:2px solid transparent;
+          white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.admin-root .side a:hover { color:var(--text); background:rgba(255,255,255,.05); }
+/* Where you are now. Marked with a stripe at the edge, not with a fill: on a narrow
+   column a fill reads as a selected button, and people start to expect an action from it.
+   The stripe is light, not an accent color. It is the same language as the selected item
+   in the list popup (`.combo-menu .opt.sel` in chrome.css) and the current tab in the
+   header: "you are here", not "this section matters more than the others". */
+.admin-root .side a.here { color:var(--text); border-left-color:var(--glass-edge-top, var(--text)); }
+/* The "needs attention" mark is a dot next to the item. Only one section needs it: until
+   the user signs in to the account, recognition will not start, and this has to be said
+   before the person presses the button and gets a refusal. */
+.admin-root .side a .dot { display:inline-block; width:6px; height:6px; border-radius:50%;
+               background:var(--warn); margin-left:6px; vertical-align:middle; }
+
+.admin-root main { display:flex; flex-direction:column; gap:16px; min-width:0; }
+
+/* Heading of a group of sections in a chat: "This chat" and "App".
+   Larger and brighter than the section label (`section.card > h2`, below): it is
+   not another section but the owner of the sections under it. The first group sits at the
+   very top; the second is separated by empty space. */
+.admin-root h3.group { margin:6px 2px -4px; font-size:15px; font-weight:600; color:var(--text); }
+.admin-root section.card + h3.group { margin-top:18px; }
+
+/* Glass without blur, by the same method as `.band` in design/argus.css: the section card
+   sits in the page flow, and nothing is behind it in the paint stack except the flat
+   `--bg`, so there is nothing to blur, whether the page scrolls or not (whatever moves on
+   scroll moves WITH the card, not under it). No shadow under the card: the panels of the
+   main window have none, and settings should not differ in this. */
+.admin-root section.card { background:var(--slab, rgba(255,255,255,.03));
+               border:1px solid var(--slab-edge, var(--line));
+               border-radius:9px;
+               scroll-margin-top:96px; }
+/* The card heading is a small gray uppercase label, like "QUESTION" and "ANSWER"
+   in the cards of the main page (`.io > .tag` in index.html), not a bold line in
+   regular case: that way the app has one language of labels. The card radius is 9px, the
+   same as the panels of the main window (it was 10). */
+.admin-root section.card > h2 { margin:0; padding:13px 18px 0; font-size:11px; font-weight:600;
+                    letter-spacing:.14em; text-transform:uppercase; color:var(--dim);
+                    display:flex; align-items:center; gap:10px; }
+.admin-root section.card > p.lead { margin:5px 18px 0; font-size:12.5px; color:var(--dim); }
+/* No shell at all: just a circle with an "i" at the end of the row, not a bordered button
+   glued into the text. A square with a background (the plain `.iconbtn`, even the ghost
+   `.ghost` from chrome.css) is redundant here; the icon stands on its own. At rest, on
+   hover, and when pressed there is never a background or border. The selector has both
+   classes (`.iconbtn.info`, not just `.info`), and this is not style for its own sake:
+   `.iconbtn:hover` in chrome.css has the same specificity, and without the second class
+   the outcome here would be decided by the order in which the files are included, not by
+   what should really win. The symbol still lightens as usual: `.iconbtn:hover svg` in
+   chrome.css turns it white, and with no fill under it that is enough. */
+.admin-root .iconbtn.info,
+.admin-root .iconbtn.info:hover:not(:disabled),
+.admin-root .iconbtn.info:active:not(:disabled) {
+  background:none; border-color:transparent;
+}
+/* Open: the same signal as on hover (a white icon), not a separate fill. An open
+   explanation is visible anyway, since the expanded text sits under the button, and a
+   second hint in the background would be redundant. One selector for both "i" buttons:
+   the one at the section heading and the one at the field name (`.f .lab .name .info`,
+   below). The shell is the same, `infoBtn` in admin.js. */
+.admin-root section.card .info[aria-expanded="true"] svg {
+  stroke:var(--text);
+}
+.admin-root .badge { font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+         border:1px solid var(--btn-edge); border-radius:20px; padding:2px 9px; color:var(--dim); }
+.admin-root .badge.todo { border-color:rgba(208,162,21,.5); color:var(--warn); }
+.admin-root .badge.on { border-color:rgba(99,199,122,.5); color:var(--ok); }
+
+/* Scaffold fields and the channel block are one column with the same padding. A block
+   that invents a second grid reads like a piece of another program: that is exactly how
+   the page looked while the audio check had its own layout.
+
+   Top and bottom are equal (the bottom used to be 16px against 6px on top). The bottom
+   padding also added to the `gap` between cards (`main`, above), so under the last row of
+   a section there was twice as much space as above the first, and the whole page looked
+   sagging downward. */
+.admin-root .fields, .admin-root .widget { padding:6px 18px; }
+
+/* And when a section has both a block and fields, it is one list, not two. A double gap
+   between them split the section in two, and the rows of the block stopped reading as
+   rows of the same list. */
+.admin-root .widget + .fields { padding-top:0; }
+.admin-root .widget + .fields > .f:first-child { border-top:1px solid var(--line); }
+
+/* One vertical gap between blocks inside a list row, the same as in a scaffold row. */
+.admin-root .widget > *:not(.f):not(:empty):not(:first-child) { margin-top:12px; }
+
+/* ---------- row ---------- */
+/* The only row on the whole page: the label on the left, the control on the right in a
+   column of fixed width. Both the scaffold and the channel blocks use it.
+
+   `align-items:center`, not `start`: the label and the control are almost never the same
+   height. A switch is 24px, a select with padding is taller than 30px, a one-line field
+   name is shorter than both. Aligned to the top edge, the shorter one would hang with
+   empty space under it instead of sharing an axis with its taller neighbor. This was less
+   noticeable before: the explanation (`.hint`) went right under the name and more often
+   made the label taller than the control. Now it is hidden behind the "i" button, so the
+   label is almost always one line and almost always shorter than the control. */
+.admin-root .f { display:grid; grid-template-columns:1fr 300px; gap:10px 18px;
+     padding:11px 0; border-top:1px solid var(--line); align-items:center; }
+/* Our own `display:grid` above beats the browser's `[hidden]`. Without this line, a row
+   with `depends_on` (for example, the "bot name" field when the mode is not
+   "by name") would stay in place as an empty rectangle. */
+.admin-root .f[hidden] { display:none; }
+.admin-root .fields > .f:first-child, .admin-root .widget > .f:first-child { border-top:0; }
+.admin-root .f.wide { grid-template-columns:1fr; }
+/* A row without a label: the control spans the full width. An empty left column would
+   look like a layout mistake, not a decision. */
+.admin-root .f.bare { grid-template-columns:1fr; }
+.admin-root .f .lab { display:flex; flex-direction:column; gap:3px; min-width:0; }
+/* Deliberately not a flex container, unlike `.row-head` in index.html. There the label is
+   always short and always fits on its line, but here the column is narrow (it shares the
+   row with the fixed-width control, `.f` above) and in a browser without the desktop
+   window (arbitrary width) the words of the label sometimes wrap. When they wrap, flex
+   centering puts the button between the lines, not next to the last word. Plain inline
+   flow with `vertical-align`, on the contrary, drags the button along with the text,
+   whichever line the text lands on. */
+.admin-root .f .lab .name { display:block; }
+.admin-root .f .lab .name .info { vertical-align:middle; margin-left:6px; }
+/* Its own full-width row of the block, not inside `.lab`: there the explanation is
+   squeezed into the left column and crowds the label from below. Same method as `.err`
+   below. */
+.admin-root .f > .hint { grid-column:1 / -1; font-size:12px; color:var(--dim); }
+.admin-root .f .ctl { display:flex; align-items:center; gap:8px; justify-content:flex-end; }
+.admin-root .f.wide .ctl { justify-content:stretch; }
+.admin-root .f .ctl .unit { color:var(--dim); font-size:12px; flex:0 0 auto; }
+
+/* Fill and edge go through `--input-fill`/`--input-edge`: outside the window this is dark
+   glass with a thin edge; in the window (chrome.css, the "flat look") it is a light plate
+   without an edge, like the select and the buttons next to it. */
+.admin-root input[type=text], .admin-root input[type=number], .admin-root textarea {
+  background:var(--input-fill, var(--field)); color:var(--text);
+  border:1px solid var(--input-edge, var(--line));
+  border-radius:7px; padding:7px 11px; font:inherit; width:100%; min-width:0;
+}
+/* Single-line fields have the same height as the buttons and the question field on the
+   main page (35px, it was 38): settings should not be bigger than the dashboard. */
+.admin-root input[type=text], .admin-root input[type=number] {
+  height:35px; padding-top:0; padding-bottom:0;
+}
+/* Separate from the line above, not in the same selector list: a select already has its
+   own arrow as a background (`select{...}` in chrome.css, shared by all pages), so
+   `background` here would be a shorthand and would erase it by resetting
+   `background-image` to `none`. `background-color` touches only the color.
+
+   For the same reason we do not touch `padding-right` at all, and set each side with its
+   own property instead of the `padding` shorthand. In chrome.css it is `32px`, room for
+   the same arrow, and this file is included later, so with equal specificity the
+   shorthand `padding:7px 11px` would override it down to `11px`, and the arrow would
+   overlap the text. */
+/* The same shell as a regular button (`button{}` in chrome.css): the same background, the
+   same border, the same hover. A select is a choice from ready-made options, exactly the
+   same as pressing a button, and it should read as one, not as a text input field
+   (`--field`, dark glass, for input/textarea). */
+.admin-root select {
+  background-color:var(--btn); color:var(--dim); border:1px solid var(--btn-edge);
+  border-radius:7px; height:35px; padding-top:0; padding-bottom:0; padding-left:11px;
+  font:inherit; width:100%; min-width:0; cursor:pointer;
+}
+.admin-root select:hover { background-color:var(--btn-hover); border-color:var(--btn-edge-hover); color:var(--text); }
+.admin-root textarea { resize:vertical; line-height:1.5; font-size:13px; }
+/* The placeholder in an empty field is the muted theme text, not the browser's default
+   gray: a field without the solid dark fill (`--field`) sits on a light card, and a gray
+   placeholder lost contrast there. The account fields (`.ac-input`) color their own
+   placeholder, `--faint`, so we leave them alone. */
+.admin-root textarea::placeholder,
+.admin-root input[type=text]:not(.ac-input)::placeholder { color:var(--dim); }
+/* The live level during the microphone check (`audio-check` in admin.js) uses the same
+   technique as the volume bars on the dashboard (`.track`/`.fill` in index.html), but
+   across the full column width: there the bar sits next to a narrow header, here it is
+   alone in a settings row. It has its own file, not one shared with the dashboard: the
+   pages share no styles with each other except the palette. */
+.admin-root .track { width:100%; height:7px; background:var(--field); border-radius:4px; overflow:hidden; }
+.admin-root .fill { height:100%; width:0; background:var(--accent); transition:width .1s linear; }
+/* The border lightens to white and is not painted with the accent color. It is the same
+   neutral response as the header buttons (`.iconbtn`/`.power`/`.src` in chrome.css). */
+/* The edge of a focused field is `--focus-edge` (about 5:1 against the window), not
+   `--glass-edge-top`: that one lightened from .14 to .20, a change of 1.2:1, and you could
+   not see where the cursor was. The fields have no bright ring: the app keeps to calm
+   gray tones. */
+.admin-root input:focus, .admin-root textarea:focus, .admin-root select:focus { outline:none; border-color:var(--focus-edge, var(--accent)); }
+/* On a select, the focus border was reset by the window rule (`.win .admin-root select`,
+   below, with the same specificity and later in the file), and the outline above is
+   removed entirely, so the lists (language, reaction to the microphone and system sound)
+   had no keyboard focus indicator at all. The ring is the same `--focus` as on buttons,
+   drawn inside the border. It is `:focus-visible`, not `:focus`: a mouse click on a select
+   opens its own popup (`chrome.js`), and a ring on it after the choice is pointless. Order
+   matters: the rule has the same specificity as `select:focus` above and must come after
+   it. */
+.admin-root select:focus-visible { outline:2px solid var(--focus); outline-offset:-1px; }
+.admin-root input[type=number] { font-variant-numeric:tabular-nums; }
+
+/* A slider with a number next to it: the limits come from the config models, and the user
+   should see where the edge is, not run into it blindly. */
+.admin-root .range { display:flex; align-items:center; gap:10px; width:100%; }
+.admin-root .range input[type=range] { flex:1; accent-color:var(--dim); }
+.admin-root .range input[type=number] { width:88px; flex:0 0 auto; text-align:right; }
+
+/* A key combination is not typed in words but pressed: a hand-typed "ctrl+alt+a" can
+   easily differ from what the person actually presses, and the only way to check is to
+   press it. So this is not an input field but a button that listens to the keyboard. */
+.admin-root .hk { width:100%; text-align:center; font-family:Consolas,ui-monospace,Menlo,monospace; font-size:12.5px; }
+.admin-root .hk.catching { border-color:var(--glass-edge-top); color:var(--text); }
+
+.admin-root .switch { position:relative; width:44px; height:24px; border-radius:13px;
+          background:rgba(255,255,255,.08); border:1px solid var(--btn-edge); cursor:pointer;
+          transition:background .13s, border-color .13s; flex:0 0 auto; }
+/* A round pill with a circle. It was once made square and then reverted on request: a
+   switch should read as a switch, not as a square checkmark. */
+.admin-root .switch::after { content:""; position:absolute; top:2px; left:2px; width:18px; height:18px;
+                 border-radius:50%; background:var(--dim); transition:transform .13s, background .13s; }
+/* The toggle is neither a source nor a state, so it has no color of its own: it turns on
+   dozens of settings, and none of them is "cyan". The position of the knob already says
+   on/off: the fill is lighter and the knob is white, the same neutral language as the
+   source checkboxes on the dashboard (`.src .box` there is painted not with the accent
+   but with its own source color, or not at all). */
+.admin-root .switch.on { background:var(--glass-edge, rgba(255,255,255,.16)); border-color:var(--glass-edge-top, var(--line2)); }
+.admin-root .switch.on::after { transform:translateX(20px); background:var(--text); }
+
+/* A list of words: stop words, dictionary, sound classes. Input is by Enter, because such
+   lists are edited one item at a time, not rewritten as a whole line. */
+.admin-root .chips { display:flex; flex-wrap:wrap; gap:6px; width:100%; }
+.admin-root .chip { display:flex; align-items:center; gap:6px; background:var(--btn);
+        border:1px solid var(--btn-edge); border-radius:20px; padding:3px 6px 3px 11px;
+        font-size:12.5px; }
+.admin-root .chip b { font-weight:400; }
+.admin-root .chip x { cursor:pointer; color:var(--meta); font-style:normal; padding:0 3px; }
+.admin-root .chip x:hover { color:var(--bad); }
+.admin-root .chips input { width:auto; flex:1; min-width:140px; border-style:dashed; }
+
+.admin-root .f .err { grid-column:1 / -1; color:var(--bad); font-size:12.5px; }
+.admin-root .f .todo { font-size:11.5px; color:var(--warn); }
+.admin-root .f .cold { font-size:11.5px; color:var(--in); }
+
+/* ---------- live blocks ---------- */
+/* The tiles and `.note` moved to `chrome.css`: the account block draws them, and it is
+   shown both here and in the slide-out menu of the dashboard. Keeping them in one page's
+   file would mean the same block looks half-styled in the menu. */
+.admin-root .tiles { padding:0 18px 16px; }
+
+/* Budget: a bar with a target mark. A single number like "3500 ms" says nothing unless you
+   can also see how much was allowed. */
+.admin-root .budget { padding:0 18px 16px; display:flex; flex-direction:column; gap:9px; }
+.admin-root .bar-row { display:grid; grid-template-columns:150px 1fr 96px; gap:12px; align-items:center;
+           font-size:12.5px; }
+.admin-root .bar { position:relative; height:16px; background:var(--field); border:1px solid var(--line);
+       border-radius:5px; overflow:hidden; }
+.admin-root .bar i { position:absolute; inset:0 auto 0 0; background:var(--accent); opacity:.75; }
+.admin-root .bar.over i { background:var(--bad); }
+.admin-root .bar u { position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--warn); }
+.admin-root .bar-row .num { text-align:right; font-variant-numeric:tabular-nums; }
+
+.admin-root .rows { display:flex; flex-direction:column; gap:7px; }
+.admin-root .row2 { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+
+/* ---------- channel blocks (were in admin.html) ---------- */
+
+/* The microphone choice takes the whole column of the row. There has been no "Check" button next to it since 2026-10-08: the level under the list is always visible
+   while the pipeline runs. */
+.admin-root #ac-mic-row .ctl select { flex:1; width:auto; min-width:0; }
+
+/* Materials: a file drop area and a list of what is already there.
+
+   The file drop is the one thing on the page that the "label - control" row cannot
+   express: it needs an area to hit with the mouse. So the border is dashed, but everything
+   else is as in a row: the same padding, the same font size, text from the left edge.
+   Centered text in a column of left-aligned labels looked like an insert from another
+   program. */
+.admin-root .mt-drop { display:flex; flex-direction:column; align-items:center; gap:3px; text-align:center;
+           border:1px dashed var(--btn-edge); border-radius:8px; padding:20px 16px 18px;
+           font-size:14px; cursor:pointer; background:var(--slab);
+           transition:border-color .1s, background .1s; }
+/* The drop area is centered: an up-arrow icon in a tile, a call to action under it, and
+   below that, quietly, what is accepted. Before, it was one small line at the left edge,
+   and "where to drag" read worse than "what to drag". */
+.admin-root .mt-drop .ico { display:grid; place-items:center; width:38px; height:38px; margin-bottom:7px;
+           border-radius:8px; background:rgba(255,255,255,.06); color:var(--dim); transition:color .1s; }
+.admin-root .mt-drop .ico svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.8;
+           stroke-linecap:round; stroke-linejoin:round; }
+.admin-root .mt-drop .t { color:var(--text); font-weight:600; }
+.admin-root .mt-drop .dim { font-size:12.5px; }
+.admin-root .mt-drop:hover .ico, .admin-root .mt-drop.over .ico { color:var(--text); }
+/* The border lightens to white and is not painted with the accent color: the same neutral
+   language as the buttons and fields everywhere in the app. For a file dragged over the
+   area ("over", actually being dragged from above) the border also becomes solid: the same
+   outline, but "ready to accept" rather than just "can be clicked". */
+.admin-root .mt-drop:hover { border-color:var(--glass-edge-top); background:rgba(255,255,255,.05); }
+.admin-root .mt-drop.over { border-color:var(--glass-edge-top); border-style:solid; background:var(--btn-hover); }
+.admin-root .mt-drop input { display:none; }
+/* Files are one list in one plate, with rows separated by a thin line: the voice list next
+   to it (`.vp-list`) is built the same way. The first version (a plate for each file, with
+   a tile with an icon inside it) read as boxes in boxes next to the drop area plate and the
+   switch row, so it was changed. Now a row has a bare sheet icon, the name, and a cross;
+   there are no sizes or counters. There is no highlight of the row under the cursor. If a
+   file could not be read, the icon and the reason under the name are red.
+   The cross is the shared `.iconbtn.act` (22px, icon 14px): quiet at rest, turns red on
+   hover, as a last warning before deletion rather than the usual "lighter". */
+.admin-root #mt-list:not(:empty) { margin-top:8px; border-radius:9px; overflow:hidden;
+          background:var(--slab); }
+.admin-root .mt-row { display:flex; align-items:center; gap:12px; padding:11px 10px 11px 14px;
+          border-top:1px solid var(--line); font-size:13.5px; }
+.admin-root .mt-row:first-child { border-top:0; }
+.admin-root .mt-row .ico { flex:none; display:grid; place-items:center; width:20px; height:20px; color:var(--dim); }
+.admin-root .mt-row .ico svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.7;
+          stroke-linecap:round; stroke-linejoin:round; }
+.admin-root .mt-row .nm { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.admin-root .mt-row .fn { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text); }
+.admin-root .mt-row .why { font-size:12px; color:var(--bad); }
+.admin-root .mt-row.bad .ico { color:var(--bad); }
+.admin-root .mt-row .x { flex:none; }
+.admin-root .mt-row .x:hover:not(:disabled) svg { stroke:var(--bad); }
+
+/* Voice choice: everything is open at once, in one column: a switch and a list of cards
+   (avatar, favorite, preview: things that cannot be squeezed into a plain `<select>` as
+   text). There are dozens of voices (ElevenLabs has forty-two now), and without a limit
+   the "Voice-over" card would take up several screens in a row, so the list has
+   its own scroll: about five rows are visible at once, and the sixth peeks out halfway,
+   which shows that the list scrolls. The scrollbar is the shared one, as everywhere in the
+   app (`::-webkit-scrollbar` in chrome.css). Before, a list without a limit was enough,
+   and a nested scroll inside a scroll was considered a bad solution; now the choice was
+   made differently. */
+/* Its own margin-bottom, not the shared `.widget` padding-bottom (6px, further down the
+   file): that one is shared with other sections that have `.fields` after it and must stay
+   small. Here the list is the last thing in the card, and without this line the same 6px
+   would remain under it, half of the 12px gap above the list. */
+.admin-root .vp-list { border:1px solid var(--line);
+           border-radius:9px; background:rgba(255,255,255,.015);
+           margin-bottom:6px; max-height:215px; overflow-y:auto; }
+.admin-root .vp-item { display:flex; align-items:center; gap:10px; padding:7px 10px;
+           border-top:1px solid var(--line); font-size:12.5px; cursor:pointer;
+           transition:background .1s; }
+.admin-root .vp-item:first-child { border-top:0; }
+.admin-root .vp-item:hover { background:rgba(255,255,255,.035); }
+/* The mark for "this is selected now" is a single background, with no stripe on the left. */
+.admin-root .vp-item.active { background:color-mix(in srgb, var(--accent) 14%, transparent); }
+.admin-root .vp-item.active:hover { background:color-mix(in srgb, var(--accent) 18%, transparent); }
+/* The whole list is rounded as one (`.vp-list`, 9px), not its edge rows: the first and
+   last rows have no corners of their own, and the list itself clips them along the outer
+   edge (`overflow`). Requirements (2026-10-08): no rounding on the right for the
+   selection; no rounding on the first and last rows; and when the corners of the backing
+   were also made square, the rounding was brought back for the block as a whole. The
+   right corner of the selected row next to the scrollbar is not rounded: the row ends
+   before the bar, and the list itself clips the corner. */
+
+/* A circle with an initial is a visual anchor in a list of fifty almost identical text
+   rows; without it the eye has nothing to catch on except the name itself, and scrolling
+   turns into reading. The color is not random: it is a deterministic hash of the slug into
+   the theme's own palette (`--ok`/`--warn`/`--bad`/`--in`, JS in admin.js), not a new
+   color for one detail, so the same voice always gets the same letter in the same color.
+   No `--accent`: it already paints "selected now" (`.vp-item.active`) and "playing"
+   (`.vp-play.playing`), and the same blue on an avatar would read as a third, unrelated
+   meaning of the same color. (Color for voices was brought back on request: a list of
+   colored circles is the one place in settings where color works as an identifying mark,
+   not as a state.) */
+.admin-root .vp-avatar { flex:0 0 auto; width:24px; height:24px; border-radius:50%;
+             display:grid; place-items:center; font-size:11px; font-weight:600;
+             background:color-mix(in srgb, var(--vp-hue, var(--dim)) 22%, transparent);
+             color:var(--vp-hue, var(--dim)); }
+
+.admin-root .vp-body { flex:1; min-width:0; display:flex; flex-direction:column; gap:1px; }
+.admin-root .vp-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text); }
+/* The slug of a namesake appears only when the list really has a namesake (counted in JS):
+   ElevenLabs had literally two different voices with the same name ("Hoffmann"
+   twice), and without the slug there is no way to tell which card is which. For the other
+   forty this line is not drawn at all, so it is not noise for the sake of those two. */
+.admin-root .vp-slug { font-size:10.5px; color:var(--meta); font-family:Consolas,ui-monospace,Menlo,monospace; }
+
+/* Preview ("Play a sample") uses the same language as the star next to it (see
+   below): no shell, no background or border even on hover, only color. It used to be a
+   square button (the `.iconbtn.sm` shell), and next to a borderless star that looked
+   inconsistent: one button "in a box", the other not. `display:inline-flex` with the same
+   `line-height:1` as the star, not `display:grid;place-items:center` in a fixed-size
+   square as before: the `▶` triangle sits off-center of the drawn glyph in the monospace
+   cell of the symbol. With a square border this was hidden under the border's own pixel;
+   without it the shift became visible. `flex` with the shared `align-items:center` of the
+   row aligns it to the actual glyph, not to the outline of the symbol. */
+.admin-root .vp-play { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center;
+           background:none; border:0; padding:0; cursor:pointer;
+           color:var(--meta); font-size:19px; line-height:1;
+           transition:color .12s; }
+.admin-root button.vp-play:hover { background:none; border-color:transparent; color:var(--text); }
+/* "Playing" is an indicator without a separate player on the page: the glyph changes to
+   "■" (JS, `syncPlayButtons`) and is painted with the accent, the same signal as the
+   active list item (`.vp-item.active`): "this is on now", not an error and not an
+   ordinary action. `:hover` is written with the tag, for the same reason as for the star's
+   `.on` above: without it, hovering over a playing button would flash white for a moment. */
+.admin-root .vp-play.playing, .admin-root button.vp-play.playing:hover { color:var(--accent); }
+
+/* The star has no shell at all: no background, no border, even on hover. It is just the
+   symbol, larger than the text next to it. Color is the only feedback: dim at rest, white
+   under the cursor ("about to click"), yellow when marked as a favorite (`.on`), and even
+   when hovered it does not turn white like the ordinary one.
+
+   Selectors with a tag (`button.vp-star...`), not just classes: this is a `<button>`, and
+   the shared `button:hover:not(:disabled)` in chrome.css (the `--btn-hover` fill, the
+   border) is more specific than a single class and would show through `background:none`
+   here. The tag raises the weight exactly enough to win. For the same reason the "hovered
+   favorite" has its own line, `button.vp-star.on:hover`: without the tag, the weight of
+   two classes (`.vp-star.on`) would lose to the tag of a plain `:hover`, and the yellow
+   would flash white on hover. */
+.admin-root .vp-star { flex:0 0 auto; background:none; border:0; padding:0; cursor:pointer;
+           color:var(--meta); font-size:19px; line-height:1;
+           transition:color .12s; }
+.admin-root button.vp-star:hover { background:none; border-color:transparent; color:var(--text); }
+.admin-root .vp-star.on, .admin-root button.vp-star.on:hover { color:var(--warn); }
+
+.admin-root .vp-empty { padding:20px 16px; text-align:center; color:var(--meta); font-size:12.5px; }
+
+/* ---------- settings in the window (`.win`, chrome.css) ----------
+
+   In the window, sections are not cards in a page column but tab content: no frame, no
+   fill, no fields of their own; the window holds the padding. The rows are the same
+   (`.f`), with the same thin lines between them; only what is around them changes.
+   Everything is under `.win`, so the real `/admin` without a window stays as it was. */
+.win .admin-root { background:none; font-size:14px; }
+.win .admin-root section.card { background:none; border:0; border-radius:0; margin:0 0 28px; }
+.win .admin-root section.card:last-child { margin-bottom:0; }
+/* A tab with several sections without subheadings ("General"): rows go as one
+   list, not as two blocks with a gap and empty space under each; between sections there is
+   the same thin line as between rows. */
+.win .admin-root .flat section.card { margin:0; }
+.win .admin-root .flat section.card:not([hidden]) ~ section.card:not([hidden]) { border-top:1px solid rgba(255,255,255,.06); }
+/* The section header when a tab has several ("General"): a subheading in regular
+   case, like "Audio Settings" in the settings of the reference app and the sections in
+   the settings of other chat apps, not sized like a tab header. */
+.win .admin-root section.card > h2 { padding:0 0 6px; font-size:14px; font-weight:600;
+                                     letter-spacing:0; text-transform:none; color:var(--text); }
+.win .admin-root section.card > p.lead { margin:0 0 8px; }
+.win .admin-root .fields, .win .admin-root .widget { padding:0; }
+/* The row label is bolder, like the setting names in the reference app: the name on the
+   left, the control on the right, and the labels read as a list, not as thin text next to
+   the fields. */
+.win .admin-root .f .lab .name { font-weight:600; }
+.win .admin-root .tiles, .win .admin-root .budget { padding-left:0; padding-right:0; }
+/* The "restart needed" bar is a plate above the tabs: it concerns the
+   whole window, not one tab, and there is no reason to stretch it across the full width of
+   the window. */
+.win .admin-root .restart { margin:0 0 20px; padding:10px 14px; border:0;
+                            border-radius:9px; background:rgba(111,123,216,.12); }
+.win .admin-root .restart.unsaved { background:rgba(240,113,107,.14); }
+
+/* Controls in the window are flat (2026-10-07, the "flat look" in chrome.css): fields,
+   selects, buttons, and chips have already become plates through token substitution; here
+   is what is drawn with its own colors. Everything is under `.win`: the real `/admin`
+   stays as it was. */
+/* Switch: a track without a border; "on" is a light fill, and the knob is white. The
+   position of the knob already says on/off, and the fill in this state is noticeably
+   lighter than the off one, so we do not rely on the knob alone. */
+.win .admin-root .switch { background:rgba(255,255,255,.10); }
+.win .admin-root .switch.on { background:rgba(255,255,255,.30); border-color:transparent; }
+.win .admin-root .switch:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+/* Section badges: "stub" and "enabled" used to be painted with a
+   colored border; now they have a tinted fill with the same text color. */
+.win .admin-root .badge { background:rgba(255,255,255,.06); border-color:transparent; }
+.win .admin-root .badge.todo { background:rgba(208,162,21,.14); border-color:transparent; }
+.win .admin-root .badge.on { background:rgba(99,199,122,.14); border-color:transparent; }
+/* File drop: a plate with a dashed outline (2026-10-08). The outline is needed here
+   specifically: this is the only place in the window where a file is dropped with the
+   mouse, and a dashed line says "here" better than a flat plate. The color is `--line2`,
+   like the fields in the window (`--btn-edge` is transparent in the window); under the
+   cursor the outline lightens, and for a file over the zone (`.over`) it becomes solid. */
+.win .admin-root .mt-drop { border:1px dashed var(--line2); border-radius:8px; background:var(--btn); }
+/* The background of the file list is the same as the drop area above it (2026-10-08): both
+   use `--btn`, one plate in color. */
+.win .admin-root #mt-list:not(:empty) { background:var(--btn); }
+.win .admin-root .mt-drop:hover { border-color:var(--glass-edge-top); background:var(--btn-hover); }
+.win .admin-root .mt-drop.over { border-color:var(--glass-edge-top); border-style:solid; background:var(--btn-hover); }
+/* Voice list: a plate without a border; the rows are still separated by a thin line. */
+.win .admin-root .vp-list { border-color:transparent; background:rgba(255,255,255,.03); }
+/* The "Voice-over" tab: the voice list takes all the space under the switch,
+   down to the bottom of the window (2026-10-08), instead of a fixed 215px: there are
+   dozens of voices, and in a large window five rows in an empty field looked like a stub.
+   For this, the chain from the window to the list is made of columns where every link
+   stretches (`flex:1`); on the other tabs the content is still at the top and has its own
+   height. The settings shell stretches only while this particular tab is open (`:has`):
+   when empty, it must not share space with the "Account" tab, which sits next to
+   it in the same column and centers its form. `:not([hidden])` is required: an id
+   selector with `display:flex` would otherwise override `[hidden]` on a hidden tab. The
+   bottom of the list sits where the content of the other tabs ends (the bottom margin of
+   `.win-main`), so it has no bottom padding of its own. */
+.win .admin-root:has(> #main > #wpanel-voice:not([hidden])) { flex:1; display:flex; flex-direction:column; min-width:0; }
+.win .admin-root:has(> #main > #wpanel-voice:not([hidden])) > #main { flex:1; display:flex; flex-direction:column; min-height:0; }
+.win .admin-root #wpanel-voice:not([hidden]),
+.win .admin-root #wpanel-voice #tts:not([hidden]),
+.win .admin-root #wpanel-voice #tts > .widget { display:flex; flex-direction:column; min-height:0; }
+.win .admin-root #wpanel-voice #tts, .win .admin-root #wpanel-voice #tts > .widget { flex:1; }
+.win .admin-root #wpanel-voice .vp-list { flex:1 1 0; min-height:160px; max-height:none; margin-bottom:0; }
+/* The word input field (stop words, dictionary) is not dashed but the same kind of plate
+   as the others. */
+.win .admin-root .chips input { border-style:solid; }
+
+/* ---------- settings window rows: layout from a reference app, mixed look (2026-10-07) ----------
+
+   The design follows the settings window of a reference app. The variant "each row in its
+   own block" was rejected (too many blocks), and mixing in the style of other modern apps
+   was allowed: rows without frames or plates, a tile with an icon on the left (`data-ico`
+   -> `ROW_ICON` in admin.js, the drawing is a mask image below; the test
+   `test_settings_window.py` makes sure that no name is left without a drawing), the name
+   in bold with the explanation under it, the control on the right; between the rows a
+   barely visible line, as in the settings of other chat apps. One condition: **square
+   corners, like ours** (6px on the tile, the list, the field, and the buttons), no pills
+   and no large rounding. Everything is under `.win`: the real `/admin` without a window
+   stays as it was. */
+.win .admin-root .f { grid-template-columns:minmax(0,1fr) auto; gap:2px 16px; padding:12px 0; margin:0;
+  border-top:0; background:none; border-radius:0; box-shadow:none; }
+.win .admin-root .f + .f { border-top:1px solid rgba(255,255,255,.06); }
+.win .admin-root .f[data-ico] { grid-template-columns:40px minmax(0,1fr) auto; }
+.win .admin-root .f[data-ico]::before {
+  content:""; width:40px; height:40px; border-radius:6px;
+  background:var(--ico) center / 20px 20px no-repeat rgba(255,255,255,.075);
+}
+.win .admin-root .widget + .fields > .f:first-child { border-top:0; }
+.win .admin-root .widget + .fields { margin-top:8px; }
+.win .admin-root .f .lab { gap:2px; }
+.win .admin-root .f .lab .name { font-size:14px; }
+/* The "i" button (22px) is taller than the name line and inflated the row by 3-4px: rows
+   with it came out taller than their neighbors (67-68 against 64). The negative margins
+   subtract it from the row height; the button itself does not change. */
+.win .admin-root .f .lab .name .info { margin-top:-4px; margin-bottom:-4px; }
+.win .admin-root .f .desc { font-size:12.5px; line-height:1.4; color:var(--dim); max-width:56ch; }
+/* A row with an icon has exactly two lines of text, the name and the caption, each on one
+   line (requirement: if there is an icon, there must be only two lines of text on the
+   row). The caption is written by the author (`ROW_CAPTION` in admin.js, at most 58
+   characters, guarded by a test); whatever still does not fit is cut with an ellipsis, and
+   the full explanation sits behind the "i". The name is not cut, only kept from wrapping:
+   it contains the "i" button itself, and cutting would hide it. */
+.win .admin-root .f[data-ico] .lab .name { white-space:nowrap; line-height:20px; }
+.win .admin-root .f[data-ico] .lab .desc { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:18px; }
+/* 20 + 2 (gap) + 18 = 40px, exactly the icon tile: every row with an icon has the same
+   height (64px with padding), with a caption or without, with an "i" or without. */
+.win .admin-root .f .ctl { justify-content:flex-end; }
+.win .admin-root .f .ctl select { width:210px; }
+/* A single-line field has the same width as a list (210px, `select` above): the "Bot name"
+   field stood wider than the neighboring lists (2026-10-08). There is one
+   exception, the session name, below: it is a phrase of its own and longer. */
+.win .admin-root .f .ctl input[type=text], .win .admin-root .f .ctl input[type=number] { width:210px; }
+.win .admin-root .f .ctl .hk { width:210px; }
+/* The session name is a phrase of its own, not a short value: the field is wider than the
+   others so that the placeholder in it ("It will be made up for you — or write your own") can be read in full. */
+.win .admin-root .f[data-path="chat.name"] .ctl input[type=text] { width:330px; }
+/* The microphone is a long list (2026-10-08, requirement: make this field longer): device
+   names like "Microphone (High Definition Audio Device) · system default" did not
+   fit in 240px. The level bar below has the same width and the same
+   left edge: there is no "Check" button next to it any more. */
+.win .admin-root #ac-mic-row .ctl select { flex:0 0 auto; width:360px; }
+.win .admin-root #ac-mic-meter-row .ctl { width:360px; }
+/* A narrow window. The app is no narrower than 880px, and the settings window there is
+   832: of the label ("Session name" with the "i" button is about 137px)
+   only 108px remained, the button dropped under the field, and the label was cut off (so up to about
+   910px, and in a browser tab it is even worse). Fields with a fixed width get shorter in
+   steps, so that the label has at least about 140px. The narrow window layout (up to 760px)
+   puts the tabs on top and gives the content the full width, so the old sizes apply there. */
+@media (max-width:960px) {
+  .win .admin-root .f[data-path="chat.name"] .ctl input[type=text] { width:230px; }
+  .win .admin-root #ac-mic-row .ctl select, .win .admin-root #ac-mic-meter-row .ctl { width:290px; }
+}
+@media (min-width:761px) and (max-width:879px) {
+  .win .admin-root .f[data-path="chat.name"] .ctl input[type=text] { width:170px; }
+  .win .admin-root #ac-mic-row .ctl select, .win .admin-root #ac-mic-meter-row .ctl { width:220px; }
+}
+/* The large field (conversation context) is an ordinary input field (2026-10-08,
+   requirement: make it look like an ordinary input field): the same outline, 6px corner,
+   and font size as the single-line settings fields, with no plate around it. Before, it was
+   a light plate with a bare field inside, the only one of its kind in the window. */
+.win .admin-root .f.wide, .win .admin-root .f.bare { grid-template-columns:minmax(0,1fr); }
+.win .admin-root .f.wide { margin:8px 0; padding:0; background:none; border-radius:0; }
+.win .admin-root .f.wide textarea { background:transparent; border:1px solid var(--line2); border-radius:6px;
+                                    padding:10px 12px; font-size:14px; }
+.win .admin-root .f.wide textarea:focus { border-color:var(--focus-edge); }
+.win .admin-root .f.wide, .win .admin-root .f.wide + .f { border-top:0; }
+.win .admin-root .f.wide .ctl { justify-content:stretch; }
+/* The list, the single-line field, and the buttons ("Check", the key
+   combination) are square plates with a thin border, 35px, 6px corner, like the header
+   blocks. The border is present here; in the dialogs and the account it is still absent. */
+.win .admin-root .f .ctl input[type=text], .win .admin-root .f .ctl input[type=number] {
+  height:var(--field-h); border-radius:var(--field-r); padding:0 12px; border:1px solid var(--field-edge);
+  background:var(--field-fill); }
+.win .admin-root .f .ctl input[type=text]:focus, .win .admin-root .f .ctl input[type=number]:focus {
+  border-color:var(--focus-edge); }
+.win .admin-root select { height:var(--field-h); border-radius:var(--field-r); padding-left:12px;
+                           border:1px solid var(--field-edge); background-color:var(--field-fill); color:var(--text); }
+.win .admin-root select:hover { background-color:var(--btn); border-color:var(--glass-edge-top); }
+/* All the controls on the right have the same height, 35px: the list, the field, the key
+   combination (before, `.hk` came out at 33.4, from the font height rather than from a
+   set measure). */
+.win .admin-root .hk {
+  height:35px; box-sizing:border-box; padding:0 12px; text-align:center; font:inherit;
+  border:1px solid var(--line2); border-radius:6px; background:transparent; color:var(--text); }
+.win .admin-root .hk:hover:not(:disabled) { background:transparent; border-color:var(--glass-edge-top); }
+.win .admin-root .hk.catching { border-color:var(--glass-edge-top); }
+.win .admin-root .f[data-ico="mic"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z'/%3E%3Cpath d='M19 11a7 7 0 0 1-14 0'/%3E%3Cpath d='M12 18v4'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="speaker"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 5L6 9H2v6h4l5 4z'/%3E%3Cpath d='M15.5 8.5a5 5 0 0 1 0 7'/%3E%3Cpath d='M19 5a10 10 0 0 1 0 14'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="lang"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8l6 6'/%3E%3Cpath d='M4 14l6-6 2-3'/%3E%3Cpath d='M2 5h12'/%3E%3Cpath d='M7 2h1'/%3E%3Cpath d='M22 22l-5-10-5 10'/%3E%3Cpath d='M14 18h6'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="clip"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.4 11.1-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="sliders"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6h8M18 6h2M4 12h12M20 12h0M4 18h5M15 18h5'/%3E%3Ccircle cx='14' cy='6' r='2'/%3E%3Ccircle cx='16' cy='12' r='2'/%3E%3Ccircle cx='11' cy='18' r='2'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="smile"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M8 14s1.5 2 4 2 4-2 4-2'/%3E%3Cpath d='M9 9h.01M15 9h.01'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="monitor"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='3' width='20' height='14' rx='2'/%3E%3Cpath d='M8 21h8M12 17v4'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="at"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="clock"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="message"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="window"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2'/%3E%3Cpath d='M3 9h18'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="panel"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2'/%3E%3Cpath d='M14 4v16'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="globe"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M2 12h20'/%3E%3Cpath d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="eye-off"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cpath d='M1 1l22 22'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="level"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12h4l3-8 4 16 3-8h4'/%3E%3C/svg%3E"); }
+.win .admin-root .f[data-ico="pen"] { --ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9bfca' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d=%22M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z%22/%3E%3C/svg%3E"); }

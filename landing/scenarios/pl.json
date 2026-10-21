@@ -1,0 +1,102 @@
+{
+ "_doc": "Przykład rozmowy do dema na stronie. Polski.",
+ "speech": [
+  "Przypomnij mi, czym proces różni się od wątku?",
+  "Patrzcie: proces to osobny program z własną pamięcią, a wątki działają wewnątrz niego i dzielą tę pamięć.",
+  "Dobrze. Zerknij, proszę, dlaczego mój test pada?",
+  "Widzę: wewnętrzna pętla porównuje element sam ze sobą.",
+  "I ostatnie: ile urośnie 10 000 przy 8% rocznie po trzech latach?"
+ ],
+ "answers": [
+  "**Proces** to izolowany program z własną pamięcią. **Wątek** to linia wykonania wewnątrz procesu: wątki jednego procesu dzielą wspólną pamięć.\n\n- procesy są droższe w tworzeniu i przełączaniu\n- wątki wymieniają dane szybciej, ale potrzebują synchronizacji\n- awaria jednego wątku może wywrócić cały proces",
+  "**Błąd:** wewnętrzna pętla zaczyna od zera, więc przy `i == j` element jest porównywany sam ze sobą, a funkcja zawsze zwraca `True`.\n\n```python\ndef has_duplicates(items):\n    return len(set(items)) != len(items)\n```\n\nMożesz też zostawić pętle i zacząć wewnętrzną od `i + 1`. Wariant ze zbiorem działa w O(n).",
+  "To procent składany:\n\n$$S = 10\\,000 \\cdot (1 + 0{,}08)^3$$\n\n$$S \\approx 12\\,597$$\n\nOdpowiedź: około **12 597**, czyli zysk **2 597**."
+ ],
+ "code": {
+  "title": "review — pull request #214",
+  "heading": "Filtr duplikatów",
+  "l1": "Funkcja has_duplicates(items) powinna",
+  "l2": "zwrócić True, jeśli na liście są",
+  "l3": "powtarzające się elementy, a False — jeśli nie.",
+  "input": "wejście",
+  "expected": "oczekiwane  False",
+  "tests": "CI · TESTY"
+ },
+ "math": {
+  "title": "sheets — Prognoza lokaty",
+  "slide": "SLAJD 7",
+  "heading": "Prognoza lokaty",
+  "rows": [
+   [
+    "Kwota",
+    "10 000"
+   ],
+   [
+    "Stopa",
+    "8% rocznie"
+   ],
+   [
+    "Okres",
+    "3 lata"
+   ],
+   [
+    "Wynik",
+    "?"
+   ]
+  ]
+ },
+ "idle": {
+  "title": "notes — Spotkanie zespołu",
+  "heading": "Spotkanie zespołu",
+  "items": [
+   "· architektura serwisu",
+   "· review pull request #214",
+   "· prognoza lokaty"
+  ]
+ },
+ "call": {
+  "names": [
+   "Anna K.",
+   "Piotr",
+   "Marta S.",
+   "Ty"
+  ],
+  "initials": [
+   "AK",
+   "PW",
+   "MS",
+   "Ty"
+  ],
+  "sharing": "Udostępniasz swój ekran"
+ },
+ "windows": [
+  {
+   "title": "Cotygodniowe spotkanie zespołu",
+   "label": "Cotygodniowe spotkanie zespołu",
+   "kind": "call",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Wykład ze statystyki",
+   "label": "Wykład ze statystyki",
+   "kind": "lecture",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "title": "Odtwarzacz muzyki",
+   "label": "Odtwarzacz muzyki",
+   "kind": "music",
+   "w": 1280,
+   "h": 720
+  },
+  {
+   "title": "Notatki",
+   "label": "Notatki",
+   "kind": "notes",
+   "w": 1100,
+   "h": 800
+  }
+ ]
+}

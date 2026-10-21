@@ -1,0 +1,103 @@
+{
+  "events": {
+    "reset": {
+      "subject": "Argus: resetowanie hasła",
+      "heading": "Nowe hasło",
+      "paragraphs": [
+        "Aby ustawić nowe hasło, proszę nacisnąć przycisk. Link działa przez {minutes} min i tylko raz."
+      ],
+      "button": "Ustaw nowe hasło",
+      "note": "Nie było takiej prośby? Wystarczy zignorować tę wiadomość — hasło pozostanie bez zmian."
+    },
+    "welcome": {
+      "subject": "Witamy w Argus",
+      "heading": "Konto zostało utworzone",
+      "paragraphs": [
+        "Rejestracja w Argus z adresem {email} została zakończona.",
+        "{gift}",
+        "Proszę otworzyć aplikację i włączyć rozpoznawanie. Z salda opłacane są rozpoznawanie, odpowiedzi i głos; doładować je można w ustawieniach."
+      ],
+      "gift": "Na saldo dodano prezent powitalny w wysokości {amount}.",
+      "note": "Konto nie było zakładane? Proszę napisać do nas — usuniemy je."
+    },
+    "password_changed": {
+      "subject": "Hasło do Argus zostało zmienione",
+      "heading": "Hasło zostało zmienione",
+      "paragraphs": [
+        "Hasło do konta {email} zostało zmienione {when}.",
+        "Nastąpiło wylogowanie ze wszystkich aplikacji. Proszę zalogować się ponownie nowym hasłem."
+      ],
+      "note": "Nie wprowadzano tej zmiany? Proszę napisać do nas — pomożemy odzyskać dostęp."
+    },
+    "top_up": {
+      "subject": "Saldo Argus zostało doładowane",
+      "heading": "Dziękujemy za doładowanie",
+      "paragraphs": [
+        "Płatność została przyjęta, a środki są już na saldzie."
+      ],
+      "rows": [
+        "Kwota",
+        "Data",
+        "Aktualne saldo"
+      ],
+      "note": "Nie dokonywano tej płatności? Proszę napisać do nas."
+    },
+    "low": {
+      "subject": "Saldo Argus się kończy",
+      "heading": "Saldo się kończy",
+      "paragraphs": [
+        "Na saldzie pozostało {balance}.",
+        "Aby rozpoznawanie działało dalej, proszę doładować saldo w ustawieniach aplikacji."
+      ]
+    },
+    "empty": {
+      "subject": "Saldo Argus jest puste",
+      "heading": "Saldo jest puste",
+      "paragraphs": [
+        "Rozpoznawanie, odpowiedzi i głos są wstrzymane, dopóki saldo jest puste.",
+        "Można je doładować w ustawieniach aplikacji."
+      ]
+    },
+    "deleted": {
+      "subject": "Konto Argus zostało usunięte",
+      "heading": "Konto zostało usunięte",
+      "paragraphs": [
+        "Konto {email} zostało usunięte: adres, hasło i logowania zostały wymazane.",
+        "Pozostałe saldo przepadło wraz z kontem. Zapisy o płatnościach są przechowywane bez powiązania z użytkownikiem."
+      ],
+      "note": "Nie usuwano konta? Proszę napisać do nas."
+    }
+  },
+  "footer": "Ta wiadomość została wysłana automatycznie. Pytania: {support}.",
+  "date": {
+    "months": [
+      "stycznia",
+      "lutego",
+      "marca",
+      "kwietnia",
+      "maja",
+      "czerwca",
+      "lipca",
+      "sierpnia",
+      "września",
+      "października",
+      "listopada",
+      "grudnia"
+    ],
+    "format": "{d} {m} {y}, {time} UTC"
+  },
+  "reset_page": {
+    "title": "Nowe hasło — Argus",
+    "heading": "Nowe hasło",
+    "placeholder": "Nowe hasło",
+    "button": "Zapisz",
+    "bad_link": "Link nie działa — nowy można uzyskać w aplikacji.",
+    "saved": "Hasło zapisane. Proszę wrócić do aplikacji i zalogować się ponownie.",
+    "failed": "Coś poszło nie tak",
+    "offline": "Brak połączenia",
+    "short": "Hasło musi mieć co najmniej {min} znaków.",
+    "weak": "To hasło jest zbyt łatwe do odgadnięcia. Proszę wybrać inne.",
+    "busy": "Serwer jest teraz zajęty. Proszę spróbować ponownie za minutę.",
+    "limit": "Zbyt wiele prób. Proszę spróbować ponownie później."
+  }
+}

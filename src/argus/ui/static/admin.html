@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Argus · assistant</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23181a20'/%3E%3Cg transform='translate(5 4.5) scale(.0787)' fill='%23fff'%3E%3Cpath d='M252.5 0H438.5L691 699H517L345.5 127L174 699H0Z'/%3E%3Ccircle cx='345.5' cy='525' r='60'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="/chrome.css">
+<script src="/chrome.js" defer></script>
+<script src="/update-button.js" defer></script>
+<link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+
+<!-- The channel blocks (gate-live, materials, audio-check, window-visibility, voice-picker)
+     moved to admin.js, the same file that the dashboard mounts inside itself without this
+     page. There is no second copy here any more. -->
+<script src="/admin/admin.js"></script>
+<script>
+// The real `/admin` page is a whole document of its own (otherwise they would not end up
+// here: `argus run --settings`, without the dashboard, or a direct visit with
+// `?embedded=1`, see `admin_base.py`). The dashboard mounts the same panel itself, through
+// `window.argusAdmin.mount(el)`, see `openSettings` in chrome.js.
+window.argusAdmin.mount(document.body, { standalone: true });
+</script>
+</body>
+</html>

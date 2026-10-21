@@ -1,0 +1,2964 @@
+{
+ "keys": [
+  {
+   "k": "Argus · assistant",
+   "at": "dash",
+   "n": "title of the tab or window"
+  },
+  {
+   "k": "All sessions",
+   "at": "dash",
+   "n": "hint and name of the 'back' arrow button in the session header: returns to the session list"
+  },
+  {
+   "k": "Account",
+   "at": "dash",
+   "n": "hint and name of the person-icon button"
+  },
+  {
+   "k": "Settings",
+   "at": "dash",
+   "n": "hint of the gear button"
+  },
+  {
+   "k": "Close",
+   "at": "dash",
+   "n": "button that closes a panel or window"
+  },
+  {
+   "k": "Close window",
+   "at": "dash",
+   "n": "hint of the X button"
+  },
+  {
+   "k": "Minimize",
+   "at": "dash",
+   "n": "button in the app window strip: sends the window to the taskbar; as in Windows"
+  },
+  {
+   "k": "Maximize",
+   "at": "dash",
+   "n": "button in the app window strip: stretches the window to full screen; as in Windows"
+  },
+  {
+   "k": "Restore",
+   "at": "dash",
+   "n": "same button when the window is already full screen: returns it to its previous size (in Windows: 'Restore')"
+  },
+  {
+   "k": "Open overlay",
+   "at": "dash",
+   "n": "button label; overlay = answers and screen together, on top of other windows"
+  },
+  {
+   "k": "Record",
+   "at": "dash",
+   "n": "name of the switch in the header; the label never changes, a light next to it shows the state; short, one word"
+  },
+  {
+   "k": "Microphone",
+   "at": "dash",
+   "n": "name of an audio source, a checkbox in the header; short"
+  },
+  {
+   "k": "System audio",
+   "at": "dash",
+   "n": "whatever plays on the computer (the other person's speech in a call); short"
+  },
+  {
+   "k": "Screen",
+   "at": "dash",
+   "n": "source: screen reading; short. Also the label of a screen frame in the timeline"
+  },
+  {
+   "k": "Microphone device",
+   "at": "dash",
+   "n": "name of the dropdown list (for screen readers)"
+  },
+  {
+   "k": "nothing found",
+   "at": "dash",
+   "n": "empty device list"
+  },
+  {
+   "k": "{name} · missing",
+   "at": "dash",
+   "n": "a device that was chosen earlier but is gone now"
+  },
+  {
+   "k": "mic",
+   "at": "dash",
+   "n": "label of the sound-level bar; lowercase, short"
+  },
+  {
+   "k": "system",
+   "at": "dash",
+   "n": "label of the second level bar: system audio; lowercase, short"
+  },
+  {
+   "k": "Reconnect audio",
+   "at": "dash",
+   "n": "button"
+  },
+  {
+   "k": "Reconnecting…",
+   "at": "dash",
+   "n": "button while the action is running"
+  },
+  {
+   "k": "failed",
+   "at": "dash,account",
+   "n": "short failure message, lowercase"
+  },
+  {
+   "k": "settings",
+   "at": "dash",
+   "n": "link to the settings page, lowercase"
+  },
+  {
+   "k": "No answers yet",
+   "at": "dash",
+   "n": "empty answer timeline"
+  },
+  {
+   "k": "No answers yet — recognition is off",
+   "at": "dash",
+   "n": "empty answer timeline when recognition is off [assembled in code from pieces]"
+  },
+  {
+   "k": "question",
+   "at": "dash",
+   "n": "label of the question block in an answer card; lowercase (styles turn it into caps)"
+  },
+  {
+   "k": "answer",
+   "at": "dash",
+   "n": "label of the block with the assistant's answer; lowercase (styles turn it into caps)"
+  },
+  {
+   "k": "thinking",
+   "at": "dash",
+   "n": "card label: the assistant is preparing an answer; lowercase, short"
+  },
+  {
+   "k": "replying to:",
+   "at": "dash",
+   "n": "in the 'thinking' card: which line the assistant is replying to"
+  },
+  {
+   "k": "preparing:",
+   "at": "dash",
+   "n": "in the 'thinking' card while a conversation summary is being prepared: what exactly is being prepared"
+  },
+  {
+   "k": "Show full question",
+   "at": "dash",
+   "n": "hint of the arrow next to a long question"
+  },
+  {
+   "k": "Ask the same thing again",
+   "at": "dash",
+   "n": "hint of the 'repeat' button"
+  },
+  {
+   "k": "Copy answer",
+   "at": "dash",
+   "n": "hint of the icon under an answer: copies the whole answer"
+  },
+  {
+   "k": "Copy code",
+   "at": "dash",
+   "n": "hint of the icon in the corner of a code block in an answer: copies only the code"
+  },
+  {
+   "k": "Copied",
+   "at": "dash",
+   "n": "hint of the copy icon for a second after a successful copy; short"
+  },
+  {
+   "k": "Failed: select the answer text and press Ctrl+C",
+   "at": "dash",
+   "n": "hint of the copy icon when copying failed"
+  },
+  {
+   "k": "with screenshot",
+   "at": "dash",
+   "n": "card label: a screenshot was sent along with the question; lowercase"
+  },
+  {
+   "k": "with photo",
+   "at": "dash",
+   "n": "label: a photo pasted from the clipboard was sent along with the question; lowercase"
+  },
+  {
+   "k": "screenshot sent with the question",
+   "at": "dash",
+   "n": "image description (alt)"
+  },
+  {
+   "k": "photo sent with the question",
+   "at": "dash",
+   "n": "image description (alt)"
+  },
+  {
+   "k": "photo that will be sent with the question",
+   "at": "dash",
+   "n": "image description (alt)"
+  },
+  {
+   "k": "Remove photo",
+   "at": "dash",
+   "n": "hint of the X on an attachment"
+  },
+  {
+   "k": "Waiting for speech…",
+   "at": "dash",
+   "n": "empty conversation timeline"
+  },
+  {
+   "k": "Recognition is off",
+   "at": "dash",
+   "n": "empty conversation timeline when recognition is off"
+  },
+  {
+   "k": "Microphone and system audio are off",
+   "at": "dash",
+   "n": "warning above the timeline"
+  },
+  {
+   "k": "Ask about this line",
+   "at": "dash",
+   "n": "hint of the '?' button on a line"
+  },
+  {
+   "k": "Ask about the screen",
+   "at": "dash,settings",
+   "n": "hint of the '?' button on a frame"
+  },
+  {
+   "k": "Me",
+   "at": "dash",
+   "n": "who said the line: me (the microphone owner). Very short"
+  },
+  {
+   "k": "Them",
+   "at": "dash",
+   "n": "who said the line: the person on the other end of the call. Very short (Them / Other)"
+  },
+  {
+   "k": "Photo",
+   "at": "dash",
+   "n": "label of an attached photo in the timeline"
+  },
+  {
+   "k": "Recognition error",
+   "at": "dash",
+   "n": "label of an error in the conversation timeline"
+  },
+  {
+   "k": "— didn't catch it",
+   "at": "dash",
+   "n": "in a comparison of two recognition results: this one did not catch the line"
+  },
+  {
+   "k": "{n} ms",
+   "at": "dash",
+   "n": "milliseconds"
+  },
+  {
+   "k": "Screen reading is off",
+   "at": "dash",
+   "n": "placeholder in place of a screen frame"
+  },
+  {
+   "k": "Ask your own question…",
+   "at": "dash",
+   "n": "placeholder of the question input"
+  },
+  {
+   "k": "Conversation summary",
+   "at": "dash",
+   "n": "name of the button by the question line: a retelling of the whole conversation"
+  },
+  {
+   "k": "Summarize the conversation",
+   "at": "runtime",
+   "n": "label of the summary card for a whole conversation; the card is made by the question-line command"
+  },
+  {
+   "k": "Summary of the conversation about {focus}",
+   "at": "runtime",
+   "n": "label of the summary card for one topic; {focus} is the topic as the person said it, keep it as it is"
+  },
+  {
+   "k": "Summarize",
+   "at": "dash",
+   "n": "button in the summary window: the bot retells the conversation"
+  },
+  {
+   "k": "Follow",
+   "at": "dash",
+   "n": "field label: topics the bot follows; the summary will have a section for each"
+  },
+  {
+   "k": "deadlines, budget, risks",
+   "at": "dash",
+   "n": "example in the empty topics field: conversation topics separated by commas"
+  },
+  {
+   "k": "Comma-separated. The bot stays quiet, and when you turn recognition off, it sends you a summary with a section for each topic.",
+   "at": "dash",
+   "n": "explanation under the topics field"
+  },
+  {
+   "k": "Topics didn't load",
+   "at": "dash",
+   "n": "error in the summary window"
+  },
+  {
+   "k": "Topics didn't save — try again",
+   "at": "dash",
+   "n": "error in the summary window"
+  },
+  {
+   "k": "Couldn't make the summary",
+   "at": "dash",
+   "n": "error in the summary window"
+  },
+  {
+   "k": "Couldn't make the summary — try again",
+   "at": "dash",
+   "n": "error in the summary window"
+  },
+  {
+   "k": "Ask",
+   "at": "dash,settings",
+   "n": "hint and name of the send button"
+  },
+  {
+   "k": "Answer settings",
+   "at": "dash",
+   "n": "name of the button with sliders (hidden in the current version)"
+  },
+  {
+   "k": "Reply to microphone",
+   "at": "dash,settings",
+   "n": "name of the list: which microphone lines to reply to"
+  },
+  {
+   "k": "Reply to system audio",
+   "at": "dash,settings",
+   "n": "name of the list: which lines of the other person to reply to"
+  },
+  {
+   "k": "Think longer",
+   "at": "dash,settings",
+   "n": "name of the switch: a mode where the answer takes longer but goes deeper"
+  },
+  {
+   "k": "Language",
+   "at": "dash,settings",
+   "n": "name of the language list"
+  },
+  {
+   "k": "Settings didn't load",
+   "at": "dash",
+   "n": "error message"
+  },
+  {
+   "k": "Didn't save — try again",
+   "at": "dash",
+   "n": "error message"
+  },
+  {
+   "k": "What to read from the screen",
+   "at": "dash",
+   "n": "title of the picker window: the whole monitor or a single window"
+  },
+  {
+   "k": "What to listen to",
+   "at": "dash",
+   "n": "title of the picker window for apps whose sound to listen to"
+  },
+  {
+   "k": "No windows found",
+   "at": "dash",
+   "n": "empty window list"
+  },
+  {
+   "k": "Show screen",
+   "at": "dash",
+   "n": "hint of the arrow in the floating window"
+  },
+  {
+   "k": "Hide screen",
+   "at": "dash",
+   "n": "hint of the same arrow"
+  },
+  {
+   "k": "Lock window",
+   "at": "dash",
+   "n": "hint of the pin on the floating window"
+  },
+  {
+   "k": "Couldn't paste the image",
+   "at": "dash",
+   "n": "error pasting a photo from the clipboard"
+  },
+  {
+   "k": "Tell me what's happening on the screen.",
+   "at": "dash",
+   "n": "THIS IS THE TEXT OF A QUESTION that is sent to the assistant and shown in the timeline. Translate it as a person addressing an assistant"
+  },
+  {
+   "k": "Tell me what's in this image.",
+   "at": "dash",
+   "n": "THIS IS THE TEXT OF A QUESTION about the pasted photo. As a person addressing an assistant"
+  },
+  {
+   "k": "rejected",
+   "at": "dash",
+   "n": "label of a rejected request, lowercase"
+  },
+  {
+   "k": "no reason",
+   "at": "dash",
+   "n": "lowercase"
+  },
+  {
+   "k": "you asked",
+   "at": "dash",
+   "n": "reason for the request: the person asked on their own (hotkey); lowercase"
+  },
+  {
+   "k": "their question",
+   "at": "dash",
+   "n": "reason for the request; lowercase"
+  },
+  {
+   "k": "new on screen",
+   "at": "dash",
+   "n": "reason for the request; lowercase"
+  },
+  {
+   "k": "silence",
+   "at": "dash",
+   "n": "reason for the request: silence fell in the conversation; lowercase"
+  },
+  {
+   "k": "Can't reach the app",
+   "at": "account",
+   "n": "error in the account panel"
+  },
+  {
+   "k": "Sign out",
+   "at": "account",
+   "n": "sign-out button"
+  },
+  {
+   "k": "No connection — showing the last known data.",
+   "at": "account",
+   "n": "warning"
+  },
+  {
+   "k": "recognition is off",
+   "at": "account",
+   "n": "status under the remaining balance; lowercase"
+  },
+  {
+   "k": "Failed",
+   "at": "account",
+   "n": "short failure message"
+  },
+  {
+   "k": "Registration",
+   "at": "account",
+   "n": "form title"
+  },
+  {
+   "k": "Login",
+   "at": "account",
+   "n": "form title"
+  },
+  {
+   "k": "Email",
+   "at": "account",
+   "n": "placeholder of the email input"
+  },
+  {
+   "k": "Password",
+   "at": "account",
+   "n": "placeholder of the password input"
+  },
+  {
+   "k": "Show password",
+   "at": "account",
+   "n": "hint of the eye button"
+  },
+  {
+   "k": "Hide password",
+   "at": "account",
+   "n": "hint of the eye button"
+  },
+  {
+   "k": "Forgot your password?",
+   "at": "account",
+   "n": "link"
+  },
+  {
+   "k": "Create account",
+   "at": "account",
+   "n": "button"
+  },
+  {
+   "k": "Sign in",
+   "at": "account",
+   "n": "button"
+  },
+  {
+   "k": "Don't have an account?",
+   "at": "account",
+   "n": "question before the 'Sign up' link"
+  },
+  {
+   "k": "Sign up",
+   "at": "account",
+   "n": "link"
+  },
+  {
+   "k": "I already have an account",
+   "at": "account",
+   "n": "link"
+  },
+  {
+   "k": "Enter your email",
+   "at": "account",
+   "n": "field validation error"
+  },
+  {
+   "k": "The address should look like name@domain",
+   "at": "account",
+   "n": "field validation error; shows the shape of an address"
+  },
+  {
+   "k": "Enter your password",
+   "at": "account",
+   "n": "field validation error"
+  },
+  {
+   "k": "Password is shorter than {n} characters",
+   "at": "account",
+   "n": "field validation error"
+  },
+  {
+   "k": "Reset password",
+   "at": "account",
+   "n": "form title"
+  },
+  {
+   "k": "Send link",
+   "at": "account",
+   "n": "button: emails a password reset link"
+  },
+  {
+   "k": "Back to sign in",
+   "at": "account",
+   "n": "link"
+  },
+  {
+   "k": "Check your email",
+   "at": "account",
+   "n": "title"
+  },
+  {
+   "k": "If we have an account with <b>{email}</b>, an email with a link is on its way. The link works for 30 minutes and can be used once.",
+   "at": "account",
+   "n": "keep the <b> tag around {email}; word order may change"
+  },
+  {
+   "k": "dashboard",
+   "at": "settings",
+   "n": "link to the main window, lowercase"
+  },
+  {
+   "k": "restart needed:",
+   "at": "settings",
+   "n": "bar at the top; followed by the number of settings"
+  },
+  {
+   "k": "Saved, but it will take effect after a restart.",
+   "at": "settings",
+   "n": "explanation for the 'restart needed' bar"
+  },
+  {
+   "k": "Window",
+   "at": "settings",
+   "n": "title of the block about the app window"
+  },
+  {
+   "k": "Info",
+   "at": "settings",
+   "n": "hint of the 'i' button"
+  },
+  {
+   "k": "Applies after restart",
+   "at": "settings",
+   "n": "label on a setting"
+  },
+  {
+   "k": "Add and press Enter",
+   "at": "settings",
+   "n": "placeholder of a list input; Enter is a key"
+  },
+  {
+   "k": "not set",
+   "at": "settings",
+   "n": "hotkey value when no combination is chosen"
+  },
+  {
+   "k": "Press a combo…",
+   "at": "settings",
+   "n": "hotkey capture button waiting for a key press"
+  },
+  {
+   "k": "<b>Recording isn't running</b> — only the settings are open. They save as usual, but there is no live data: no sound levels, no recognized lines, no headphone check.",
+   "at": "settings",
+   "n": "bar in 'settings only' mode; keep the <b> tag"
+  },
+  {
+   "k": "block “{name}” isn't defined",
+   "at": "settings",
+   "n": "technical error"
+  },
+  {
+   "k": "The filter hasn't decided anything yet",
+   "at": "settings",
+   "n": ""
+  },
+  {
+   "k": "last decision: <b>{reason}</b>",
+   "at": "settings",
+   "n": "keep the <b> tag"
+  },
+  {
+   "k": "requests",
+   "at": "settings",
+   "n": "filter counter"
+  },
+  {
+   "k": "filtered out",
+   "at": "settings",
+   "n": "filter counter"
+  },
+  {
+   "k": "chatter",
+   "at": "settings",
+   "n": "filter counter: chatter, not a question"
+  },
+  {
+   "k": "too short",
+   "at": "settings",
+   "n": "filter counter"
+  },
+  {
+   "k": "not a question",
+   "at": "settings",
+   "n": "filter counter"
+  },
+  {
+   "k": "pause",
+   "at": "settings",
+   "n": "filter counter"
+  },
+  {
+   "k": "repeat",
+   "at": "settings",
+   "n": "filter counter"
+  },
+  {
+   "k": "Drop files or click",
+   "at": "settings",
+   "n": "materials upload area"
+  },
+  {
+   "k": "PDF, Word, PowerPoint, text, photos of pages",
+   "at": "settings",
+   "n": "which files can be uploaded"
+  },
+  {
+   "k": "{n} pages as images",
+   "at": "settings",
+   "n": "size of a material: the pages were sent as images"
+  },
+  {
+   "k": "{n} chars",
+   "at": "settings",
+   "n": "size of a material in characters"
+  },
+  {
+   "k": "{n} KB",
+   "at": "settings",
+   "n": "file size [assembled in code from pieces]"
+  },
+  {
+   "k": "remove",
+   "at": "settings",
+   "n": "hint of the X next to a file"
+  },
+  {
+   "k": "{n} chars cut off",
+   "at": "settings",
+   "n": "the materials did not fit, part was cut off"
+  },
+  {
+   "k": "{n} pages didn't fit",
+   "at": "settings",
+   "n": "the materials did not fit"
+  },
+  {
+   "k": "<b>currently off</b>",
+   "at": "settings",
+   "n": "keep the <b> tag"
+  },
+  {
+   "k": "Parsing “{name}”…",
+   "at": "settings",
+   "n": "the uploaded file is being parsed"
+  },
+  {
+   "k": "couldn't parse",
+   "at": "settings",
+   "n": "file parsing error"
+  },
+  {
+   "k": "Current level",
+   "at": "settings",
+   "n": "name of the microphone level indicator"
+  },
+  {
+   "k": "system default",
+   "at": "settings",
+   "n": "device list item"
+  },
+  {
+   "k": "{name} · system default",
+   "at": "settings",
+   "n": "the device the system uses by default"
+  },
+  {
+   "k": "Invisible in recordings",
+   "at": "settings",
+   "n": "name of a setting: the app window does not appear in recordings or screen sharing"
+  },
+  {
+   "k": "You can see the window, but it won't show up in screen sharing, streams, or recordings (Windows 10 2004+). You can hide the window itself with the “Open/close main window” hotkey in the “Hotkeys” section.",
+   "at": "settings",
+   "n": "hint; the hotkey and section names must match their translations in this dictionary"
+  },
+  {
+   "k": "Visible to you, hidden in sharing and recordings.",
+   "at": "settings",
+   "n": "caption under the title 'Invisible in recordings'; one short line"
+  },
+  {
+   "k": "You can leave it empty — it names itself.",
+   "at": "settings",
+   "n": "caption under the title 'Session name'; one short line"
+  },
+  {
+   "k": "For in-person meetings with one microphone for two.",
+   "at": "settings",
+   "n": "caption under the title 'Reply to microphone'; one short line"
+  },
+  {
+   "k": "Same, but for system audio.",
+   "at": "settings",
+   "n": "caption under the title 'Reply to system audio'; one short line"
+  },
+  {
+   "k": "The bot responds to this word.",
+   "at": "settings",
+   "n": "caption under the title 'Bot name'; one short line"
+  },
+  {
+   "k": "Language of buttons, labels, and hints.",
+   "at": "settings",
+   "n": "caption under the title 'App language'; one short line"
+  },
+  {
+   "k": "Turn it off and it won’t show in screen sharing.",
+   "at": "settings",
+   "n": "caption under the title 'Window button on the taskbar' (button = the program icon on the Windows taskbar); one short line"
+  },
+  {
+   "k": "Hears accents and unclear speech better, but costs more.",
+   "at": "settings",
+   "n": "caption under the title 'Smart recognition'; one short line, up to 58 characters; 'smart' means speech recognition works more accurately"
+  },
+  {
+   "k": "The app window and the interface language.",
+   "at": "settings",
+   "n": "explanation under the title of the 'General' tab"
+  },
+  {
+   "k": "Read answers aloud",
+   "at": "settings",
+   "n": "name of the switch: voice replies"
+  },
+  {
+   "k": "couldn't synthesize",
+   "at": "settings",
+   "n": "speech synthesis error"
+  },
+  {
+   "k": "couldn't play sample",
+   "at": "settings",
+   "n": "error playing a voice sample"
+  },
+  {
+   "k": "No voices yet.",
+   "at": "settings",
+   "n": "empty voice list"
+  },
+  {
+   "k": "Nothing matches the filter.",
+   "at": "settings",
+   "n": "empty voice search result"
+  },
+  {
+   "k": "Remove from favorites",
+   "at": "settings",
+   "n": "hint of the star"
+  },
+  {
+   "k": "Add to favorites",
+   "at": "settings",
+   "n": "hint of the star"
+  },
+  {
+   "k": "build {build}",
+   "at": "settings",
+   "n": "hint on the version number"
+  },
+  {
+   "k": "source",
+   "at": "settings",
+   "n": "version number when run from source"
+  },
+  {
+   "k": "none",
+   "at": "settings",
+   "n": "the value 'none'"
+  },
+  {
+   "k": "working",
+   "at": "settings",
+   "n": "status"
+  },
+  {
+   "k": "ready",
+   "at": "settings",
+   "n": "status"
+  },
+  {
+   "k": "not done",
+   "at": "settings",
+   "n": "status"
+  },
+  {
+   "k": "same as system",
+   "at": "settings",
+   "n": "item of the 'App language' list: the language comes from Windows"
+  },
+  {
+   "k": "planned",
+   "at": "settings",
+   "n": "status"
+  },
+  {
+   "k": "audio: {error}",
+   "at": "runtime",
+   "n": "failure bar; {error} is the error text, may be in any language"
+  },
+  {
+   "k": "audio: stream stopped",
+   "at": "runtime",
+   "n": "failure bar [assembled in code from pieces]"
+  },
+  {
+   "k": "screen: {error}",
+   "at": "runtime",
+   "n": "failure bar"
+  },
+  {
+   "k": "screen: stream stopped",
+   "at": "runtime",
+   "n": "failure bar [assembled in code from pieces]"
+  },
+  {
+   "k": "you need to sign in — it's in settings",
+   "at": "runtime",
+   "n": "hint on the bar: recognition cannot be turned on until you sign in"
+  },
+  {
+   "k": "recognition unavailable",
+   "at": "runtime",
+   "n": "hint on the bar"
+  },
+  {
+   "k": "you need to sign in",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "sign-in required",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "session expired — sign in again",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "you need to sign in again",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "no account",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "no connection",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "the service is unavailable right now",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "this build has no accounts",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "password is shorter than {n} characters",
+   "at": "runtime",
+   "n": "server refusal during sign-up"
+  },
+  {
+   "k": "an account with this email already exists — sign in",
+   "at": "runtime",
+   "n": "server refusal during sign-up"
+  },
+  {
+   "k": "no such account",
+   "at": "runtime",
+   "n": "server refusal during sign-in"
+  },
+  {
+   "k": "wrong password",
+   "at": "runtime",
+   "n": "server refusal during sign-in"
+  },
+  {
+   "k": "account is closed",
+   "at": "runtime",
+   "n": "server refusal"
+  },
+  {
+   "k": "old password is incorrect",
+   "at": "runtime",
+   "n": "server refusal"
+  },
+  {
+   "k": "link is invalid or expired — request a new one",
+   "at": "runtime",
+   "n": "server refusal during password reset"
+  },
+  {
+   "k": "voice replies are unavailable right now",
+   "at": "runtime",
+   "n": "server error; lowercase"
+  },
+  {
+   "k": "no access",
+   "at": "runtime",
+   "n": "server refusal"
+  },
+  {
+   "k": "only works in the app",
+   "at": "runtime",
+   "n": "error: the action is only available in the app, not in a browser tab"
+  },
+  {
+   "k": "the window only exists in the app",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "resizing is only available in the app",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "panel is hidden or the size is outdated — not applied",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "no such panel: {name}",
+   "at": "runtime",
+   "n": "error"
+  },
+  {
+   "k": "the assistant is turned off",
+   "at": "runtime",
+   "n": "error: the assistant is turned off; lowercase"
+  },
+  {
+   "k": "the assistant is still answering",
+   "at": "runtime",
+   "n": "error: the previous answer is not ready yet; lowercase"
+  },
+  {
+   "k": "no answer came in time",
+   "at": "runtime",
+   "n": "error: the service did not answer in time; lowercase"
+  },
+  {
+   "k": "too many requests in a row",
+   "at": "runtime",
+   "n": "error: the service asks to wait; lowercase"
+  },
+  {
+   "k": "something went wrong",
+   "at": "runtime",
+   "n": "error whose cause the person does not need to know; lowercase"
+  },
+  {
+   "k": "couldn't get an answer right now",
+   "at": "runtime",
+   "n": "error: the service could not answer; lowercase"
+  },
+  {
+   "k": "asked manually",
+   "at": "runtime",
+   "n": "reason for the request in the 'thinking' card: the person pressed a hotkey; lowercase"
+  },
+  {
+   "k": "they asked a question",
+   "at": "runtime",
+   "n": "reason for the request; lowercase"
+  },
+  {
+   "k": "your own question aloud",
+   "at": "runtime",
+   "n": "reason for the request: I asked the question aloud myself; lowercase"
+  },
+  {
+   "k": "mic line",
+   "at": "runtime",
+   "n": "reason for the request; lowercase"
+  },
+  {
+   "k": "their line",
+   "at": "runtime",
+   "n": "reason for the request; lowercase"
+  },
+  {
+   "k": "called by name",
+   "at": "runtime",
+   "n": "reason for the request: the assistant was called by name; lowercase"
+  },
+  {
+   "k": "{n} new lines on screen",
+   "at": "runtime",
+   "n": "reason for the request: new text appeared on the screen"
+  },
+  {
+   "k": "silence {n} s",
+   "at": "runtime",
+   "n": "reason for the request: so many seconds of silence"
+  },
+  {
+   "k": "By creating an account, you accept the {terms} and the {privacy}.",
+   "at": "account",
+   "n": "line under the sign-up button; {terms} and {privacy} are links to the documents, inserted by the code (the names in the right grammatical case)"
+  },
+  {
+   "k": "Terms of Use",
+   "at": "account",
+   "n": "link to a document; in the 'you accept ...' line and as a separate link in the account section"
+  },
+  {
+   "k": "Privacy policy",
+   "at": "account",
+   "n": "link to a document in the 'you accept ...' line; the form must fit into that sentence (grammatical case): translate it the way it will stand in the phrase"
+  },
+  {
+   "k": "Privacy Policy",
+   "at": "account",
+   "n": "link to a document, on its own line"
+  },
+  {
+   "k": "I accept",
+   "at": "account",
+   "n": "button: accept the terms"
+  },
+  {
+   "k": "Data",
+   "at": "account",
+   "n": "title of a section in the account: data copy, deletion"
+  },
+  {
+   "k": "Download my data",
+   "at": "account",
+   "n": "button: save a copy of the account data as a file"
+  },
+  {
+   "k": "Delete account",
+   "at": "account",
+   "n": "button for a dangerous action"
+  },
+  {
+   "k": "Cancel",
+   "at": "account,dash",
+   "n": "cancel button"
+  },
+  {
+   "k": "password does not match",
+   "at": "runtime",
+   "n": "server refusal when deleting an account"
+  },
+  {
+   "k": "couldn't save the file",
+   "at": "runtime",
+   "n": "error while saving a file; lowercase"
+  },
+  {
+   "k": "Before you start",
+   "at": "dash",
+   "n": "title of the recording notice window"
+  },
+  {
+   "k": "Argus listens to your microphone and system audio and can look at your screen while recognition is on.",
+   "at": "dash",
+   "n": "first line of the notice"
+  },
+  {
+   "k": "Recordings, history, and materials stay on this computer.",
+   "at": "dash",
+   "n": "notice item"
+  },
+  {
+   "k": "Speech goes out for recognition, and questions, along with screen frames and your materials, go out for an answer. Third-party services do this.",
+   "at": "dash",
+   "n": "notice item: what leaves the computer"
+  },
+  {
+   "k": "The people you talk to won't know an assistant is hearing the conversation. In many countries and organizations, recording a conversation needs the participants' consent, and on exams and interviews help may be banned. That's on you.",
+   "at": "dash",
+   "n": "notice item: the person's responsibility for recording and for exam rules"
+  },
+  {
+   "k": "Got it, turn on",
+   "at": "dash",
+   "n": "button in the notice: I have read it, turn on recognition"
+  },
+  {
+   "k": "Update",
+   "at": "dash",
+   "n": "button at the top of the window: a new version is out, pressing it downloads and installs it right away; one word, a bright button"
+  },
+  {
+   "k": "Download",
+   "at": "dash",
+   "n": "same button when installing from here is not possible: pressing it opens the download page in the browser"
+  },
+  {
+   "k": "Downloading…",
+   "at": "dash",
+   "n": "same button while the new version is downloading"
+  },
+  {
+   "k": "Restarting…",
+   "at": "dash",
+   "n": "same button: the new version is downloaded, the program closes and reopens by itself"
+  },
+  {
+   "k": "Failed — download",
+   "at": "dash",
+   "n": "same button after a failure when retrying from here will not help (or installing from here is not possible): pressing it opens the download page; short, fits the button"
+  },
+  {
+   "k": "Failed — try again",
+   "at": "dash",
+   "n": "same button after the first failure: pressing it retries right here; short, fits the button"
+  },
+  {
+   "k": "Recording in progress. Update?",
+   "at": "dash",
+   "n": "same button asks whether to really update while a conversation is being recorded; updating will interrupt it; the question fits the button"
+  },
+  {
+   "k": "Find a session",
+   "at": "home",
+   "n": "search field on the home screen; placeholder and field name"
+  },
+  {
+   "k": "New session",
+   "at": "home",
+   "n": "button, window title, and the name of a session that has not been named yet; session = one conversation with its own settings and history"
+  },
+  {
+   "k": "Nothing found",
+   "at": "home",
+   "n": "result of searching sessions"
+  },
+  {
+   "k": "Couldn't load the sessions. Trying again…",
+   "at": "home",
+   "n": ""
+  },
+  {
+   "k": "No sessions yet",
+   "at": "home",
+   "n": "title of the empty list"
+  },
+  {
+   "k": "A session is one conversation, with its own settings, materials, and answer history. Create a separate session for an interview, an exam, or a work call, so they don't get in each other's way.",
+   "at": "home",
+   "n": "explanation under the 'No sessions yet' title"
+  },
+  {
+   "k": "Skip",
+   "at": "home",
+   "n": "button in the new-session window: create without a name"
+  },
+  {
+   "k": "Done",
+   "at": "home",
+   "n": "confirm button (also in the payment window)"
+  },
+  {
+   "k": "Today",
+   "at": "home",
+   "n": "day heading in the session list"
+  },
+  {
+   "k": "Yesterday",
+   "at": "home",
+   "n": "day heading in the session list"
+  },
+  {
+   "k": "Work with the recording",
+   "at": "home",
+   "n": "icon in a session row, arrow in the header, and screen title; recording = a recorded conversation, not the 'Record' switch"
+  },
+  {
+   "k": "Session settings",
+   "at": "home",
+   "n": "hint of an icon in a session row"
+  },
+  {
+   "k": "Rename",
+   "at": "home",
+   "n": "hint of an icon in a session row"
+  },
+  {
+   "k": "Delete",
+   "at": "home",
+   "n": "hint of the icon and the button that deletes a session"
+  },
+  {
+   "k": "Stop recognition?",
+   "at": "home",
+   "n": "title of the question when switching to another session"
+  },
+  {
+   "k": "Recognition is running in the session “<b data-i18n=\"off\">{name}</b>”. If you open another session, it will stop.",
+   "at": "home",
+   "n": "keep the <b> tag around {name}; word order may change"
+  },
+  {
+   "k": "Stop and open",
+   "at": "home,record",
+   "n": "confirm button: stop recognition and open the other session"
+  },
+  {
+   "k": "That didn't work. Try again.",
+   "at": "home",
+   "n": "fallback reason for a refusal in the window"
+  },
+  {
+   "k": "Create",
+   "at": "home",
+   "n": "button in the new-session window"
+  },
+  {
+   "k": "You can leave the name empty: it will be picked from what the conversation is about.",
+   "at": "home",
+   "n": "explanation in the new-session window"
+  },
+  {
+   "k": "For example: interview at Google",
+   "at": "home",
+   "n": "example name in the empty field; may be replaced with a company well known in the market of that language"
+  },
+  {
+   "k": "Couldn't create the session",
+   "at": "home",
+   "n": ""
+  },
+  {
+   "k": "Rename session",
+   "at": "home",
+   "n": "window title"
+  },
+  {
+   "k": "Save",
+   "at": "home",
+   "n": "button"
+  },
+  {
+   "k": "Couldn't rename it",
+   "at": "home",
+   "n": ""
+  },
+  {
+   "k": "Delete the session?",
+   "at": "home",
+   "n": "window title"
+  },
+  {
+   "k": "“<b data-i18n=\"off\">{name}</b>” will be deleted along with its answer history and its own materials. This can't be undone.",
+   "at": "home",
+   "n": "keep the <b> tag around {name}; word order may change"
+  },
+  {
+   "k": "Couldn't delete it",
+   "at": "home",
+   "n": ""
+  },
+  {
+   "k": "Recording · Argus",
+   "at": "record",
+   "n": "tab title"
+  },
+  {
+   "k": "{name} · Recording · Argus",
+   "at": "record",
+   "n": "tab title with the session name; {name} is the session name"
+  },
+  {
+   "k": "Back to the session",
+   "at": "record",
+   "n": "name of the 'back' arrow in the header"
+  },
+  {
+   "k": "Requests about the recording",
+   "at": "record",
+   "n": "name of the area with requests (for screen readers)"
+  },
+  {
+   "k": "Find in the recording",
+   "at": "record",
+   "n": "placeholder of the search field over the recording text"
+  },
+  {
+   "k": "What should I do with the recording?",
+   "at": "record",
+   "n": "placeholder of the request field"
+  },
+  {
+   "k": "What to do with the recording",
+   "at": "record",
+   "n": "name of the request field (for screen readers)"
+  },
+  {
+   "k": "Send",
+   "at": "record",
+   "n": "name of the button that sends a request (an arrow icon)"
+  },
+  {
+   "k": "Go to the live session",
+   "at": "record",
+   "n": "button in the banner: a recording is running in another session"
+  },
+  {
+   "k": "Stop and go",
+   "at": "record",
+   "n": "button in the banner: stop the recording in the other session and go to it"
+  },
+  {
+   "k": "No",
+   "at": "record",
+   "n": "decline button in the banner"
+  },
+  {
+   "k": "Conversation recording",
+   "at": "record",
+   "n": "name of the card with the text of the recorded conversation"
+  },
+  {
+   "k": "Something went wrong",
+   "at": "record",
+   "n": "fallback error text"
+  },
+  {
+   "k": "Didn't work",
+   "at": "record",
+   "n": "fallback error text; short"
+  },
+  {
+   "k": "Refine the answer or ask for something else",
+   "at": "record",
+   "n": "placeholder of the request field when answers already exist"
+  },
+  {
+   "k": "Recording is on in this session. You can work with it after it stops.",
+   "at": "record",
+   "n": "banner at the top; 'with it' = with the recording"
+  },
+  {
+   "k": "This is where you'll work with the recording",
+   "at": "record",
+   "n": "title of the empty page when there is no recording yet"
+  },
+  {
+   "k": "Once a conversation is recorded in this session, you can turn it into a summary, notes, tasks, an email, or flashcards.",
+   "at": "record",
+   "n": ""
+  },
+  {
+   "k": "You can record a conversation on the session's working screen: the “back” arrow at the top left.",
+   "at": "record",
+   "n": "'back' is the arrow in the header, the same as 'All sessions'"
+  },
+  {
+   "k": "Write in the field below what to do with the conversation: a summary, notes, tasks, an email, flashcards.",
+   "at": "record",
+   "n": ""
+  },
+  {
+   "k": "You can refine the answer (“shorter”, “in English”), redo it in place, copy it, or save it as a PDF. The time in an answer leads to the right line, and the full text opens from the card at the top.",
+   "at": "record",
+   "n": ""
+  },
+  {
+   "k": "Edit the request",
+   "at": "record",
+   "n": "name of the field for editing a request (for screen readers)"
+  },
+  {
+   "k": "Answer this request again",
+   "at": "record",
+   "n": "name of the button that sends an edit"
+  },
+  {
+   "k": "Open {name}",
+   "at": "record",
+   "n": "name of the button with a PDF file; {name} is the file name"
+  },
+  {
+   "k": "Answer this request again. The new answer replaces this one",
+   "at": "record",
+   "n": "name of the icon under an answer"
+  },
+  {
+   "k": "Edit the request. The answer under it is replaced",
+   "at": "record",
+   "n": "name of the icon under an answer"
+  },
+  {
+   "k": "Make a PDF (the file appears right here)",
+   "at": "record",
+   "n": "name of the icon under an answer"
+  },
+  {
+   "k": "Reading the recording…",
+   "at": "record",
+   "n": "waiting for an answer"
+  },
+  {
+   "k": "Opening…",
+   "at": "record",
+   "n": "state of the PDF icon"
+  },
+  {
+   "k": "Failed: select the text and press Ctrl+C",
+   "at": "record",
+   "n": "do not translate Ctrl+C"
+  },
+  {
+   "k": "Preparing the PDF…",
+   "at": "record",
+   "n": "state of the PDF icon"
+  },
+  {
+   "k": "There's no text in this session yet. Turn on recording and it will appear here.",
+   "at": "record",
+   "n": "empty window for the recording text"
+  },
+  {
+   "k": "Nothing found.",
+   "at": "record",
+   "n": "searching the recording text found nothing"
+  },
+  {
+   "k": "Recording is running in the session “<b data-i18n=\"off\">{name}</b>”. If you switch here, it will stop.",
+   "at": "record",
+   "n": "keep the <b> tag around {name}; word order may change"
+  },
+  {
+   "k": "Recording is running in the session “<b data-i18n=\"off\">{name}</b>”. To open this session's settings, you have to open the session, and the recording will stop.",
+   "at": "record",
+   "n": "keep the <b> tag around {name}; word order may change"
+  },
+  {
+   "k": "{n} min",
+   "at": "account",
+   "n": "minutes in the pricing and spending tables; {n} is a number"
+  },
+  {
+   "k": "{n} h",
+   "at": "account",
+   "n": "hours in the pricing and spending tables; {n} is a number"
+  },
+  {
+   "k": "{n}K",
+   "at": "account",
+   "n": "thousands: '208K' instead of '208,000'; {n} is a number"
+  },
+  {
+   "k": "Pricing",
+   "at": "account",
+   "n": "title of the pricing block"
+  },
+  {
+   "k": "Pricing isn't available right now: no connection",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Speech recognition",
+   "at": "account",
+   "n": "row of the pricing and spending tables; recognition = speech to text"
+  },
+  {
+   "k": "hours of speech",
+   "at": "account",
+   "n": "unit under the service name in the pricing table; lowercase"
+  },
+  {
+   "k": "{price} / hour",
+   "at": "account",
+   "n": "price per hour; {price} is an amount with a currency"
+  },
+  {
+   "k": "{price} / min",
+   "at": "account",
+   "n": "price per minute; {price} is an amount with a currency"
+  },
+  {
+   "k": "Smart speech recognition",
+   "at": "account",
+   "n": "row of the pricing table; same as the 'Smart recognition' setting"
+  },
+  {
+   "k": "Voice replies",
+   "at": "account",
+   "n": "row of the pricing and spending tables; voice replies"
+  },
+  {
+   "k": "characters",
+   "at": "account",
+   "n": "voice-over unit under the service name; lowercase"
+  },
+  {
+   "k": "per 1,000 characters",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "number of answers",
+   "at": "account",
+   "n": "unit under the answer level name; lowercase"
+  },
+  {
+   "k": "per answer",
+   "at": "account",
+   "n": "price per answer; lowercase"
+  },
+  {
+   "k": "You pay only for what you use. On the right is how much each top-up amount covers. An answer with a long context or a screen costs more than a typical one.",
+   "at": "account",
+   "n": "explanation under the 'Pricing' title"
+  },
+  {
+   "k": "What each amount covers",
+   "at": "account",
+   "n": "common heading above the columns with the amounts $5, $10…"
+  },
+  {
+   "k": "Service",
+   "at": "account",
+   "n": "table column heading"
+  },
+  {
+   "k": "Price",
+   "at": "account",
+   "n": "table column heading"
+  },
+  {
+   "k": "Welcome gift",
+   "at": "account",
+   "n": "top-up history row"
+  },
+  {
+   "k": "Top-up",
+   "at": "account",
+   "n": "history row: money credited to the balance"
+  },
+  {
+   "k": "Added manually",
+   "at": "account",
+   "n": "history row: money added by the operator"
+  },
+  {
+   "k": "Carried over from the subscription",
+   "at": "account",
+   "n": "history row: the remainder from the subscription days carried over to the balance"
+  },
+  {
+   "k": "Top-up history",
+   "at": "account",
+   "n": "block title"
+  },
+  {
+   "k": "Event",
+   "at": "account",
+   "n": "history column heading"
+  },
+  {
+   "k": "Date",
+   "at": "account",
+   "n": "history column heading"
+  },
+  {
+   "k": "Amount",
+   "at": "account",
+   "n": "history column heading"
+  },
+  {
+   "k": "No top-ups yet",
+   "at": "account",
+   "n": "empty history"
+  },
+  {
+   "k": "Recognition",
+   "at": "account",
+   "n": "legend of the spending chart; short"
+  },
+  {
+   "k": "Answers",
+   "at": "account",
+   "n": "legend of the spending chart and a table row; short"
+  },
+  {
+   "k": "Voice-over",
+   "at": "account,settings",
+   "n": "legend of the spending chart and name of a settings tab; voice replies; short"
+  },
+  {
+   "k": "No spending data yet",
+   "at": "account",
+   "n": "empty chart"
+  },
+  {
+   "k": "Spending by day",
+   "at": "account",
+   "n": "name of the chart (for screen readers)"
+  },
+  {
+   "k": "Last {n} days",
+   "at": "account",
+   "n": "caption above the spending total; {n} is a number of days"
+  },
+  {
+   "k": "no spending",
+   "at": "account",
+   "n": "hint above a chart bar: no money was spent that day; lowercase"
+  },
+  {
+   "k": "Volume",
+   "at": "account",
+   "n": "heading of a spending table column"
+  },
+  {
+   "k": "Charged",
+   "at": "account",
+   "n": "heading of a spending table column: how much money was charged"
+  },
+  {
+   "k": "Total",
+   "at": "account",
+   "n": "total row in the table"
+  },
+  {
+   "k": "Empty",
+   "at": "account,dash",
+   "n": "badge 'the balance is empty'; also an empty block"
+  },
+  {
+   "k": "Low",
+   "at": "account",
+   "n": "badge 'low on money'"
+  },
+  {
+   "k": "Balance",
+   "at": "account",
+   "n": "name of the amount on the account; 'balance' means money, not a usage allowance"
+  },
+  {
+   "k": "Your balance isn't available yet. Check back later.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Recognition and answers are stopped. Top up from {sum}",
+   "at": "account",
+   "n": "{sum} is an amount with a currency, do not translate"
+  },
+  {
+   "k": "Spent in {n} days",
+   "at": "account",
+   "n": "caption of a figure; {n} is a number of days"
+  },
+  {
+   "k": "Enough for speech",
+   "at": "account",
+   "n": "caption of a figure: how much speech the money covers, the figure is on the right"
+  },
+  {
+   "k": "Enough for answers",
+   "at": "account",
+   "n": "caption of a figure: how many answers the money covers; the word for 'answers' stands before the figure 'up to N'"
+  },
+  {
+   "k": "up to {n}",
+   "at": "account",
+   "n": "'up to 1200' = at most that many answers; {n} is a number"
+  },
+  {
+   "k": "≈ {n} of speech",
+   "at": "account",
+   "n": "'≈ 2 h of speech': on the amount tile; {n} is a time like '2 h'"
+  },
+  {
+   "k": "Other amount",
+   "at": "account",
+   "n": "placeholder of the custom amount field"
+  },
+  {
+   "k": "Other amount, in dollars",
+   "at": "account",
+   "n": "name of the custom amount field (for screen readers)"
+  },
+  {
+   "k": "Top-up amount",
+   "at": "account",
+   "n": "title of the amount selection block"
+  },
+  {
+   "k": "Whole dollars, from {min} to {max}.",
+   "at": "account",
+   "n": "{min} and {max} are amounts with a currency, do not translate"
+  },
+  {
+   "k": "Pay",
+   "at": "account",
+   "n": "pay button"
+  },
+  {
+   "k": "Pay {sum}",
+   "at": "account",
+   "n": "pay button with the chosen amount; {sum} is an amount with a currency"
+  },
+  {
+   "k": "Payment opens in your browser, on the payment service's page. The balance tops up by itself as soon as the payment goes through.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Payment isn't connected yet. Write to us and we'll top up your balance by hand.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Waiting for payment",
+   "at": "account",
+   "n": "title of the payment waiting state"
+  },
+  {
+   "k": "Waiting for payment — {sum}",
+   "at": "account",
+   "n": "{sum} is an amount with a currency [assembled in code from pieces]"
+  },
+  {
+   "k": "The payment page is open in your browser. As soon as the payment goes through, the balance will update here by itself.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "The payment page didn't open by itself. Open it with the link in your browser — the balance will update here as soon as the payment goes through.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Open the payment page again",
+   "at": "account",
+   "n": "button"
+  },
+  {
+   "k": "Try opening it again",
+   "at": "account",
+   "n": "button"
+  },
+  {
+   "k": "Choose another amount",
+   "at": "account",
+   "n": "button"
+  },
+  {
+   "k": "Balance topped up by {sum}",
+   "at": "account",
+   "n": "{sum} is an amount with a currency, do not translate"
+  },
+  {
+   "k": "Your balance is now {sum}.",
+   "at": "account",
+   "n": "{sum} is an amount with a currency, do not translate"
+  },
+  {
+   "k": "No payment confirmation yet",
+   "at": "account",
+   "n": "title"
+  },
+  {
+   "k": "If you've already paid, the money will arrive a little later and the balance will update here. If not, choose the amount again.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Check now",
+   "at": "account",
+   "n": "button"
+  },
+  {
+   "k": "No connection",
+   "at": "account",
+   "n": "banner title; short"
+  },
+  {
+   "k": "Couldn't get the account status. Check your connection and try again.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Retry",
+   "at": "account",
+   "n": "retry button"
+  },
+  {
+   "k": "There are no accounts here",
+   "at": "account",
+   "n": "banner title: a build without accounts"
+  },
+  {
+   "k": "This version works without an account, so there's nothing to top up.",
+   "at": "account",
+   "n": "build = a version of the program"
+  },
+  {
+   "k": "This version works without an account, so there's nothing to track.",
+   "at": "account",
+   "n": "build = a version of the program"
+  },
+  {
+   "k": "Sign-in required",
+   "at": "account",
+   "n": "banner title"
+  },
+  {
+   "k": "To top up your balance, sign in to your account.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "To see your spending, sign in to your account.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "{sum} covers",
+   "at": "account",
+   "n": "heading above the calculation: '$10 covers: speech, answers…'; {sum} is an amount with a currency"
+  },
+  {
+   "k": "Whole dollars only, from {min} to {max}",
+   "at": "account",
+   "n": "{min} and {max} are amounts with a currency, do not translate"
+  },
+  {
+   "k": "Can't reach the app. Try again.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "No connection: no data",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Password changed. On your other devices you'll need to sign in again.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "You can change your password at any time. After that, you'll need to sign in again on your other devices.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Change password",
+   "at": "account",
+   "n": "button that opens the form"
+  },
+  {
+   "k": "Current password",
+   "at": "account",
+   "n": "placeholder of the field"
+  },
+  {
+   "k": "New password, at least {n} characters",
+   "at": "account",
+   "n": "placeholder of the field; {n} is a number"
+  },
+  {
+   "k": "New password again",
+   "at": "account",
+   "n": "placeholder of the field"
+  },
+  {
+   "k": "Change",
+   "at": "account",
+   "n": "button that confirms the password change"
+  },
+  {
+   "k": "Enter your current password",
+   "at": "account",
+   "n": "field validation error"
+  },
+  {
+   "k": "The new password is shorter than {n} characters",
+   "at": "account",
+   "n": "field validation error; {n} is a number"
+  },
+  {
+   "k": "The passwords don't match",
+   "at": "account",
+   "n": "field validation error"
+  },
+  {
+   "k": "The new password is the same as the old one",
+   "at": "account",
+   "n": "field validation error"
+  },
+  {
+   "k": "Failed: this version of the app can't change the password yet. Update the app.",
+   "at": "account",
+   "n": ""
+  },
+  {
+   "k": "Sections",
+   "at": "settings",
+   "n": "name of the tab list of the settings window (for screen readers)"
+  },
+  {
+   "k": "Payment",
+   "at": "settings",
+   "n": "name of a settings window tab: topping up the balance"
+  },
+  {
+   "k": "One balance for everything: recognition, answers, and voice replies. The money doesn't expire.",
+   "at": "settings",
+   "n": "explanation under the title of the 'Payment' tab"
+  },
+  {
+   "k": "Usage",
+   "at": "settings",
+   "n": "name of a settings window tab: where the money goes"
+  },
+  {
+   "k": "Where the money goes: by day and by service.",
+   "at": "settings",
+   "n": "explanation under the title of the 'Usage' tab"
+  },
+  {
+   "k": "This session",
+   "at": "settings",
+   "n": "title of the group of settings sections inside a session: what relates to this conversation"
+  },
+  {
+   "k": "Context",
+   "at": "settings",
+   "n": "name of a settings window tab: information about the person and the conversation for the assistant"
+  },
+  {
+   "k": "General",
+   "at": "settings",
+   "n": "name of a settings window tab: window and language"
+  },
+  {
+   "k": "not saved:",
+   "at": "settings",
+   "n": "bar at the top of the settings; followed by the number of edits; lowercase"
+  },
+  {
+   "k": "Needs ctrl, alt, or win",
+   "at": "settings",
+   "n": "hotkey capture error on Windows; do not translate key names"
+  },
+  {
+   "k": "Needs ⌃, ⌥, or ⌘",
+   "at": "settings",
+   "n": "hotkey capture error on macOS; do not change the key symbols"
+  },
+  {
+   "k": "AltGr types a letter — pick another",
+   "at": "settings",
+   "n": "hotkey capture error; AltGr is a key, do not translate"
+  },
+  {
+   "k": "can't reach the app",
+   "at": "settings,runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "unexpected reply from the app",
+   "at": "settings",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "the app already has another session open — refresh the page, nothing will be saved from here",
+   "at": "settings",
+   "n": "error on the 'not saved' bar; lowercase"
+  },
+  {
+   "k": "Not everything fit — some materials are not being used",
+   "at": "settings",
+   "n": "remark under the materials list"
+  },
+  {
+   "k": "“{name}” — {reason}",
+   "at": "settings",
+   "n": "refusal for a file in the materials list: {name} is the file name, {reason} is the reason (translated separately); keep the dash"
+  },
+  {
+   "k": "this file type can't be read",
+   "at": "settings",
+   "n": "reason a file was refused; lowercase"
+  },
+  {
+   "k": "larger than 100 MB",
+   "at": "settings",
+   "n": "reason a file was refused; MB = megabytes; lowercase"
+  },
+  {
+   "k": "couldn't be uploaded",
+   "at": "settings",
+   "n": "reason a file was refused; lowercase"
+  },
+  {
+   "k": "didn't work",
+   "at": "settings,runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "Play a sample",
+   "at": "settings",
+   "n": "name of the '▶' button on a voice (for screen readers)"
+  },
+  {
+   "k": "Remove",
+   "at": "settings",
+   "n": "name of the X next to a file (for screen readers)"
+  },
+  {
+   "k": "You can see the window, but it won't show up in screen sharing, streams, or recordings. On macOS 15 and newer this doesn't work in every screen-sharing app — check on your own setup. You can hide the window itself with the “Open/close main window” hotkey in the “Hotkeys” section.",
+   "at": "settings",
+   "n": "macOS version of the hint; the hotkey and section names must match their translations in this dictionary"
+  },
+  {
+   "k": "Check before a conversation: macOS sometimes swaps the microphone on its own, and then you just get silence, with no error.",
+   "at": "settings",
+   "n": "same hint for macOS; the translation is built from the Windows version [assembled in code from pieces]"
+  },
+  {
+   "k": "Didn't work — try again",
+   "at": "dash",
+   "n": "reason a button was refused in the failure window when the server gave none"
+  },
+  {
+   "k": "Can't reach the app — try again",
+   "at": "dash",
+   "n": "reason a button was refused in the failure window"
+  },
+  {
+   "k": "Can't reach the app — reconnecting…",
+   "at": "dash",
+   "n": "failure window when the connection to the app dropped"
+  },
+  {
+   "k": "Full screen",
+   "at": "dash",
+   "n": "name of the yellow circle on macOS: expands the window to full screen"
+  },
+  {
+   "k": "Visible in recordings",
+   "at": "dash",
+   "n": "red label in the window strip: the window could not be hidden from screen recording; the opposite of the 'Invisible in recordings' setting"
+  },
+  {
+   "k": "there is no such session",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "couldn't create the session folder — check the disk space",
+   "at": "runtime",
+   "n": "error in the new-session window; lowercase"
+  },
+  {
+   "k": "couldn't save the name to disk",
+   "at": "runtime",
+   "n": "error in the rename window; lowercase"
+  },
+  {
+   "k": "couldn't make a copy — check the disk space",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "the session folder wasn't fully deleted — close whatever is open from it and try again",
+   "at": "runtime",
+   "n": "error in the delete window; lowercase"
+  },
+  {
+   "k": "the name can't be empty",
+   "at": "runtime",
+   "n": "error in the rename window; lowercase"
+  },
+  {
+   "k": "topics must be a comma-separated line or a list",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "the topics weren't saved — try again",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "a summary is already being prepared",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "The summary didn't work out: {reason}",
+   "at": "runtime",
+   "n": "{reason} is the cause, may be in any language"
+  },
+  {
+   "k": "Write what to do with the recording.",
+   "at": "runtime",
+   "n": "reply to an empty request in 'Work with the recording'"
+  },
+  {
+   "k": "That answer no longer exists.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "The assistant is turned off.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "This session is still working on the previous request.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "Didn't work: {reason}",
+   "at": "runtime",
+   "n": "{reason} is the cause, may be in any language"
+  },
+  {
+   "k": "There is no such result.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "There is no such line.",
+   "at": "runtime",
+   "n": "line = a line of the recorded conversation"
+  },
+  {
+   "k": "A line can't be empty. To remove it, press “Remove”.",
+   "at": "runtime",
+   "n": "'Remove' is the button name, translate it the same as 'Remove' in this dictionary"
+  },
+  {
+   "k": "There is no such session.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "Recording is on. You can work with it after it stops.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "Couldn't open the file.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "A PDF can't be made on this computer.",
+   "at": "runtime",
+   "n": "do not translate PDF"
+  },
+  {
+   "k": "To make a PDF, you need the Chrome or Edge browser.",
+   "at": "runtime",
+   "n": "Chrome and Edge are names, do not translate"
+  },
+  {
+   "k": "The PDF didn't work out — try again.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "This PDF is open in another program right now. Close it and try again.",
+   "at": "runtime",
+   "n": ""
+  },
+  {
+   "k": "the password was changed, but signing in again failed — sign in with the new password",
+   "at": "runtime",
+   "n": "error in the password change form; lowercase"
+  },
+  {
+   "k": "the password is too simple — pick another one",
+   "at": "runtime",
+   "n": "server refusal during sign-up and password change; lowercase"
+  },
+  {
+   "k": "the password was just changed — sign in again",
+   "at": "runtime",
+   "n": "server refusal; lowercase"
+  },
+  {
+   "k": "the server is busy right now — try again in a minute",
+   "at": "runtime",
+   "n": "server refusal; lowercase"
+  },
+  {
+   "k": "the server couldn't handle the request — try later",
+   "at": "runtime",
+   "n": "server refusal; lowercase"
+  },
+  {
+   "k": "there is no such page",
+   "at": "runtime",
+   "n": "server refusal; lowercase"
+  },
+  {
+   "k": "the request is too large",
+   "at": "runtime",
+   "n": "server refusal; lowercase"
+  },
+  {
+   "k": "there is no such order",
+   "at": "runtime",
+   "n": "server refusal: order = payment; lowercase"
+  },
+  {
+   "k": "too many sign-ups from this address",
+   "at": "runtime",
+   "n": "server refusal: part of the phrase '... — wait 14 min'; lowercase"
+  },
+  {
+   "k": "too many sign-in attempts",
+   "at": "runtime",
+   "n": "server refusal: part of the phrase '... — wait 14 min'; lowercase"
+  },
+  {
+   "k": "too many sign-in attempts from this address",
+   "at": "runtime",
+   "n": "server refusal: part of the phrase '... — wait 14 min'; lowercase"
+  },
+  {
+   "k": "too many wrong passwords",
+   "at": "runtime",
+   "n": "server refusal: part of the phrase '... — wait 14 min'; lowercase"
+  },
+  {
+   "k": "too many recovery requests from this address",
+   "at": "runtime",
+   "n": "server refusal: part of the phrase '... — wait 14 min'; lowercase"
+  },
+  {
+   "k": "too many attempts",
+   "at": "runtime",
+   "n": "server refusal: part of the phrase '... — wait 14 min'; lowercase"
+  },
+  {
+   "k": "several replies in a row did not arrive in time",
+   "at": "runtime",
+   "n": "server refusal: part of the phrase '... — wait 14 min'; lowercase"
+  },
+  {
+   "k": "{what} — wait a minute",
+   "at": "runtime",
+   "n": "{what} is one of the phrases above (translated by itself); lowercase [assembled in code from pieces]"
+  },
+  {
+   "k": "{what} — wait {n} min",
+   "at": "runtime",
+   "n": "{what} is one of the phrases above; {n} is a number of minutes [assembled in code from pieces]"
+  },
+  {
+   "k": "{what} — wait {n} h",
+   "at": "runtime",
+   "n": "{what} is one of the phrases above; {n} is a number of hours [assembled in code from pieces]"
+  },
+  {
+   "k": "too many requests at once — wait for the answer",
+   "at": "runtime",
+   "n": "server refusal; lowercase"
+  },
+  {
+   "k": "this kind of answer isn't offered",
+   "at": "runtime",
+   "n": "server refusal: kind = the answer level (normal answer / 'Think longer'); lowercase"
+  },
+  {
+   "k": "the request wasn't accepted",
+   "at": "runtime",
+   "n": "server refusal; lowercase"
+  },
+  {
+   "k": "your balance is empty — top up from {sum}, it's in the settings",
+   "at": "runtime",
+   "n": "server refusal; {sum} is an amount with a currency, do not translate; lowercase"
+  },
+  {
+   "k": "your balance is {have}, but the request may cost up to {need} — top up from {sum}",
+   "at": "runtime",
+   "n": "server refusal; {have}, {need}, {sum} are amounts with a currency, do not translate; lowercase"
+  },
+  {
+   "k": "the picture is too large — use a smaller one",
+   "at": "runtime",
+   "n": "answer error; lowercase"
+  },
+  {
+   "k": "no voice is selected",
+   "at": "runtime",
+   "n": "voice-over error; 'character' = voice; lowercase"
+  },
+  {
+   "k": "voice “{name}” wasn't found",
+   "at": "runtime",
+   "n": "voice-over error; {name} is the voice name; lowercase"
+  },
+  {
+   "k": "you need to sign in to use voice replies",
+   "at": "runtime",
+   "n": "voice-over error; lowercase"
+  },
+  {
+   "k": "voice replies aren't set up here",
+   "at": "runtime",
+   "n": "voice-over error; lowercase"
+  },
+  {
+   "k": "voice reply failed: {reason}",
+   "at": "runtime",
+   "n": "voice-over error; {reason} is the cause; lowercase"
+  },
+  {
+   "k": "the amount must be a whole number of dollars",
+   "at": "runtime",
+   "n": "payment error; lowercase"
+  },
+  {
+   "k": "a file name is required",
+   "at": "runtime",
+   "n": "material upload error; lowercase"
+  },
+  {
+   "k": "this file name won't do — rename it and upload again",
+   "at": "runtime",
+   "n": "material upload error; lowercase"
+  },
+  {
+   "k": "“{name}” can't be read; these work: {list}",
+   "at": "runtime",
+   "n": "material upload error; {name} is a file extension or 'no extension', {list} is a list of extensions, do not translate; lowercase [assembled in code from pieces]"
+  },
+  {
+   "k": "no extension",
+   "at": "runtime",
+   "n": "inserted into the phrase '“…” can't be read' in place of the file extension; lowercase"
+  },
+  {
+   "k": "larger than {n} MB — I won't take it",
+   "at": "runtime",
+   "n": "material upload error; {n} is a number; MB = megabytes; lowercase"
+  },
+  {
+   "k": "the file is empty",
+   "at": "runtime",
+   "n": "material upload error; lowercase"
+  },
+  {
+   "k": "values must be a set of settings",
+   "at": "runtime",
+   "n": "request-to-the-app error; lowercase"
+  },
+  {
+   "k": "paths must be a list",
+   "at": "runtime",
+   "n": "request-to-the-app error; lowercase"
+  },
+  {
+   "k": "the photo doesn't fit",
+   "at": "runtime",
+   "n": "photo paste error; lowercase"
+  },
+  {
+   "k": "the photo couldn't be read",
+   "at": "runtime",
+   "n": "photo paste error; lowercase"
+  },
+  {
+   "k": "the photo is too large",
+   "at": "runtime",
+   "n": "photo paste error; lowercase"
+  },
+  {
+   "k": "the question must be text",
+   "at": "runtime",
+   "n": "request-to-the-app error; lowercase"
+  },
+  {
+   "k": "detaching works only in the app — a browser tab has no separate windows",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "unknown action: {name}",
+   "at": "runtime",
+   "n": "error; {name} is the internal name of the action, do not translate; lowercase"
+  },
+  {
+   "k": "the size must be numbers",
+   "at": "runtime",
+   "n": "request-to-the-app error; lowercase"
+  },
+  {
+   "k": "you need to say explicitly whether to hide the windows",
+   "at": "runtime",
+   "n": "request-to-the-app error; lowercase"
+  },
+  {
+   "k": "windows must be a list of names",
+   "at": "runtime",
+   "n": "request-to-the-app error; lowercase"
+  },
+  {
+   "k": "Request rejected: it didn't come from the app.",
+   "at": "runtime",
+   "n": "refusal by the local server of a request from a foreign page"
+  },
+  {
+   "k": "the port is taken by another program — close it and start Argus again",
+   "at": "runtime",
+   "n": "startup error; do not translate Argus; lowercase"
+  },
+  {
+   "k": "there is no main window",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "the window didn't respond",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "Couldn't get the window list — try again",
+   "at": "dash",
+   "n": "empty list in the window picker: the list did not load"
+  },
+  {
+   "k": "Edit the question",
+   "at": "dash",
+   "n": "name of the pencil icon under a question (for screen readers); short"
+  },
+  {
+   "k": "The request must be text.",
+   "at": "runtime",
+   "n": "request error in 'Work with the recording'"
+  },
+  {
+   "k": "The request title must be text.",
+   "at": "runtime",
+   "n": "request error in 'Work with the recording'"
+  },
+  {
+   "k": "Which answer to replace must be given as an ID.",
+   "at": "runtime",
+   "n": "request error in 'Work with the recording'; ID is a technical name, do not translate"
+  },
+  {
+   "k": "A line must be text.",
+   "at": "runtime",
+   "n": "request error in 'Work with the recording'"
+  },
+  {
+   "k": "recording: {error}",
+   "at": "runtime",
+   "n": "in the failure window: the session cannot be written to disk; {error} is the cause (translated by itself); lowercase"
+  },
+  {
+   "k": "didn't start — check the disk space",
+   "at": "runtime",
+   "n": "cause after 'recording: …'; lowercase"
+  },
+  {
+   "k": "stopped — check the disk space",
+   "at": "runtime",
+   "n": "cause after 'recording: …'; lowercase"
+  },
+  {
+   "k": "recognition: {error}",
+   "at": "runtime",
+   "n": "in the failure window: speech recognition did not start; {error} is the cause (translated by itself); lowercase"
+  },
+  {
+   "k": "voice replies: {error}",
+   "at": "runtime",
+   "n": "in the failure window: voice replies are silent; {error} is the cause (translated by itself); lowercase"
+  },
+  {
+   "k": "part of the assistant's settings couldn't be read — the defaults are used instead",
+   "at": "runtime",
+   "n": "in the failure window; lowercase"
+  },
+  {
+   "k": "the audio of window {name} is gone — was the app closed?",
+   "at": "runtime",
+   "n": "in the failure window; {name} is a window name in quotes, do not translate; lowercase [assembled in code from pieces]"
+  },
+  {
+   "k": "the pinned device ({what}) “{name}” wasn't found — listening to “{other}”",
+   "at": "runtime",
+   "n": "in the failure window: the chosen device disappeared; {what} is 'microphone' or 'system audio' / 'system sound' (translated by themselves), {name} and {other} are device names; the grammatical gender of {what} is unknown, so keep it in parentheses; lowercase [assembled in code from pieces]"
+  },
+  {
+   "k": "system audio",
+   "at": "runtime",
+   "n": "word inside the complaint 'the pinned … wasn't found'; lowercase"
+  },
+  {
+   "k": "system sound",
+   "at": "runtime",
+   "n": "the same word in the macOS complaint; lowercase"
+  },
+  {
+   "k": "system audio is going elsewhere: listening to “{name}”, but Windows plays to “{other}” — reconnect the audio",
+   "at": "runtime",
+   "n": "in the failure window; {name} and {other} are device names; do not translate Windows; lowercase [assembled in code from pieces]"
+  },
+  {
+   "k": "listening to the microphone “{name}”, but the system one is now “{other}” — pick it or reconnect the audio",
+   "at": "runtime",
+   "n": "in the failure window; {name} and {other} are device names; lowercase [assembled in code from pieces]"
+  },
+  {
+   "k": "microphone “{name}” has been silent for {n} s — check that it's on",
+   "at": "runtime",
+   "n": "in the failure window; {name} is a device name, {n} is a number of seconds; lowercase [assembled in code from pieces]"
+  },
+  {
+   "k": "the pinned program's audio is gone — was it closed?",
+   "at": "runtime",
+   "n": "in the failure window on macOS; lowercase"
+  },
+  {
+   "k": "No permission to record the screen and system audio. Turn on Argus in System Settings, in the “Screen Recording” section, and restart the app.",
+   "at": "runtime",
+   "n": "in the failure window on macOS; section names as they appear in macOS in the target language ('System Settings', 'Screen Recording')"
+  },
+  {
+   "k": "No permission to use the microphone. Turn on Argus in System Settings, in the “Microphone” section.",
+   "at": "runtime",
+   "n": "in the failure window on macOS; section names as they appear in macOS in the target language"
+  },
+  {
+   "k": "Microphone access is blocked by this computer's settings.",
+   "at": "runtime",
+   "n": "in the failure window on macOS"
+  },
+  {
+   "k": "hiding the window works only on Windows",
+   "at": "runtime",
+   "n": "reply of the 'Invisible in recordings' switch; lowercase"
+  },
+  {
+   "k": "window not found",
+   "at": "runtime",
+   "n": "reply of the 'Invisible in recordings' switch; lowercase"
+  },
+  {
+   "k": "window hidden from recordings ({n})",
+   "at": "runtime",
+   "n": "success of the 'Invisible in recordings' switch; {n} is a number of windows; lowercase"
+  },
+  {
+   "k": "{n} of {total} windows hidden — some are visible",
+   "at": "runtime",
+   "n": "refusal of the 'Invisible in recordings' switch; {n} and {total} are numbers; lowercase"
+  },
+  {
+   "k": "the system refused to hide the window (Windows 10 2004+ is required)",
+   "at": "runtime",
+   "n": "refusal of the 'Invisible in recordings' switch; do not change 'Windows 10 2004+'; lowercase"
+  },
+  {
+   "k": "window visible in recordings again ({n})",
+   "at": "runtime",
+   "n": "success of the 'Invisible in recordings' switch; {n} is a number of windows; lowercase"
+  },
+  {
+   "k": "{n} of {total} windows are visible again — some are still hidden",
+   "at": "runtime",
+   "n": "refusal of the switch; {n} and {total} are numbers; lowercase"
+  },
+  {
+   "k": "couldn't make the window visible in recordings again",
+   "at": "runtime",
+   "n": "refusal of the 'Invisible in recordings' switch; lowercase"
+  },
+  {
+   "k": "the app is still starting — try again",
+   "at": "runtime",
+   "n": "error; lowercase"
+  },
+  {
+   "k": "couldn't hide the panel from recordings — the window was closed",
+   "at": "runtime",
+   "n": "panel opening error; lowercase"
+  },
+  {
+   "k": "the panel window didn't appear — try again",
+   "at": "runtime",
+   "n": "panel opening error; lowercase"
+  },
+  {
+   "k": "the system refused to hide the window",
+   "at": "runtime",
+   "n": "refusal of the 'Invisible in recordings' switch on macOS; lowercase"
+  },
+  {
+   "k": "Conversation context",
+   "at": "settings",
+   "n": "title of a settings section"
+  },
+  {
+   "k": "Sent in full with every question — the longer it is, the more it costs. Write it as it comes, this isn't a form.",
+   "at": "settings",
+   "n": "explanation under the section title"
+  },
+  {
+   "k": "Session name",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "You can leave this empty: once the conversation description appears, the name is made from it. A name you write here is never changed by the app.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "It will be made up for you — or write your own",
+   "at": "settings",
+   "n": "hint in an empty field"
+  },
+  {
+   "k": "A short bio: who you are, what you've worked on, what the conversation will be about, and what questions might come up",
+   "at": "settings",
+   "n": "hint in an empty field"
+  },
+  {
+   "k": "Answer tone",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "Business — the usual tone for school and work. Casual — livelier, no “Certainly!”, with swearing where it fits, like a real person.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "business",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "technical",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "standard",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "friendly",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "strict",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "rude",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "trolling",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "Materials",
+   "at": "settings",
+   "n": "title of a settings section"
+  },
+  {
+   "k": "If you uncheck the box, the files stay here — the assistant just stops reading them.",
+   "at": "settings",
+   "n": "explanation under the section title"
+  },
+  {
+   "k": "Use materials",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "“Same as conversation” — the language isn't set in advance: the assistant picks it on its own, for every answer.",
+   "at": "settings",
+   "n": "explanation under the section title"
+  },
+  {
+   "k": "Answer language",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "same as conversation",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "Recognition language",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "What the microphone hears, not the answer language. With auto-detect, slang and rare words sometimes throw it off to another language — pick the language explicitly to avoid that.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "detect from audio (slower and less accurate)",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "Smart recognition",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "Handles strong accents and fast or unclear speech better. The text may appear a little later, and an hour of recording costs more. Best turned on before you start recording: if you switch it mid-conversation, recognition starts over and forgets the last few lines.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "When to answer",
+   "at": "settings",
+   "n": "title of a settings section"
+  },
+  {
+   "k": "Which lines make the assistant wake up on its own. In any mode you can still ask it with the button or a hotkey.",
+   "at": "settings",
+   "n": "explanation under the section title"
+  },
+  {
+   "k": "For in-person meetings with one microphone for two people — otherwise their questions never reach the assistant. “By phrasing” answers any grammatical question, even a short one like “can you hear me?”; “by name” and “by meaning” react only to a real address to the bot, and cost more: “by meaning” makes an extra request to check.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "don't answer",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "everything",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "by phrasing",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "by name",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "by meaning",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "The same, but for system audio — what the other person is physically saying. “Don't answer” — only via the “Ask” button or hotkey. “By phrasing” is the default and answers any grammatical question, even “can you hear me?”; “by name” is for a group call or a lecture, where it should answer only when addressed directly, not every question from someone else.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "Bot name",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "The bot uses this word to know you're talking to it — shared by the microphone and system audio.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "e.g., Argus",
+   "at": "settings",
+   "n": "hint in an empty field"
+  },
+  {
+   "k": "Slower, but more thought through.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "Hotkeys",
+   "at": "settings",
+   "n": "title of a settings section"
+  },
+  {
+   "k": "They work from any window, not just this one — otherwise you couldn't press them in the middle of a conversation.",
+   "at": "settings",
+   "n": "explanation under the section title"
+  },
+  {
+   "k": "Open/close main window",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "Open/close panel",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "Recognition on/off",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "Audio",
+   "at": "settings",
+   "n": "title of a settings section"
+  },
+  {
+   "k": "Check before a conversation: Windows sometimes swaps the microphone on its own, and then you just get silence, with no error.",
+   "at": "settings",
+   "n": "explanation under the section title"
+  },
+  {
+   "k": "Voice replies (test)",
+   "at": "settings",
+   "n": "title of a settings section"
+  },
+  {
+   "k": "Spoken answers — paid, by the number of characters. Off by default. A new voice will show up here after you restart the app.",
+   "at": "settings",
+   "n": "explanation under the section title"
+  },
+  {
+   "k": "Voice",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "— no voice selected —",
+   "at": "settings",
+   "n": "item of a drop-down list; short"
+  },
+  {
+   "k": "App",
+   "at": "settings",
+   "n": "title of a settings section"
+  },
+  {
+   "k": "Window button on the taskbar",
+   "at": "settings",
+   "n": "name of a setting"
+  },
+  {
+   "k": "The taskbar is visible when you share your screen, and the “Argus” button on it shows that the app is open. Turn this off and there is no button on the taskbar or in Alt+Tab. You can bring the window back with the “Open/close main window” hotkey in the “Hotkeys” section, or by starting Argus again; “Minimize” then hides the window.",
+   "at": "settings",
+   "n": "explanation of a setting"
+  },
+  {
+   "k": "App language",
+   "at": "settings",
+   "n": "name of a setting"
+  }
+ ]
+}
